@@ -37,6 +37,8 @@ dumpButton.onclick = function () {
             console.log(response.logInfo);
     };
     */
+   // which function is handling this?
+   //button click 
     xhttp.open("GET", "/dump/data", true);
     xhttp.send();    
 
