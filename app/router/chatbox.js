@@ -197,37 +197,3 @@ function updateProfile(userName,chatboxName){
 }
 
 module.exports = router;
-
-
-//var myobj = { name: "Company Inc", address: "Highway 37" };
-        /*
-        dbo.collection(name).insertOne(data, function (err, res) {
-            if (err) throw err;
-            console.log("1 document inserted");
-            db.close();
-        });
-        */
-        /*
-        regProfile.findOneAndUpdate(
-                                {userName:req.body.from},
-                                {$push:{
-                                    "chatWindow":usr1and2
-                                }}
-                                )
-                                .then(succ=>console.log(succ))
-                                .catch(err=>console.log(err));
-        */
-       /*
-       
-                            authToken.findOneAndUpdate({userName:username},{authToken:"ABCDEFG",authExpire:"Soon2Expire"},{upsert: true,useFindAndModify:false})
-                        .then(updatedDocument=>{
-                            if(updatedDocument){
-                                console.log("Updated"+updatedDocument);
-                            }else{
-                                console.log("Not updated");
-                            }
-                            //return updatedDocument;
-                        })
-                        .catch(err=>console.log(err));
-
-       */
