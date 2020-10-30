@@ -6,6 +6,7 @@ const chatW = require('./../models/chatWindow');
 const { MongoClient } = require('mongodb');
 const { resolve } = require('path');
 const { rejects } = require('assert');
+const { find } = require('./../models/profile');
 
 var collectionArr;
 
@@ -52,34 +53,35 @@ async function getCollectionData(collName) {
     let MongoClient = require('mongodb').MongoClient;
     const configFile = require('./../../myUrl');
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    let dataArr;
+    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .catch(err => console.log(err));
 
-    MongoClient.connect(url, async (err, client) => {
-
-        if (err) throw err;
-        const db = client.db('testdb');
+    try {
+        const db = client.db('testdb').collection(collName);
         console.log("Catch point 1");
-        let dbo = db.collection(collName);
-        console.log("Catch point 2");
-        let pro = new Promise((resolve, rejects) = {
 
-        })
-        let fin = await dbo.find({}, { projection: { "_id": 0 } })
-            .toArray(await function (err, data) {
-                if (err) throw err;
-                console.log(data);
-            })
-        console.log("fin", fin);
+        dataArr = await db.find({}, { projection: { "_id": 0 } })
+            .toArray();
+        //console.log(dataArr);
+        console.log("End of data catch point");
+    }
+    catch (err) {
+        console.log(err);
+    } finally {
+        client.close();
+    }
 
-        console.log("End of getCollectionData");
-    })
-
-    return;
+    console.log("End of getCollectionData");
+    return dataArr;
 }
 
 async function callME() {
+    console.log("Start of CallME");
     let ok = await getCollectionData("testtest2");
-    //console.log("Typeof OK:", typeof ok);
-    //console.log("OK:", ok);
+    console.log("Between of CallME");
+    console.log(ok);
+    console.log("End of CallME");
 }
 
 callME();
