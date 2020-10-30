@@ -17,6 +17,7 @@ window.onload = function(){
 */
 
 var dumpButton = document.getElementById("dumpButton");
+let totaldata;
 
 dumpButton.onclick = function () {
     
@@ -26,10 +27,13 @@ dumpButton.onclick = function () {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           console.log(this.responseText);
-          console.log("Doing Good");
+          let response = JSON.parse(this.responseText);
+          totaldata = response;
+          //console.log(typeof response);
+          //console.log(response.length)
+          console.log("Data coming");
         }
     };
-
     /*
     xhttp.onload = function(){
             var response = JSON.parse(this.responseText);

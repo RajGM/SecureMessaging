@@ -16,40 +16,70 @@ router.get('/', function (req, res) {
 
 router.get('/data', async function (req, res) {
 
+    /*
     //const profile = await getCollectionNames('test');
+    //console.log(profile);
     //handle the null cases here
-    const profileChat = await getCollectionData('testtest2');
-    console.log("ConsoleLog from res:" + profileChat);
-    res.status(200).json(profile);
+    //let totalchat = [];
+    for (let i = 0; i < profile.length; i++) {
+        //testtest2 is working 
+        let profileChat = await getCollectionData(profile[i]);
+        //console.log("ConsoleLog from res:", profileChat);
+        //console.log(typeof profileChat);
+        //totalchat=totalchat.concat(profileChat);
+        totalchat.push(profileChat);
+    }
+    console.log(totalchat);
+    console.log("All collection names");
+    */
+    let totalDump = [];
+    let collName = await dumpData("testdb");
+    for(let i=0;i<collName.length;i++){
+        let collDump = await getCollectionData(collName[i]);
+        totalDump.push(collDump);
+    }
+    res.status(200).json(totalDump);
 });
 
-function dumpData(DBname) {
+async function dumpData(DBname) {
     var MongoClient = require('mongodb').MongoClient;
     const configFile = require('./../../myUrl');
-
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    let collectionNames;
 
-    MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        var dbo = db.db(DBname);
-        dbo.listCollections().toArray(function (err, collections) {
-            console.log(collections);
-        });
-        db.close();
-    });
+    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .catch(err => console.log(err));
+
+    try {
+        let dbo = client.db(DBname);
+
+        collectionNames = await dbo.listCollections({},{"nameOnly":1}).toArray();
+    }
+    catch(err){
+        console.log(err)
+    }
+    finally{
+        client.close();
+    }
+    let onlyColNae = [];
+    for(let i=0;i<collectionNames.length;i++){
+        onlyColNae.push(collectionNames[i].name);
+    }
+    //console.log(onlyColNae);
+    return onlyColNae;
 };
 
 async function getCollectionNames(userName) {
-    console.log("Start of getCollectionNames");
+    //console.log("Start of getCollectionNames");
     const profile = await regProfile.findOne({ userName: userName });
-    console.log('full profile promise: ', profile);
+    // console.log('full profile promise: ', profile);
     //handdle the case of profile not found here
-    console.log("End of getCollectionNames");
+    // console.log("End of getCollectionNames");
     return profile.chatWindow;
 }
 
 async function getCollectionData(collName) {
-    console.log("Start of getCollectionData");
+    //console.log("Start of getCollectionData");
     let MongoClient = require('mongodb').MongoClient;
     const configFile = require('./../../myUrl');
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
@@ -59,12 +89,12 @@ async function getCollectionData(collName) {
 
     try {
         const db = client.db('testdb').collection(collName);
-        console.log("Catch point 1");
+        //  console.log("Catch point 1");
 
         dataArr = await db.find({}, { projection: { "_id": 0 } })
             .toArray();
         //console.log(dataArr);
-        console.log("End of data catch point");
+        // console.log("End of data catch point");
     }
     catch (err) {
         console.log(err);
@@ -72,19 +102,23 @@ async function getCollectionData(collName) {
         client.close();
     }
 
-    console.log("End of getCollectionData");
+    // console.log("End of getCollectionData");
     return dataArr;
 }
 
 async function callME() {
+    let collN = await dumpData("testdb");
+    console.log(collN);
+    /*
     console.log("Start of CallME");
     let ok = await getCollectionData("testtest2");
     console.log("Between of CallME");
     console.log(ok);
     console.log("End of CallME");
+    */
 }
 
-callME();
+//callME();
 
 async function getWholeChat(userName) {
     console.log("Before calling getCollectionNames");
