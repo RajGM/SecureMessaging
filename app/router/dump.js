@@ -34,6 +34,8 @@ router.get('/data', async function (req, res) {
     */
     let totalDump = [];
     let collName = await dumpData("testdb");
+    totalDump.push(collName);
+    //console.log(collName);
     for(let i=0;i<collName.length;i++){
         let collDump = await getCollectionData(collName[i]);
         totalDump.push(collDump);
