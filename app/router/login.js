@@ -25,6 +25,7 @@ router.post('/', async (req,res)=>{
         userName:"",
         authToken:""
     }
+    
     if(loginState=="correct"){
         responseObj.logInfo="Success";
         responseObj.userName=profileValues.username;
