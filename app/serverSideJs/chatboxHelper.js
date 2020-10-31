@@ -1,4 +1,4 @@
-exports.module = async function createCollections(name) {
+async function createCollections(name) {
     var MongoClient = require('mongodb').MongoClient;
     const configFile = require('./../../myUrl');
     
@@ -83,3 +83,9 @@ function updateProfile(userName,chatboxName){
     });
 
 }
+
+
+
+exports.createCollections = createCollections;
+exports.insertData = insertData;
+exports.updateProfile = updateProfile;

@@ -3,7 +3,6 @@ const authToken = require('./../models/authToken');
 const configFile = require('./../../myUrl');
 
 async function findProfile(userName) {
-    //console.log("Start of getCollectionData");
     let MongoClient = require('mongodb').MongoClient;
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
     let dataArr;
@@ -12,12 +11,9 @@ async function findProfile(userName) {
 
     try {
         const db = client.db('testdb').collection("userprofiles");
-        //  console.log("Catch point 1");
 
         dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
             .toArray();
-        //console.log(dataArr);
-        // console.log("End of data catch point");
     }
     catch (err) {
         console.log(err);
@@ -25,71 +21,64 @@ async function findProfile(userName) {
         client.close();
     }
 
-    //Object.keys(obj).length === 0;
     console.log(typeof dataArr);
     if (Object.keys(dataArr).length === 0) {
         console.log("blank");
         return "notExists"
     }
-    return dataArr;
+    return "exists";
 
 }
 
 async function createProfile(userName, password) {
-    let profileState = await findProfile(userName);
-    if (profileState.toString() != "notExists") {
-        return "profileExists";
-    } else {
 
-        let MongoClient = require('mongodb').MongoClient;
-        const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
-        let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-            .catch(err => console.log(err));
+    let MongoClient = require('mongodb').MongoClient;
+    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .catch(err => console.log(err));
 
-        console.log("Before catch");
-        try {
-            const db = client.db('testdb').collection("userprofiles");
-              console.log("Catch point 1");
+    console.log("Before catch");
+    try {
+        const db = client.db('testdb').collection("userprofiles");
+        console.log("Catch point 1");
 
-            const newProfile = new regProfile({
-                userName:userName,
-                password:password
+        const newProfile = new regProfile({
+            userName: userName,
+            password: password
+        });
+
+        let dbInsert = await db.insertOne(newProfile)
+            .then(pro => {
+                console.log("proCreated", pro);
+            })
+            .catch(err => {
+                console.log("Profile creation problem", err);
+            })
+
+        console.log("dbInsert state:", dbInsert);
+
+        const dbaT = client.db('testdb').collection("authtokens");
+        const authTokenDB = new authToken({
+            userName: userName,
+            authToken: "",
+            authExpire: ""
+        });
+
+        let authInsert = await dbaT.insertOne(authTokenDB)
+            .then(aT => {
+                console.log("Auth Token created", aT);
+            })
+            .catch(err => {
+                console.log("Auth Token creation problem", err)
             });
 
-            let dbInsert = await db.insertOne(newProfile)
-                .then(pro=>{
-                    console.log(pro);
-                })
-                .catch(err=>{
-                    console.log(err);
-                })
+        console.log("AuthToken state", authInsert);
 
-            console.log("dbInsert state:",dbInsert);
-          
-           const dbaT = client.db('testdb').collection("authtokens");
-            const authTokenDB = new authToken({
-                userName:userName,
-                authToken:"",
-                authExpire:""
-            });
-            
-            let authInsert = await dbaT.insertOne(authTokenDB)
-                    .then(aT=>{
-                        console.log("Auth Token created",aT);
-                    })
-                    .catch(err=>{
-                        console.log("Auth Token creation problem",err)
-                    });
-
-            console.log("AuthToken state",authInsert);
-           
-        }
-        catch (err) {
-            console.log(err);
-        } finally {
-            client.close();
-        }
-
+    }
+    catch (err) {
+        console.log(err);
+    } finally {
+        client.close();
     }
 
     return "profileCreated";
@@ -105,10 +94,13 @@ async function callME() {
     console.log("ok type", typeof of);
     if (ok.toString() == "notExists") {
         console.log("working");
-        let proCreation = await createProfile(userName,password);
+        let proCreation = await createProfile(userName, password);
         console.log(proCreation);
     }
     console.log("callME end");
 }
 
-callME();
+//callME();
+
+exports.findProfile = findProfile;
+exports.createProfile = createProfile;
