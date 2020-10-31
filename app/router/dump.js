@@ -73,8 +73,8 @@ async function dumpData(DBname) {
 
 async function getCollectionNames(userName) {
     //console.log("Start of getCollectionNames");
-    const profile = await regProfile.findOne({ userName: userName });
-    // console.log('full profile promise: ', profile);
+    const profile = await regProfile.findOne({ userName });
+     console.log('full profile promise: ', profile);
     //handdle the case of profile not found here
     // console.log("End of getCollectionNames");
     return profile.chatWindow;
@@ -109,15 +109,14 @@ async function getCollectionData(collName) {
 }
 
 async function callME() {
-    let collN = await dumpData("testdb");
-    console.log(collN);
-    /*
+    //let collN = await dumpData("testdb");
+    //console.log(collN);
+    
     console.log("Start of CallME");
-    let ok = await getCollectionData("testtest2");
+    let ok = await getCollectionNames("testtest2");
     console.log("Between of CallME");
     console.log(ok);
     console.log("End of CallME");
-    */
 }
 
 //callME();

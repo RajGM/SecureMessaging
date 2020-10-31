@@ -13,29 +13,31 @@ router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
 });
 
-router.post('/logout', (req, res) => {
+router.post('/logout', async (req, res) => {
     console.log("Logging out");
+    console.log("Body data", req.body);
     const aT = new authToken({
         userName: req.body.from,
         authToken: ""
     });
-
-    authToken.findOneAndUpdate({ userName: req.body.from }, { authToken: "", authExpire: "" }, { upsert: true, useFindAndModify: false })
+    let returnDoc;
+    await authToken.findOneAndUpdate({ userName: req.body.from }, { authToken: "", authExpire: "" }, { upsert: true, useFindAndModify: false })
         .then(updatedDocument => {
             if (updatedDocument) {
                 console.log("Updated" + updatedDocument);
             } else {
                 console.log("Not updated" + updatedDocument);
             }
+            returnDoc = updatedDocument;
             return updatedDocument;
         })
         .catch(err => console.log(err));
-    res.status(200).json({ loggedOut: "Logged out success" });
+
+    console.log("Logout catch Point 2");
+    res.status(200).json(returnDoc);
 });
 
-
-
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     //check eachTime for auth Token verification
     //Then
     //Check for socketIDToken of from and to if all good 
@@ -94,8 +96,8 @@ router.post('/', (req, res) => {
                             console.log("*********************");
                             console.log("*********************");
 
-                           updateProfile(req.body.from,usr1and2);
-                           updateProfile(req.body.to,usr1and2);
+                            updateProfile(req.body.from, usr1and2);
+                            updateProfile(req.body.to, usr1and2);
 
                             console.log("Chatwindow does not exists creating new collection");
                             createCollections(usr1and2);
@@ -162,7 +164,7 @@ function insertData(name, data) {
     });
 }
 
-function updateProfile(userName,chatboxName){
+function updateProfile(userName, chatboxName) {
     var MongoClient = require('mongodb').MongoClient;
     const configFile = require('./../../myUrl');
 
@@ -171,7 +173,7 @@ function updateProfile(userName,chatboxName){
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db("testdb");
-        
+
         /*
        dbo.collection("userprofiles").findOneAndUpdate(
            {userName:userName},
@@ -182,14 +184,16 @@ function updateProfile(userName,chatboxName){
            .then(succ=>console.log(succ))
             .catch(err=>console.log(err));
             */
-           dbo.collection("userprofiles").updateOne(
-            {userName:userName},
-               {$push:{
-                "chatWindow":chatboxName
-            }}
+        dbo.collection("userprofiles").updateOne(
+            { userName: userName },
+            {
+                $push: {
+                    "chatWindow": chatboxName
+                }
+            }
         )
-        .then(ok=>console.log("Update chatWindow in profile done:"+ok))
-        .catch(err=>console.log("Update cannot be completed:"+err))
+            .then(ok => console.log("Update chatWindow in profile done:" + ok))
+            .catch(err => console.log("Update cannot be completed:" + err))
 
 
     });

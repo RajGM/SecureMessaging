@@ -28,9 +28,10 @@ dumpData.onclick = function () {
                             //let txtNode = document.createTextNode(response[i][j]);
                             //dataDiv.appendChild(txtNode);
                             for(let [key,value] of Object.entries(response[i][j])){
-                                dataDiv.innerHTML+= key+":"+value+"<br>";
+                                dataDiv.innerHTML+= key+":"+value+" ";
                                 console.log(`${key}:${value}`);
                             }
+                            dataDiv.innerHTML+= "<br>";
                         }
                     }
                 }

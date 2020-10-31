@@ -1,14 +1,13 @@
 const express = require('express');
 const router = new express.Router();
 var path = require('path');
+const regProfile = require('../models/profile');
+const authToken = require('./../models/authToken');
 
 router.get('/',function(req,res){
     console.log("Sending Reg page");
     res.sendFile(path.join(__dirname+'./../views/'+'register.html'));
 })
-
-const regProfile = require('../models/profile');
-const authToken = require('./../models/authToken');
 
 router.post('/',(req,res)=>{
     console.log("Posting request");
@@ -65,14 +64,3 @@ router.post('/',(req,res)=>{
 });
 
 module.exports = router;
-
-/*
-responseObj = {
-    logInfo:"Success",
-    userName:username,
-    authToken:"ABCDEFG"
-};
-
-console.log("Sending response This is not good is that was async");
-res.status(200).json(responseObj);
-*/

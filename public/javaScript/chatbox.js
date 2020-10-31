@@ -5,6 +5,7 @@ var message = document.getElementById("messageUser");
 var sendButton = document.getElementById("sendButton");
 var output = document.getElementById("output");
 var messageBlock = document.getElementById("messageUser");
+var logoutButton = document.getElementById('logoutButton');
 if(sessionStorage.getItem("userName")===null && sessionStorage.getItem("authTokenuserName")===null){
     window.location.href = "http://localhost:3000/login";
 }else{
@@ -56,6 +57,28 @@ sendButton.onclick = function () {
         catch(err){
             console.log("Error"+err);
         }
+}
+
+logoutButton.onclick = function(){
+    var objSent = {
+        from:"",
+        authToken:""
+    }
+    objSent.from = localStorage.getItem("userName");
+    objSent.authToken = localStorage.getItem("authToken");
+    var jsonFormat = JSON.stringify(objSent);
+    try{
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function(){
+            var response = JSON.parse(this.responseText);
+            console.log(response);
+        }
+        xhttp.open("POST","/chatbox/logout",true);
+        xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
+        xhttp.send(jsonFormat);    
+    }catch(err){
+        console.log(err);
+    }
 }
 
 messageBlock.addEventListener('keypress',function(){
