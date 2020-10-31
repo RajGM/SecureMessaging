@@ -84,8 +84,6 @@ function updateProfile(userName,chatboxName){
 
 }
 
-
-
 exports.createCollections = createCollections;
 exports.insertData = insertData;
 exports.updateProfile = updateProfile;

@@ -1,65 +1,41 @@
 const express = require('express');
 const router = new express.Router();
 var path = require('path');
+const helperFunction = require('./../serverSideJs/loginHelper');
 
 router.get('/',function(req,res){
     res.sendFile(path.join(__dirname+'./../views/'+'login.html'));
 })
 
-const logProfile = require('../models/profile');
-const authToken = require('../models/authToken');
+router.post('/', async (req,res)=>{
+    const profileValues = { username: "", password: "" };
+    if (req.body.username != "" && req.body.password != "") {
+        profileValues.username = req.body.userName;
+        profileValues.password = req.body.Password;
+    }
 
-router.post('/', (req,res)=>{
-    const username = req.body.userName;
-    const password = req.body.Password;
+    console.log("Values in server object");
+    console.log(profileValues);
 
-    /*
-    console.log("Type of data:"+typeof req);
-    console.log("Type of data:"+typeof req.body);
-    console.log("Type of data:"+typeof req.body.userName);
-    */
-
-    //console.log("Login post req");
-    logProfile.findOne({userName:req.body.userName})
-        .then(person=>{
-            if(!person){
-                console.log("Email not found");
-                return res.status(404).json({emailerr:"Not found"});
-            }else{
-                console.log(person);
-                if(password==person.password){
-                    console.log("Inside password comparision");
-                    authToken.findOneAndUpdate({userName:username},{authToken:"ABCDEFG",authExpire:"Soon2Expire"},{upsert: true,useFindAndModify:false})
-                        .then(updatedDocument=>{
-                            if(updatedDocument){
-                                console.log("Updated"+updatedDocument);
-                            }else{
-                                console.log("Not updated");
-                            }
-                            //return updatedDocument;
-                        })
-                        .catch(err=>console.log(err));
-                    
-                    
-                    responseObj = {
-                        logInfo:"Success",
-                        userName:username,
-                        authToken:"ABCDEFG"
-                    };
-                    
-                    console.log("Sending response This is not good is that was async");
-                    res.status(200).json(responseObj);
-                    //res.status(200).json({logInfo:"SuccessTest checking"});
-                }else{
-                    responseObj = {
-                        logInfo:"Fail"
-                    };
-                    console.log("Password incorrect");
-                    res.status(200).json(responseObj);
-                }
-            }
-        })
-        .catch(err=>console.log(err));
-})
+    let loginState = await helperFunction.loginProfile(profileValues.username,profileValues.password);
+    console.log("loginState",loginState);
+    
+    let responseObj = {
+        logInfo:"",
+        userName:"",
+        authToken:""
+    }
+    if(loginState=="correct"){
+        responseObj.logInfo="Success";
+        responseObj.userName=profileValues.username;
+        responseObj.authToken="ABCDEFG"; 
+    }else if(loginState=="incorrect"){
+        responseObj.logInfo="Fail";
+    }else if(loginState=="notExists"){
+        responseObj.logInfo="Fail";
+    }
+    
+    res.status(200).json(responseObj);
+});
 
 module.exports = router;
