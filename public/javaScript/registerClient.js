@@ -22,9 +22,9 @@ RegisterButton.onclick = function () {
     xhttp.onload = function(){
         var response = JSON.parse(this.responseText);
         console.log(response);
-        if(response.logInfo=="Fail"){
+        if(response=="Fail"){
             console.log("Username exists");
-        }else if(response.logInfo=="Success"){
+        }else if(response=="Success"){
             console.log("Registration success");
             window.location.href = "http://localhost:3000/login";
         }

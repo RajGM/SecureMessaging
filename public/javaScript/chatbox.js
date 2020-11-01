@@ -35,13 +35,12 @@ sendButton.onclick = function () {
     objSent.socketID = socket.id;
 
     var jsonFormat = JSON.stringify(objSent); 
-
+    message.value="";
     try{
         var xhttp = new XMLHttpRequest();
         xhttp.onload = function(){
             var response = JSON.parse(this.responseText);
             console.log(response);
-            message.value="";
         }
         xhttp.open("POST", "/chatbox/", true);
         xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
