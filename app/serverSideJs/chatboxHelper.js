@@ -1,4 +1,5 @@
 const chatMessage = require('./../models/chatMsg');
+const chatWindow = require('./../models/chatWindow');
 
 async function createCollections(name) {
     var MongoClient = require('mongodb').MongoClient;
@@ -71,7 +72,7 @@ async function updateProfile(userName, chatboxName) {
 
     try {
         const db = client.db("testdb").collection("userprofiles");
-        let returnData = await db.updateOne({userName: userName},
+        let returnData = await db.updateOne({ userName: userName },
             {
                 $push: { "chatWindow": chatboxName }
             })
@@ -91,12 +92,74 @@ async function updateProfile(userName, chatboxName) {
         client.close();
     }
 
-   return updationState;
+    return updationState;
+}
+
+async function chatWinowFinder(windowName) {
+    let MongoClient = require('mongodb').MongoClient;
+    const configFile = require('./../../myUrl');
+    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    let dataArr;
+    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .catch(err => console.log(err));
+
+    try {
+        const db = client.db('testdb').collection("chatboxes");
+
+        dataArr = await db.find({ usr12: windowName }, { projection: { "_id": 0 } })
+            .toArray();
+    }
+    catch (err) {
+        console.log(err);
+    } finally {
+        client.close();
+    }
+
+    //console.log(typeof dataArr);
+    if (Object.keys(dataArr).length === 0) {
+        console.log("blank");
+        return "notExists"
+    } else {
+        console.log("Something found");
+        console.log(dataArr[0].usr12);
+        return "exists";
+    }
+}
+
+async function chatWindowCollectionUpdate(data) {
+    var MongoClient = require('mongodb').MongoClient;
+    const configFile = require('./../../myUrl');
+    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .catch(err => console.log(err));
+
+    let chatWindowCollectionState;
+
+    try {
+        const db = client.db("testdb").collection("chatboxes");
+        let returnData = await db.insertOne(data)
+            .catch(err => {
+                console.log(err);
+            })
+        if (returnData) {
+            console.log("Data inserted" + returnData);
+            chatWindowCollectionState = "dataInserted";
+        } else {
+            console.log("Something went wrong during data insertion");
+            chatWindowCollectionState = "errorInsertion";
+        }
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client.close();
+    }
+
+    return chatWindowCollectionState;
 }
 
 async function callME() {
-    //let collectionName = "testingColl2";
-    //let userName = "test404";
+    let collectionName = "testtest2";
+    let userName = "test404";
     //let collCreationState = await createCollections(collectionName);
     //console.log("Collection Creation State:" + collCreationState);
     /*
@@ -111,6 +174,15 @@ async function callME() {
     */
     //let updationState = await updateProfile(userName, collectionName);
     //console.log("Updation State:"+updationState);
+    //let chatWindowFinderState = await chatWinowFinder(collectionName);
+    //console.log("chatWindowFinderState:" + chatWindowFinderState);
+    const cW = new chatWindow({
+        user1:"test2",
+        user2:"test404",
+        usr12:"test2test404"
+    });
+    let chatWindowCollState = await chatWindowCollectionUpdate(cW);
+    console.log("chatWindowState:"+chatWindowCollState);
 }
 
 //callME();
@@ -118,3 +190,5 @@ async function callME() {
 exports.createCollections = createCollections;
 exports.insertData = insertData;
 exports.updateProfile = updateProfile;
+exports.chatWinowFinder = chatWinowFinder;
+exports.chatWindowCollectionUpdate = chatWindowCollectionUpdate;

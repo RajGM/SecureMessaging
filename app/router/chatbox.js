@@ -4,11 +4,11 @@ var path = require('path');
 
 const regProfile = require('../models/profile');
 const msgSent = require('../models/chatMsg');
-const chatW = require('./../models/chatWindow');
+const chatWindow = require('./../models/chatWindow');
 const authToken = require('./../models/authToken');
 const socketToken = require('./../models/socketToken');
-const { createIndexes } = require('../models/profile');
 const helperFun = require('./../serverSideJs/chatboxHelper');
+const helperFun2 = require('./../serverSideJs/registerHelper');
 
 router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
@@ -65,86 +65,47 @@ router.post('/', async (req, res) => {
         timeStamp: timeStamp
     });
 
-    regProfile.findOne({ userName: req.body.to })
-        .then(profileEmail => {
-            if (profileEmail) {
+    let fromProfile = await helperFun2.findProfile(newMessage.from);
+    let toProfile = await helperFun2.findProfile(newMessage.to);
+    if (toProfile == "exists" && fromProfile == "exists") {
+        var usr1;
+        var usr2;
+        var usr1and2;
+        if (req.body.to > req.body.from) {
+            usr1 = req.body.from;
+            usr2 = req.body.to;
+        } else {
+            usr1 = req.body.to;
+            usr2 = req.body.from;
+        }
+        usr1and2 = usr1 + usr2;
 
-                var usr1;
-                var usr2;
-                var usr1and2;
-                if (req.body.to > req.body.from) {
-                    usr1 = req.body.from;
-                    usr2 = req.body.to;
-                } else {
-                    usr1 = req.body.to;
-                    usr2 = req.body.from;
-                }
-                usr1and2 = usr1 + usr2;
+        let chatboxState = await helperFun.chatWinowFinder(usr1and2);
+        
+        if (chatboxState == "exists") {
+            helperFun.insertData(usr1and2,newMessage);
+            res.status(200).json({ pro: "Chatwindow exists" });
+        } else {
+            let chatW = new chatWindow({
+                user1:usr1,
+                user2:usr2,
+                usr12:usr1and2
+            });
+            let profileUpdateStateFrom = await helperFun.updateProfile(newMessage.from,usr1and2);
+            let profileUpdateStateTo = await helperFun.updateProfile(newMessage.to,usr1and2);
+            let collectionCreationState = await helperFun.createCollections(usr1and2);
+            let chatWindowCollUpdateState = await helperFun.chatWindowCollectionUpdate(chatW);
+            let dataInsertState = await helperFun.insertData(usr1and2,newMessage);
+            res.status(200).json({ pro: "Chatwindow does not exists created new collection" });
+        }
 
-                chatW.findOne({ usr12: usr1and2 })
-                    .then(user12 => {
-                        if (user12) {
-                            console.log("Chatwindow exists");
-                            insertData(usr1and2, newMessage);
-                            res.status(200).json({ pro: "Chatwindow exists" });
-                        } else {
+    } else {
+        res.status(200).json({ pro: "Reciever profile does not exists" });
+    }
 
-                            console.log("*********************");
-                            console.log("*********************");
-                            console.log("*********************");
-                            console.log("*Updating in profile*");
-                            console.log("*********************");
-                            console.log("*********************");
-                            console.log("*********************");
-
-                            updateProfile(req.body.from, usr1and2);
-                            updateProfile(req.body.to, usr1and2);
-
-                            console.log("Chatwindow does not exists creating new collection");
-                            createCollections(usr1and2);
-
-                            const newChatWindow = new chatW({
-                                user1: usr1,
-                                user2: usr2,
-                                usr12: usr1and2
-                            });
-
-                            newChatWindow
-                                .save()
-                                .then(succ => console.log(succ))
-                                .catch(err => console.log(err));
-
-                            insertData(usr1and2, newMessage);
-
-                            res.status(200).json({ pro: "Chatwindow does not exists creating new collection" });
-                        }
-                    })
-                    .catch()
-
-                //res.status(400).json({pro:"Profile exists"});
-
-            } else {
-                res.status(404).json({ pro: "Reciever profile does not exists" });
-            }
-        })
-        .catch(err => console.log("Find err" + err));
 });
 
 module.exports = router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function createCollections(name) {
     var MongoClient = require('mongodb').MongoClient;
@@ -216,3 +177,58 @@ function updateProfile(userName, chatboxName) {
     });
 
 }
+
+/*
+    regProfile.findOne({ userName: req.body.to })
+        .then(profileEmail => {
+            if (profileEmail) {
+
+                chatW.findOne({ usr12: usr1and2 })
+                    .then(user12 => {
+                        if (user12) {
+                            console.log("Chatwindow exists");
+                            insertData(usr1and2, newMessage);
+                            res.status(200).json({ pro: "Chatwindow exists" });
+                        } else {
+
+                            console.log("*********************");
+                            console.log("*********************");
+                            console.log("*********************");
+                            console.log("*Updating in profile*");
+                            console.log("*********************");
+                            console.log("*********************");
+                            console.log("*********************");
+
+                            updateProfile(req.body.from, usr1and2);
+                            updateProfile(req.body.to, usr1and2);
+
+                            console.log("Chatwindow does not exists creating new collection");
+                            createCollections(usr1and2);
+
+                            const newChatWindow = new chatW({
+                                user1: usr1,
+                                user2: usr2,
+                                usr12: usr1and2
+                            });
+
+                            newChatWindow
+                                .save()
+                                .then(succ => console.log(succ))
+                                .catch(err => console.log(err));
+
+                            insertData(usr1and2, newMessage);
+
+                            res.status(200).json({ pro: "Chatwindow does not exists creating new collection" });
+                        }
+                    })
+                    .catch()
+
+                //res.status(400).json({pro:"Profile exists"});
+
+            } else {
+                res.status(404).json({ pro: "Reciever profile does not exists" });
+            }
+        })
+        .catch(err => console.log("Find err" + err));
+
+    */

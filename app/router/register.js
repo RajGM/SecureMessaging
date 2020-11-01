@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     }else{
         let cpv = await helperFun.createProfile(profileValues.username,profileValues.password);
         console.log(cpv);
-        res.status(200).json("Created new");
+        res.status(200).json("Success");
     }
 
 });
