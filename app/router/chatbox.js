@@ -8,6 +8,7 @@ const chatW = require('./../models/chatWindow');
 const authToken = require('./../models/authToken');
 const socketToken = require('./../models/socketToken');
 const { createIndexes } = require('../models/profile');
+const helperFun = require('./../serverSideJs/chatboxHelper');
 
 router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
@@ -129,6 +130,22 @@ router.post('/', async (req, res) => {
         .catch(err => console.log("Find err" + err));
 });
 
+module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function createCollections(name) {
     var MongoClient = require('mongodb').MongoClient;
     const configFile = require('./../../myUrl');
@@ -199,5 +216,3 @@ function updateProfile(userName, chatboxName) {
     });
 
 }
-
-module.exports = router;
