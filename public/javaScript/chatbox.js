@@ -84,6 +84,11 @@ messageBlock.addEventListener('keypress',function(){
     socket.emit('typing',from.value);
 });
 
+socket.on('connect',function(){
+    console.log("SocketID:"+socket.id);
+    //console.log("SessionID:",socket);
+})
+
 socket.on('typing', function (data) {
     console.log("Typing a message");
 });

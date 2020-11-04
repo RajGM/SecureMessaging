@@ -1,5 +1,6 @@
 const regProfile = require('../models/profile');
 const authToken = require('./../models/authToken');
+const socketToken = require('./../models/socketToken');
 const configFile = require('./../../myUrl');
 
 async function findProfile(userName) {
@@ -53,7 +54,7 @@ async function createProfile(userName, password) {
             })
             .catch(err => {
                 console.log("Profile creation problem", err);
-            })
+            });
 
         console.log("dbInsert state:", dbInsert);
 
@@ -73,6 +74,20 @@ async function createProfile(userName, password) {
             });
 
         console.log("AuthToken state", authInsert);
+
+        let newSocketToken = await new socketToken({
+            userName: userName,
+            socketID: ""
+        });
+
+        const dbsT = client.db("testdb").collection("sockettoken");
+        let stInsert = await dbsT.insertOne(newSocketToken)
+            .then(stTok => {
+                console.log("SocketToken created:" + stTok);
+            })
+            .catch(err => {
+                console.log("SocketToken creation error:" + err)
+            });
 
     }
     catch (err) {
