@@ -12,14 +12,7 @@ if(sessionStorage.getItem("userName")===null && sessionStorage.getItem("authToke
     from.value = sessionStorage.getItem("userName");
 }
 sendButton.onclick = function () {
-    /*
-    console.log(from.value);
-    console.log(to.value);
-    console.log(message.value);
-    console.log("authToken:"+sessionStorage.getItem("authToken"));
-    console.log(socket.id);
-    */
-
+    
     var objSent = {
         from:"",
         to:"",
@@ -87,7 +80,14 @@ messageBlock.addEventListener('keypress',function(){
 socket.on('connect',function(){
     console.log("SocketID:"+socket.id);
     //console.log("SessionID:",socket);
-})
+
+    socket.emit('socketIDUpdate',{
+        from:from.value,
+        authToken:sessionStorage.getItem("authToken"),
+        socketID:socket.id
+    });
+
+});
 
 socket.on('typing', function (data) {
     console.log("Typing a message");

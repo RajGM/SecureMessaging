@@ -3,6 +3,7 @@ const express = require('express');
 //var mongo = require('mongodb');
 const mongoose = require("mongoose");
 const bodyparser = require("body-parser");
+const finalHelper = require('./app/serverSideJs/indexHelper');
 
 // Define our application
 const app = express();
@@ -67,8 +68,31 @@ var io = socket(server);
 io.on('connection',function(socket){
   console.log('Socket made connection with client id:'+socket.id);
 
-  socket.on('chat',function(data){
-    io.sockets.emit('chat',data)
+  socket.on('chat',async function(data){
+    console.log("Socket chat data");
+    console.log("Socket:",data);
+    io.sockets.emit('chat',data);
+    let toSocketID = finalHelper.findSocketID(data.to,data.socketID);
+    
+    //if sockeID to is found
+    if(toSocketID !=""){
+      let fi = await finalHelper.insertChatData(data);
+      console.log("Final console log:",fi);
+     // io.sockets.emit('chat',data); //to particular user
+    }
+    else{
+      //if sockeID to is not found
+      console.log("Something went wrong");
+    }
+    
+  });
+
+  socket.on('socketIDUpdate',async function(data){
+    console.log("Updation data:",data);
+    console.log("SocketID in on.socket:"+data.socketID)
+    //update socket id from here
+    let upSid = await finalHelper.updateSocketID(data.from,data.authToken,data.socketID);
+    console.log("SocketID update:"+upSid);
   });
 
   socket.on('typing',function(data){

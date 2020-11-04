@@ -157,6 +157,105 @@ async function chatWindowCollectionUpdate(data) {
     return chatWindowCollectionState;
 }
 
+async function socketIDUpdate(userName, socketID) {
+
+    var MongoClient = require('mongodb').MongoClient;
+    const configFile = require('./../../myUrl');
+    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .catch(err => console.log(err));
+    let updationState;
+
+    try {
+        const db = client.db("testdb").collection("sockettoken");
+        //        dataArr = await db.updateOne({ userName: userName }, { $set: { authToken: "ABCDEFG", authExpire: "Soon2Expire" } }, { upsert: true, useFindAndModify: false });
+
+        let returnData = await db.updateOne({ userName: userName },{$set:{socketID:socketID}},{ upsert: true, useFindAndModify: false });
+        if (returnData) {
+            //console.log("socketID Updated:" + returnData);
+            updationState = "socketIDupdated";
+        } else {
+            console.log("Something went wrong during profile updation");
+            updationState = "errorSocketUpdate";
+        }
+    } catch (err) {
+        console.log("Profile updation error:" + err);
+    } finally {
+        client.close();
+    }
+
+    return updationState;
+
+}
+
+async function verifyAuthToken(userName, authToken) {
+    let MongoClient = require('mongodb').MongoClient;
+    const configFile = require('./../../myUrl');
+    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    let dataArr;
+    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .catch(err => console.log(err));
+
+    console.log("Values in verifyAuthToken function");
+    console.log("userName:" + userName + " authToken:" + authToken);
+    try {
+        const db = client.db('testdb').collection("authtokens");
+        dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
+            .toArray();
+    }
+    catch (err) {
+        console.log(err);
+    } finally {
+        client.close();
+    }
+
+    console.log(typeof dataArr);
+    console.log("dataArr", dataArr);
+    if (Object.keys(dataArr).length === 0) {
+        console.log("blank");
+        return "notExists"
+    } else {
+        if (authToken == dataArr[0].authToken) {
+            return "correct";
+        } else {
+            return "incorrect";
+        }
+    }
+
+}
+
+async function findSocketID(userName, socketID) {
+    let MongoClient = require('mongodb').MongoClient;
+    const configFile = require('./../../myUrl');
+    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    let dataArr;
+    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .catch(err => console.log(err));
+
+    console.log("Values in verifyAuthToken function");
+    console.log("userName:" + userName + " socketID:" + socketID);
+    try {
+        const db = client.db('testdb').collection("sockettoken");
+        dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
+            .toArray();
+    }
+    catch (err) {
+        console.log(err);
+    } finally {
+        client.close();
+    }
+
+    console.log(typeof dataArr);
+    console.log("dataArr", dataArr);
+    if (Object.keys(dataArr).length === 0) {
+        console.log("blank");
+        return "notExists"
+    } else {
+        return dataArr[0].socketID;
+    }
+
+}
+
 async function callME() {
     let collectionName = "testtest2";
     let userName = "test404";
@@ -177,12 +276,12 @@ async function callME() {
     //let chatWindowFinderState = await chatWinowFinder(collectionName);
     //console.log("chatWindowFinderState:" + chatWindowFinderState);
     const cW = new chatWindow({
-        user1:"test2",
-        user2:"test404",
-        usr12:"test2test404"
+        user1: "test2",
+        user2: "test404",
+        usr12: "test2test404"
     });
     let chatWindowCollState = await chatWindowCollectionUpdate(cW);
-    console.log("chatWindowState:"+chatWindowCollState);
+    console.log("chatWindowState:" + chatWindowCollState);
 }
 
 //callME();
@@ -192,3 +291,6 @@ exports.insertData = insertData;
 exports.updateProfile = updateProfile;
 exports.chatWinowFinder = chatWinowFinder;
 exports.chatWindowCollectionUpdate = chatWindowCollectionUpdate;
+exports.socketIDUpdate = socketIDUpdate;
+exports.verifyAuthToken = verifyAuthToken;
+exports.findSocketID = findSocketID;

@@ -10,8 +10,8 @@ async function loginProfile(userName, password) {
         let authTok = await updateAuthToken(userName);
         console.log("authTok return State:", authTok);
         console.log("updated");
-        let socketIDTok = await updateSocketToken(userName,"socketID");
-        console.log("socketID return State:",socketIDTok);
+        //let socketIDTok = await updateSocketToken(userName,"socketID");
+        //console.log("socketID return State:",socketIDTok);
         return "correct";
     } else {
         console.log("incorrect");
@@ -90,33 +90,6 @@ async function updateAuthToken(userName) {
     }
 
     return "ABCDEFGH";
-}
-
-async function updateSocketToken(userName, socketID) {
-
-    let MongoClient = require('mongodb').MongoClient;
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
-    let dataArr;
-    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-        .catch(err => console.log(err));
-
-    try {
-        client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-            .catch(err => console.log(err));
-
-        const db = client.db('testdb').collection('sockettoken');
-        dataArr = await db.updateOne({ userName: userName }, { $set: { socketID: socketID} }, { upsert: true, useFindAndModify: false });
-       
-        console.log("socketID update state:" + dataArr);
-        dataArr="socketIDupdated";
-    } catch (err) {
-        console.log("socketID updation error:" + err);
-        dataArr="error socketID update";
-    } finally {
-        client.close();
-    }
-
-    return dataArr;
 }
 
 async function callME() {

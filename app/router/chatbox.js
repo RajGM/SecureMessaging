@@ -2,11 +2,9 @@ const express = require('express');
 const router = new express.Router();
 var path = require('path');
 
-const regProfile = require('../models/profile');
 const msgSent = require('../models/chatMsg');
 const chatWindow = require('./../models/chatWindow');
 const authToken = require('./../models/authToken');
-const socketToken = require('./../models/socketToken');
 const helperFun = require('./../serverSideJs/chatboxHelper');
 const helperFun2 = require('./../serverSideJs/registerHelper');
 
@@ -83,6 +81,7 @@ router.post('/', async (req, res) => {
         let chatboxState = await helperFun.chatWinowFinder(usr1and2);
         
         if (chatboxState == "exists") {
+            helperFun.socketIDUpdate(newMessage.from,req.body.socketID);
             helperFun.insertData(usr1and2,newMessage);
             res.status(200).json({ pro: "Chatwindow exists" });
         } else {

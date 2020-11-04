@@ -75,6 +75,7 @@ async function createProfile(userName, password) {
 
         console.log("AuthToken state", authInsert);
 
+        
         let newSocketToken = await new socketToken({
             userName: userName,
             socketID: ""
@@ -88,7 +89,6 @@ async function createProfile(userName, password) {
             .catch(err => {
                 console.log("SocketToken creation error:" + err)
             });
-
     }
     catch (err) {
         console.log(err);
