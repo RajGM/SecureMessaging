@@ -14,8 +14,10 @@ router.get('/', function (req, res) {
 });
 
 router.get('/data',async function(req,res){
+    //console.log("body data:",req.body);
+    //console.log("body data:"+req.body);
     let chatData = await chatboxHelper.getWholeChat('test2');
-    console.log(chatData);
+    //console.log(chatData);
     res.status(200).json(chatData);
 });
 

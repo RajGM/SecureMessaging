@@ -322,7 +322,7 @@ async function getWholeChat(userName) {
         let collDump = await getCollectionData(newArr[i]);
         totalDump.push(collDump);
     }
-    console.log(totalDump);
+    //console.log(totalDump);
     return totalDump;
 }
 

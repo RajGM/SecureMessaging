@@ -79,32 +79,27 @@ logoutButton.onclick = function () {
 }
 
 async function getData(userName) {
-
+    console.log("Inside getData");
+    console.log("userName:"+userName);
     try {
         var xhttp = new XMLHttpRequest();
         xhttp.onload = function () {
             var response = JSON.parse(this.responseText);
-            console.log(response);
-            console.log(response[1]);
-            console.log(response[2]);
-            for (let i = 0; i < response[0].length; i++) {
+            
+            for (let i = 0; i < response.length; i++) {
                 if (i != 0) {
                     chatWindow.innerHTML += '<p><strong>' + response[i][0].from + '</strong></p>';
                 }
             }
         }
         xhttp.open("GET", "/chatbox/data", true);
-        xhttp.send();
-        //console.log(res[0]);
-        /*
+        xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
+        xhttp.send(userName);
         
-        */
-        //chatWindow.innerHTML += '<p><strong>' + objSent.message + '</strong></p>';
     }
     catch (err) {
         console.log("Error" + err);
     }
-
 
 }
 
@@ -121,8 +116,11 @@ socket.on('connect', async function () {
         authToken: sessionStorage.getItem("authToken"),
         socketID: socket.id
     });
-
-    await getData();
+    let uN = {userName:""}; 
+    uN.userName = sessionStorage.getItem("userName");
+    uN = JSON.stringify(uN);
+    console.log(uN);
+    await getData(uN);
 
 
 });
