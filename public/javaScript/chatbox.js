@@ -49,6 +49,7 @@ sendButton.onclick = function () {
             authToken: sessionStorage.getItem("authToken"),
             socketID: objSent.socketID
         });
+        output.innerHTML += '<p><strong>' + objSent.message + '</strong></p>';
     }
     catch (err) {
         console.log("Error" + err);

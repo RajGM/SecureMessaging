@@ -100,22 +100,5 @@ async function createProfile(userName, password) {
 
 }
 
-async function callME() {
-    let userName = "test5000";
-    let password = "123";
-    console.log("callME started");
-    let ok = await findProfile(userName);
-    console.log("ok", ok);
-    console.log("ok type", typeof of);
-    if (ok.toString() == "notExists") {
-        console.log("working");
-        let proCreation = await createProfile(userName, password);
-        console.log(proCreation);
-    }
-    console.log("callME end");
-}
-
-//callME();
-
 exports.findProfile = findProfile;
 exports.createProfile = createProfile;

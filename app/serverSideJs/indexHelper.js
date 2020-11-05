@@ -3,12 +3,13 @@ const chatboxHelper = require('./chatboxHelper');
 const registerHelper = require('./registerHelper');
 
 async function updateSocketID(userName, authToken, socketID) {
+    //if auth equal then update socketID
+    /*
     console.log("Inside updateSocketID");
     console.log("userName:" + userName);
     console.log("authToken:" + authToken);
     console.log("socketID:" + socketID);
-
-    //if auth equal then update socketID
+    */
     let authVerified = await chatboxHelper.verifyAuthToken(userName, authToken);
     if (authVerified == "correct") {
         await chatboxHelper.socketIDUpdate(userName, socketID);
@@ -20,21 +21,27 @@ async function updateSocketID(userName, authToken, socketID) {
 }
 
 async function insertChatData(data) {
+    //insert Data to database from socket.io call
     //userName, authToken, from, to, message
-    console.log(data);
+    //console.log(data);
 
-    console.log("Posting Message");
-    const msgValues = { from: "", to: "", message: "" ,timeStamp:""};
+    //console.log("Posting Message");
+    //const msgValues = { from: "", to: "", message: "" ,timeStamp:""};
     var timeStamp = new Date();
 
-    if (data.from != "" && data.to != "" && data.message != "") {
+    if (data.from != "" && data.to != "" && data.message != "" && data.authToken != "" && data.socketID != "") {
+       //continue operation if everythin is correct
+        /*
         msgValues.from = data.from;
         msgValues.to = data.to;
         msgValues.message = data.message;
         msgValues.timeStamp = timeStamp;
+        */
+    }else{
+        return "dataForm incorrect"
     }
-    console.log("Values in server object");
-    console.log(msgValues);
+    //console.log("Values in server object");
+    //console.log(msgValues);
 
     const newMessage = new msgSent({
         from: data.from,
@@ -84,17 +91,16 @@ async function insertChatData(data) {
         //res.status(200).json({ pro: "Reciever profile does not exists" });
         return "errChat";
     }
-
-    return "data uploaded";
+        return "errDataUpload";
 }
 
-async function findSocketID(userName, authToken,socketID) {
+async function findSocketID(userName, authToken) {
     let authVerified = await chatboxHelper.verifyAuthToken(userName, authToken);
     if (authVerified == "correct") {
-        let socID = await chatboxHelper.findSocketID(userName, socketID);
-        return socID
+        let socID = await chatboxHelper.findSocketID(userName);
+        return socID;
     } else {
-        return ""
+        return "notexists"
     }
 }
 

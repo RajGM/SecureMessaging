@@ -157,37 +157,6 @@ async function chatWindowCollectionUpdate(data) {
     return chatWindowCollectionState;
 }
 
-async function socketIDUpdate(userName, socketID) {
-
-    var MongoClient = require('mongodb').MongoClient;
-    const configFile = require('./../../myUrl');
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
-    const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-        .catch(err => console.log(err));
-    let updationState;
-
-    try {
-        const db = client.db("testdb").collection("sockettoken");
-        //        dataArr = await db.updateOne({ userName: userName }, { $set: { authToken: "ABCDEFG", authExpire: "Soon2Expire" } }, { upsert: true, useFindAndModify: false });
-
-        let returnData = await db.updateOne({ userName: userName },{$set:{socketID:socketID}},{ upsert: true, useFindAndModify: false });
-        if (returnData) {
-            //console.log("socketID Updated:" + returnData);
-            updationState = "socketIDupdated";
-        } else {
-            console.log("Something went wrong during profile updation");
-            updationState = "errorSocketUpdate";
-        }
-    } catch (err) {
-        console.log("Profile updation error:" + err);
-    } finally {
-        client.close();
-    }
-
-    return updationState;
-
-}
-
 async function verifyAuthToken(userName, authToken) {
     let MongoClient = require('mongodb').MongoClient;
     const configFile = require('./../../myUrl');
@@ -224,7 +193,38 @@ async function verifyAuthToken(userName, authToken) {
 
 }
 
-async function findSocketID(userName, socketID) {
+async function socketIDUpdate(userName, socketID) {
+
+    var MongoClient = require('mongodb').MongoClient;
+    const configFile = require('./../../myUrl');
+    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .catch(err => console.log(err));
+    let updationState;
+
+    try {
+        const db = client.db("testdb").collection("sockettoken");
+        //        dataArr = await db.updateOne({ userName: userName }, { $set: { authToken: "ABCDEFG", authExpire: "Soon2Expire" } }, { upsert: true, useFindAndModify: false });
+
+        let returnData = await db.updateOne({ userName: userName },{$set:{socketID:socketID}},{ upsert: true, useFindAndModify: false });
+        if (returnData) {
+            //console.log("socketID Updated:" + returnData);
+            updationState = "socketIDupdated";
+        } else {
+            console.log("Something went wrong during profile updation");
+            updationState = "errorSocketUpdate";
+        }
+    } catch (err) {
+        console.log("Profile updation error:" + err);
+    } finally {
+        client.close();
+    }
+
+    return updationState;
+
+}
+
+async function findSocketID(userName) {
     let MongoClient = require('mongodb').MongoClient;
     const configFile = require('./../../myUrl');
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
@@ -232,8 +232,8 @@ async function findSocketID(userName, socketID) {
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
-    console.log("Values in verifyAuthToken function");
-    console.log("userName:" + userName + " socketID:" + socketID);
+    //console.log("Values in verifyAuthToken function");
+    //console.log("userName:" + userName + " socketID:" + socketID);
     try {
         const db = client.db('testdb').collection("sockettoken");
         dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
@@ -291,6 +291,6 @@ exports.insertData = insertData;
 exports.updateProfile = updateProfile;
 exports.chatWinowFinder = chatWinowFinder;
 exports.chatWindowCollectionUpdate = chatWindowCollectionUpdate;
-exports.socketIDUpdate = socketIDUpdate;
 exports.verifyAuthToken = verifyAuthToken;
+exports.socketIDUpdate = socketIDUpdate;
 exports.findSocketID = findSocketID;

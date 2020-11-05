@@ -1,7 +1,7 @@
 const express = require('express');
 const router = new express.Router();
 var path = require('path');
-const helperFun = require('./../serverSideJs/registerHelper');
+const registerHelper = require('./../serverSideJs/registerHelper');
 
 router.get('/', function (req, res) {
     console.log("Sending Reg page");
@@ -17,16 +17,16 @@ router.post('/', async (req, res) => {
         profileValues.password = req.body.Password;
     }
 
-    console.log("Values in server object");
-    console.log(profileValues);
+    //console.log("Values in server object");
+    //console.log(profileValues);
 
-    let fpv = await helperFun.findProfile(profileValues.username);
+    let fpv = await registerHelper.findProfile(profileValues.username);
     console.log("fpv:", fpv);
     if(fpv=="exists"){
         console.log("Profile exists cannot create new");
         res.status(200).json("Profile exists");
     }else{
-        let cpv = await helperFun.createProfile(profileValues.username,profileValues.password);
+        let cpv = await registerHelper.createProfile(profileValues.username,profileValues.password);
         console.log(cpv);
         res.status(200).json("Success");
     }

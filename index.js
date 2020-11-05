@@ -75,12 +75,9 @@ io.on('connection', function (socket) {
     let toSocketID = await indexHelper.findSocketID(data.to, data.authToken, data.socketID);
 
     //if sockeID to is found
-    if (toSocketID != "") {
-      let fi = await indexHelper.insertChatData(data);
-      console.log("Final console log:", fi);
-      //io.sockets.broadcast.to(toSocketID).emit('chat', {data});
+    if (toSocketID != "notexists") {
+      let dataInsertState = await indexHelper.insertChatData(data);
       io.sockets.to(toSocketID).emit("chat", data);
-      // io.sockets.emit('chat',data); //to particular user
     }
     else {
       //if sockeID to is not found
@@ -90,15 +87,25 @@ io.on('connection', function (socket) {
   });
 
   socket.on('socketIDUpdate', async function (data) {
-    console.log("Updation data:", data);
-    console.log("SocketID in on.socket:" + data.socketID)
     //update socket id from here
+    //console.log("Updation data:", data);
     let upSid = await indexHelper.updateSocketID(data.from, data.authToken, data.socketID);
-    console.log("SocketID update:" + upSid);
+    //console.log("SocketID update:" + upSid);
   });
 
-  socket.on('typing', function (data) {
+  socket.on('typing', async function (data) {
     console.log("Typing");
-    socket.broadcast.emit('typing', data);
+    let toSocketID = await indexHelper.findSocketID(data.to, data.authToken, data.socketID);
+
+    //if sockeID to is found
+    if (toSocketID != "notexists") {
+      io.sockets.to(toSocketID).emit("typing", data);
+      //socket.broadcast.emit('typing', data);
+    }
+    else {
+      //if sockeID to is not found
+      //console.log("Emitting typing makes no sense as touser is offline");
+    }
+
   });
 });
