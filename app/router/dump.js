@@ -2,36 +2,12 @@ const express = require('express');
 const router = new express.Router();
 var path = require('path');
 const regProfile = require('./../models/profile');
-const chatW = require('./../models/chatWindow');
-const { MongoClient } = require('mongodb');
-const { resolve } = require('path');
-const { rejects } = require('assert');
-const { find } = require('./../models/profile');
-
-var collectionArr;
 
 router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + './../views/' + 'dump.html'));
 });
 
 router.get('/data', async function (req, res) {
-
-    /*
-    //const profile = await getCollectionNames('test');
-    //console.log(profile);
-    //handle the null cases here
-    //let totalchat = [];
-    for (let i = 0; i < profile.length; i++) {
-        //testtest2 is working 
-        let profileChat = await getCollectionData(profile[i]);
-        //console.log("ConsoleLog from res:", profileChat);
-        //console.log(typeof profileChat);
-        //totalchat=totalchat.concat(profileChat);
-        totalchat.push(profileChat);
-    }
-    console.log(totalchat);
-    console.log("All collection names");
-    */
     let totalDump = [];
     let collName = await dumpData("testdb");
     totalDump.push(collName);
@@ -106,27 +82,6 @@ async function getCollectionData(collName) {
 
     // console.log("End of getCollectionData");
     return dataArr;
-}
-
-async function callME() {
-    //let collN = await dumpData("testdb");
-    //console.log(collN);
-    
-    console.log("Start of CallME");
-    let ok = await getCollectionNames("testtest2");
-    console.log("Between of CallME");
-    console.log(ok);
-    console.log("End of CallME");
-}
-
-//callME();
-
-async function getWholeChat(userName) {
-    console.log("Before calling getCollectionNames");
-    var newArr = await getCollectionNames(userName);
-    collectionArr = newArr;
-    console.log("Testing local return:" + newArr);
-    console.log("After calling getCollectionNames");
 }
 
 module.exports = router;

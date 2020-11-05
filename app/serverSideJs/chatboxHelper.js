@@ -1,6 +1,3 @@
-const chatMessage = require('./../models/chatMsg');
-const chatWindow = require('./../models/chatWindow');
-
 async function createCollections(name) {
     var MongoClient = require('mongodb').MongoClient;
     const configFile = require('./../../myUrl');
@@ -206,7 +203,7 @@ async function socketIDUpdate(userName, socketID) {
         const db = client.db("testdb").collection("sockettoken");
         //        dataArr = await db.updateOne({ userName: userName }, { $set: { authToken: "ABCDEFG", authExpire: "Soon2Expire" } }, { upsert: true, useFindAndModify: false });
 
-        let returnData = await db.updateOne({ userName: userName },{$set:{socketID:socketID}},{ upsert: true, useFindAndModify: false });
+        let returnData = await db.updateOne({ userName: userName }, { $set: { socketID: socketID } }, { upsert: true, useFindAndModify: false });
         if (returnData) {
             //console.log("socketID Updated:" + returnData);
             updationState = "socketIDupdated";
@@ -256,35 +253,80 @@ async function findSocketID(userName) {
 
 }
 
-async function callME() {
-    let collectionName = "testtest2";
-    let userName = "test404";
-    //let collCreationState = await createCollections(collectionName);
-    //console.log("Collection Creation State:" + collCreationState);
-    /*
-    const newMessage = new chatMessage({
-        from:"test",
-        to:"test2",
-        message:"Date.getTime() test",
-        timeStamp: Date()
-    });
-    let dataInsertion = await insertData(collectionName,newMessage);
-    console.log("Message insertion state:"+dataInsertion);
-    */
-    //let updationState = await updateProfile(userName, collectionName);
-    //console.log("Updation State:"+updationState);
-    //let chatWindowFinderState = await chatWinowFinder(collectionName);
-    //console.log("chatWindowFinderState:" + chatWindowFinderState);
-    const cW = new chatWindow({
-        user1: "test2",
-        user2: "test404",
-        usr12: "test2test404"
-    });
-    let chatWindowCollState = await chatWindowCollectionUpdate(cW);
-    console.log("chatWindowState:" + chatWindowCollState);
+async function getCollectionNames(userName) {
+
+    const configFile = require('./../../myUrl');
+    let MongoClient = require('mongodb').MongoClient;
+    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    let dataArr;
+    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .catch(err => console.log(err));
+
+    try {
+        const db = client.db('testdb').collection("userprofiles");
+
+        dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
+            .toArray();
+    }
+    catch (err) {
+        console.log(err);
+    } finally {
+        client.close();
+    }
+
+    if (Object.keys(dataArr).length === 0) {
+        console.log("blank");
+        return "notExists"
+    }
+    
+    return dataArr[0].chatWindow;
+
 }
 
-//callME();
+async function getCollectionData(collName) {
+    //console.log("Start of getCollectionData");
+    let MongoClient = require('mongodb').MongoClient;
+    const configFile = require('./../../myUrl');
+    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    let dataArr;
+    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .catch(err => console.log(err));
+
+    try {
+        const db = client.db('testdb').collection(collName);
+        //  console.log("Catch point 1");
+
+        dataArr = await db.find({}, { projection: { "_id": 0 } })
+            .toArray();
+        //console.log(dataArr);
+        // console.log("End of data catch point");
+    }
+    catch (err) {
+        console.log(err);
+    } finally {
+        client.close();
+    }
+
+    // console.log("End of getCollectionData");
+    return dataArr;
+}
+
+async function getWholeChat(userName) {
+    //let collName = await dumpData("testdb");
+    var newArr = await getCollectionNames(userName);
+    
+    let totalDump = [];
+    totalDump.push(newArr);
+    
+    for (let i = 0; i < newArr.length; i++) {
+        let collDump = await getCollectionData(newArr[i]);
+        totalDump.push(collDump);
+    }
+    console.log(totalDump);
+    return totalDump;
+}
+
+//getWholeChat("test2");
 
 exports.createCollections = createCollections;
 exports.insertData = insertData;
@@ -294,3 +336,6 @@ exports.chatWindowCollectionUpdate = chatWindowCollectionUpdate;
 exports.verifyAuthToken = verifyAuthToken;
 exports.socketIDUpdate = socketIDUpdate;
 exports.findSocketID = findSocketID;
+exports.getCollectionNames = getCollectionNames;
+exports.getCollectionData = getCollectionData;
+exports.getWholeChat = getWholeChat;

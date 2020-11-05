@@ -78,11 +78,41 @@ logoutButton.onclick = function () {
     }
 }
 
+async function getData(userName) {
+
+    try {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
+            var response = JSON.parse(this.responseText);
+            console.log(response);
+            console.log(response[1]);
+            console.log(response[2]);
+            for (let i = 0; i < response[0].length; i++) {
+                if (i != 0) {
+                    chatWindow.innerHTML += '<p><strong>' + response[i][0].from + '</strong></p>';
+                }
+            }
+        }
+        xhttp.open("GET", "/chatbox/data", true);
+        xhttp.send();
+        //console.log(res[0]);
+        /*
+        
+        */
+        //chatWindow.innerHTML += '<p><strong>' + objSent.message + '</strong></p>';
+    }
+    catch (err) {
+        console.log("Error" + err);
+    }
+
+
+}
+
 messageBlock.addEventListener('keypress', function () {
     socket.emit('typing', from.value);
 });
 
-socket.on('connect', function () {
+socket.on('connect', async function () {
     console.log("SocketID:" + socket.id);
     //console.log("SessionID:",socket);
 
@@ -91,6 +121,9 @@ socket.on('connect', function () {
         authToken: sessionStorage.getItem("authToken"),
         socketID: socket.id
     });
+
+    await getData();
+
 
 });
 

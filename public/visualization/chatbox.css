@@ -13,13 +13,17 @@
     overflow: scroll;
 }
 
-div{
-    display: inline-block;
-}
-
 #output{
     border: 1px solid black;
-    display: block;
+    display: inline-block;
+    height: 800px;
+    width: 800px;
+    overflow: scroll;
+}
+
+#chatWindow{
+    border: 1px solid black;
+    display: inline-block;
     height: 800px;
     width: 800px;
     overflow: scroll;

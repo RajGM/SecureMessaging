@@ -1,6 +1,7 @@
 const express = require('express');
 const router = new express.Router();
 var path = require('path');
+var chatboxHelper = require('./../serverSideJs/chatboxHelper');
 
 const msgSent = require('../models/chatMsg');
 const chatWindow = require('./../models/chatWindow');
@@ -10,6 +11,12 @@ const helperFun2 = require('./../serverSideJs/registerHelper');
 
 router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
+});
+
+router.get('/data',async function(req,res){
+    let chatData = await chatboxHelper.getWholeChat('test2');
+    console.log(chatData);
+    res.status(200).json(chatData);
 });
 
 router.post('/logout', async (req, res) => {
