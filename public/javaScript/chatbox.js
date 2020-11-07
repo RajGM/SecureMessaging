@@ -4,8 +4,10 @@ var to = document.getElementById("toUser");
 var message = document.getElementById("messageUser");
 var sendButton = document.getElementById("sendButton");
 var output = document.getElementById("output");
+var chatWindow = document.getElementById("chatWindow");
 var messageBlock = document.getElementById("messageUser");
 var logoutButton = document.getElementById('logoutButton');
+var currentChatOpenIndex = 0;
 if (sessionStorage.getItem("userName") === null && sessionStorage.getItem("authTokenuserName") === null) {
     window.location.href = "http://localhost:3000/login";
 } else {
@@ -78,17 +80,56 @@ logoutButton.onclick = function () {
     }
 }
 
+function hideShow(chatIndex){
+    console.log("chatIndex Passed:"+chatIndex);
+    console.log("Global open Index:"+currentChatOpenIndex);
+    let finalID = "chatCount"+currentChatOpenIndex;
+    let modiDom = document.getElementById(finalID);
+    modiDom.style.display = "none";
+    currentChatOpenIndex = chatIndex;
+    finalID = "chatCount"+chatIndex;
+    modiDom = document.getElementById(finalID);
+    modiDom.style.display = "inline-block";
+}
+
 async function getData(userName) {
     console.log("Inside getData");
-    console.log("userName:"+userName);
+    console.log("userName:",userName);
     try {
         var xhttp = new XMLHttpRequest();
         xhttp.onload = function () {
             var response = JSON.parse(this.responseText);
-            
+            let chatCount = 1;
             for (let i = 0; i < response.length; i++) {
                 if (i != 0) {
-                    chatWindow.innerHTML += '<p><strong>' + response[i][0].from + '</strong></p>';
+                    let showusr;
+                    if(response[i][0].from == sessionStorage.getItem("userName") ){
+                        showusr = response[i][0].to;
+                    }else{
+                        showusr = response[i][0].from;
+                    }
+                    let finalID = "chatCount"+chatCount;
+                    console.log("finalID:"+finalID);
+                    chatWindow.innerHTML += '<div class="chatBox" onclick="hideShow('+chatCount+')" id='+chatCount+'><strong>' + showusr + '</strong></div>';
+                    output.innerHTML += '<div id='+finalID+'></div>';
+                    let indiChat = document.getElementById(finalID);
+                    
+
+
+                    let newEle = document.createElement('div');
+                        indiChat.appendChild(newEle);
+                        indiChat.style.display = "none";
+                        for (let j = 0; j < response[i].length; j++) {
+                            for(let [key,value] of Object.entries(response[i][j])){
+                                indiChat.innerHTML+= key+":"+value+" ";
+                                console.log(`${key}:${value}`);
+                            }
+                            indiChat.innerHTML+= "<br>";
+                        }
+
+
+
+                    chatCount+=1;
                 }
             }
         }
@@ -109,7 +150,6 @@ messageBlock.addEventListener('keypress', function () {
 
 socket.on('connect', async function () {
     console.log("SocketID:" + socket.id);
-    //console.log("SessionID:",socket);
 
     socket.emit('socketIDUpdate', {
         from: from.value,
@@ -121,7 +161,6 @@ socket.on('connect', async function () {
     uN = JSON.stringify(uN);
     console.log(uN);
     await getData(uN);
-
 
 });
 

@@ -28,3 +28,7 @@
     width: 800px;
     overflow: scroll;
 }
+
+.chatBox{
+    border: 1px solid black;
+}
