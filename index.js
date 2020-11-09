@@ -14,7 +14,7 @@ const app = express();
 var socket = require('socket.io');
 
 // Set 'port' value to either an environment value PORT or 3000
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8000);
 
 app.use(express.static(__dirname + '/public'));
 
