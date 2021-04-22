@@ -7,50 +7,56 @@
   <body>
     <div id="pageDiv">
       <div id="mainDiv">
-
         <div>
           <p>SignUp for <b class="chatAppName">Shadow</b></p>
         </div>
 
-        <div>
-          <label for="userName">User Name</label>
-        <input type="text" id="userName" name="userName" /><br />
-        <label for="Password">Password</label>
-        <input type="password" id="Password" name="Password" /><br />
-        <label for="cPassword">Confirm Password</label>
-        <input type="password" id="cPassword" name="cPassword" /><br />
-        
+        <div class="inputDiv">
+          <div >
+            <label for="cPassword">Email</label> <br />
+            <label for="userName">User Name</label> <br />
+            <label for="Password">Password</label> 
+          </div>
+          <div >
+            &nbsp
+            <input type="text" id="userName" name="userName" /><br />
+            <input type="password" id="Password" name="Password" /><br />
+            <input type="password" id="cPassword" name="cPassword" />
+          </div>
         </div>
 
-        <div>
-          <label for="vehicle1" class="rulesClass"> I understand</label>
-        <input type="checkbox" id="vehicle1" />
-      <br>
-      <label for="vehicle1" class="rulesClass"> I understand</label>
-      <input type="checkbox" id="vehicle1" />
-      <br>
-      <label for="vehicle1" class="rulesClass"> I understand</label>
-      <input type="checkbox" id="vehicle1" />
-    <br>
-    <label for="vehicle1" class="rulesClass"> I understand</label>
-    <input type="checkbox" id="vehicle1" />
-    <br>
-    
-      
-      </div>
+        <div class="inputDiv">
 
-        <br />
+          <div class="checkBoxDiv">
+            <input class="checkBoxOption" type="checkbox" id="vehicle1" />
+            <br />
+            <input class="checkBoxOption" type="checkbox" id="vehicle1" />
+          </div>
+          
+          <div class="tickStatementDiv">
+            &nbsp
+            <label for="vehicle1" class="rulesClass"
+              >Email is used for verification only</label
+            >
+            <br />
+            &nbsp
+            <label for="vehicle1" class="rulesClass"
+              >userName cannot be changed later</label
+            >
+          </div>
+
+        </div>
 
         <div>
           <button id="RegisterButton">Register</button>
-
         </div>
-        
+
         <br />
 
         <div class="complementDiv">
-          <button class="secondaryButton">LogIn</button> Instead
+          Looking to <button class="secondaryButton">LogIn</button> Instead
         </div>
+
       </div>
     </div>
 

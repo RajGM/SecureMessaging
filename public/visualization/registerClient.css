@@ -6,7 +6,7 @@ body{
 #pageDiv{
     display: flex;
     width: 500px;
-    height: 950px;
+    height: 850px;
     flex-direction: column;
     justify-content: center;
     margin: auto;
@@ -16,7 +16,7 @@ body{
     text-align: center;
     font-size: 25px;
     background-color: #FFFFFF;
-    height: 500px;
+    height: 420px;
     border: 1px solid black;
     box-shadow: 10px 10px;
 }
@@ -29,6 +29,14 @@ p{
     font-size: 30px;
 }
 
+.inputDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: right;
+    margin-bottom: 10px;
+}
+
 input{
     height: 22px;
     font-size: 17px;
@@ -36,7 +44,14 @@ input{
     width: 200px;
 }
 
+.checkBoxOption{
+    height: 25px;
+}
 
+.tickStatementDiv{
+    font-size: 23px;
+    text-align: left;
+}
 
 #vehicle1{
     width: 20px;

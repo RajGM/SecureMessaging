@@ -6,7 +6,7 @@ body{
 #pageDiv{
     display: flex;
     width: 500px;
-    height: 950px;
+    height: 850px;
     flex-direction: column;
     justify-content: center;
     margin: auto;
@@ -32,11 +32,18 @@ button{
     box-shadow: 5px 5px;
 }
 
+.inputDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: right;
+}
+
 input{
     height: 25px;
     font-size: 20px;
     font-family: cursive;
-    width: 200px;
+    width: 150px;
 }
 
 p{

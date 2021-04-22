@@ -40,10 +40,6 @@ const register = require('./app/router/register');
 app.use("/register", register);
 const login = require('./app/router/login');
 app.use("/login", login);
-/*
-const reset = require('./app/router/reset');
-app.use('/reset',reset);
-*/
 const chatbox = require('./app/router/chatbox');
 app.use('/chatbox', chatbox);
 const dumpDB = require('./app/router/dump');

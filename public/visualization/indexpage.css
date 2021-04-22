@@ -6,13 +6,15 @@ body{
 #pageDiv{
     display: flex;
     width: 500px;
-    height: 950px;
+    height: 850px;
     flex-direction: column;
     justify-content: center;
     margin: auto;
 }
 
 #mainDiv{
+    display: flex;
+    flex-direction: column;
     text-align: center;
     background-color: #FFFFFF;
     height: 400px;
