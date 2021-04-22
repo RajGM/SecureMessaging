@@ -13,14 +13,33 @@ body{
 }
 
 #mainDiv{
-    display: flex;
-    flex-direction: column;
     text-align: center;
     font-size: 25px;
     background-color: #FFFFFF;
-    height: 400px;
+    height: 500px;
     border: 1px solid black;
     box-shadow: 10px 10px;
+}
+
+p{
+    font-size: 20px;
+}
+
+.chatAppName{
+    font-size: 30px;
+}
+
+input{
+    height: 22px;
+    font-size: 17px;
+    font-family: cursive;
+    width: 200px;
+}
+
+
+
+#vehicle1{
+    width: 20px;
 }
 
 button{
@@ -30,21 +49,6 @@ button{
     height: 50px;
     width: 200px;
     box-shadow: 5px 5px;
-}
-
-input{
-    height: 25px;
-    font-size: 20px;
-    font-family: cursive;
-    width: 200px;
-}
-
-p{
-    font-size: 20px;
-}
-
-.chatAppName{
-    font-size: 30px;
 }
 
 .complementDiv{
