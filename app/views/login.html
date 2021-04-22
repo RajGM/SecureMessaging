@@ -7,18 +7,36 @@
 
 <body>
 
-    <div>
-        <label for="userName">User Name</label>
-        <input type="text" name="userName" id="userName"></input>
-        <br>
-        <br>
-        <label for="Password">Password</label>
-        <input type="password" id="Password" name="Password"><br><br>
-        <button id="LoginButton">Login</button>
-    </div>
+    <div id="pageDiv">
 
-    <script src="/javaScript/loginClient.js"></script>
+        <div id="mainDiv">
+            <p>LogIn into <b class="chatAppName">Shadow</b> </p>
+            <label for="userName">userName</label>
+            <input type="text" name="userName" id="userName"></input>
+            <br>
+            <br>
+            <label for="Password">&nbsp Password</label>
+            <input type="password" id="Password" name="Password"><br><br>
+            <button id="LoginButton">Login</button>
+
+            <br>
+            <br>
+            
+            <div class="complementDiv">
+                Recover your <button class="secondaryButton">UserName</button>  OR <button class="secondaryButton">Password</button> 
+            </div>
+
+            <div class="complementDiv">
+                Create new <button class="secondaryButton">Account</button>
+            </div>
+            
     
+        </div>
+
+    </div>
+    
+    <script src="/javaScript/loginClient.js"></script>
+    <link rel="stylesheet" type="text/css" href="/visualization/loginClient.css" />
 </body>
 
 </html>

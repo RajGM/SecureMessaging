@@ -1,5 +1,6 @@
 body{
     background-color: #FFFAFA;
+    font-family: Cursive;
 }
 
 #pageDiv{
@@ -29,11 +30,11 @@ body{
 }
 
 p{
-    font-family: Cursive;
     font-size: 20px;
 }
 
 button{
+    font-family: Cursive;
     margin-left: 10px;
     font-size: 20px;
     height: 50px;
