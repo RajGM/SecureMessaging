@@ -9,7 +9,7 @@ var messageBlock = document.getElementById("messageUser");
 var logoutButton = document.getElementById('logoutButton');
 var currentChatOpenIndex = 0;
 if (sessionStorage.getItem("userName") === null && sessionStorage.getItem("authTokenuserName") === null) {
-    window.location.href = "http://localhost:3000/login";
+    window.location.href = "http://localhost:8000/login";
 } else {
     from.value = sessionStorage.getItem("userName");
 }
@@ -114,8 +114,6 @@ async function getData(userName) {
                     output.innerHTML += '<div id='+finalID+'></div>';
                     let indiChat = document.getElementById(finalID);
                     
-
-
                     let newEle = document.createElement('div');
                         indiChat.appendChild(newEle);
                         indiChat.style.display = "none";

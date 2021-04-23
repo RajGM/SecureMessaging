@@ -31,7 +31,7 @@ LoginButton.onclick = function () {
               sessionStorage.setItem("authToken",response.authToken);
               userName.value="";
               Password.value="";
-              window.location.href = "http://localhost:3000/chatbox";
+              window.location.href = "http://localhost:8000/chatbox";
             }
     };
     xhttp.open("POST", "/login/", true);

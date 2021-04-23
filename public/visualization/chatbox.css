@@ -1,3 +1,24 @@
+#pageDiv{
+    display: flex;
+    width: 1500px;
+    height: 850px;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    background-color: aqua;
+}
+
+#mainDiv{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background-color: #FFFFFF;
+    height: 80%;
+    border: 1px solid black;
+    box-shadow: 10px 10px;
+    background-color: bisque;
+}
+
 #contactsMenu{
  border: 1px solid black;
  height: 500px;

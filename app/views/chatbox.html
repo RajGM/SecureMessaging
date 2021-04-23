@@ -13,17 +13,42 @@
 </head>
 
 <body>
-    <h1>This is chat Box</h1>
+
+    <h1>Shadow </h1>
+
+    <div id="pageDiv">
+
+        <diV id="mainDiv">
+            <div id="topBarDiv">
+                <button id="logoutButton">Logout</button>
+            </div>
+            <div id="allChatDiv">
+                <div id="chatAndContactParentDiv">
+                    <div id="contactParentDiv">
+
+                    </div>
+                    <div id="chatParentDiv">
+                        <div>
+                            <input type="text" name="toUser" id="toUser" placeholder="To"></input>
+                        </div>
+                        <div>
+
+                        </div>
+                        <div>
+        <input type="text" name="messageUser" id="messageUser" placeholder="message"></input>
+        <button id="sendButton">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </diV>
+
+    </div>
 
     <div id="info">
-        <label for="from">From</label>
-        <input type="text" name="fromUser" id="fromUser"></input>
-        <label for="to">To</label>
-        <input type="text" name="toUser" id="toUser"></input>
-        <label for="message">Message</label>
-        <input type="text" name="messageUser" id="messageUser"></input>
-        <button id="sendButton">Submit</button>
+        <input type="text" name="fromUser" id="fromUser" placeholder="from" style="display: none;"></input>
     </div>
+
     <div id="output">
         <div id="chatCount0">
 
@@ -32,7 +57,6 @@
     <div id="chatWindow">
 
     </div>
-    <button id="logoutButton">Logout</button>
     <script src="/javaScript/chatbox.js"></script>
 </body>
 
