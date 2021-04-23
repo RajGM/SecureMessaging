@@ -1,3 +1,7 @@
+body{
+    background-color: #FFFAFA;
+}
+
 #pageDiv{
     display: flex;
     width: 1500px;
@@ -52,4 +56,49 @@
 
 .chatBox{
     border: 1px solid black;
+}
+
+#allChatDiv{
+    display: flex;
+    flex-direction: row;
+}
+
+#contactParentDiv{
+    height: 100%;
+    flex-grow: 1;
+    min-width: 400px;
+    background-color:cornsilk;
+}
+
+#chatParentDiv{
+    height: 100%;
+    flex-grow: 10;
+    background-color: chartreuse;
+}
+
+.singleContactTest{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 60px;
+    width: 400px;
+    box-shadow: 5px 5px;
+    margin: auto;
+    margin-top:15px ;
+    margin-bottom: 15px;
+    border: 1px solid black;
+    background-color: ghostwhite;
+}
+
+.displayImageTag{
+    height:80%; 
+    margin-top: 4px;
+    border-radius: 50%;
+    border: 2px solid black;
+}
+
+.verticalFlexParent{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
