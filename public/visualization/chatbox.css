@@ -178,11 +178,19 @@ body {
 .keyBoardDivClass {
     display: flex;
     flex-direction: row;
-    background-color: tomato;
+    background-color: cornsilk;
     width: 90%;
     min-height: 100px;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
     margin: auto;
     box-shadow: 5px 5px;
+}
+
+#sendButton{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-image: url("http://i.stack.imgur.com/BSVeQ.gif");
+    background-repeat: no-repeat;
 }

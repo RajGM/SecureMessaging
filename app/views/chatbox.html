@@ -20,7 +20,19 @@
 
         <diV id="mainDiv">
             <div id="topBarDiv">
-                <button id="logoutButton">Logout</button>
+
+                <div class="singleContactTest" style="width: 90%;">
+                    <div>
+                        <img src="/assets/student.png" class="displayImageTag">
+                    </div>
+                    <div class="verticalFlexParent">
+                        RajGM
+                    </div>
+                    <div class="verticalFlexParent">
+                        <button id="logoutButton">Logout</button>
+                    </div>
+                </div>
+
             </div>
             <div id="allChatDiv">
 
@@ -208,14 +220,53 @@
 
                         </div>
 
+                        <div class="fullWidth">
+
+                            <div class="indiMessageDiv right">
+                                Dummy Messages
+                                Dummy Messages
+                                Dummy Messages
+                                Dummy Messages
+                                Dummy Messages
+                                Dummy Messages
+                                Dummy Messages
+                            </div>
+
+                        </div>
+
+                        <div class="fullWidth">
+
+                            <div class="middle">
+                                Class Center
+                            </div>
+
+                        </div>
+
+                        <div class="fullWidth">
+
+                            <div class="indiMessageDiv left">
+                                Dummy Messages
+                                Dummy Messages
+                                Dummy Messages
+                                Dummy Messages
+                                Dummy Messages
+                                Dummy Messages
+                                Dummy Messages
+                            </div>
+
+                        </div>
+
                     </div>
 
                     <div class="keyBoardDivClass">
+                        <div>
+                            <button style="height: 40px; width: 40px; border-radius: 50%;">EP</button>
+                        </div>
                         <div >
-                            <p id="messageUser" contenteditable="true" style="min-width: 600px; max-height: 80px; overflow-y:auto; border: 1px solid black;" placeholder="message">Check</p>
+                            <p id="messageUser" contenteditable="true" style="min-width: 700px; max-width: 700px ;max-height: 80px; overflow-y:auto; border: 1px solid black;" placeholder="message">Check</p>
                         </div>
                         <div>
-                            <button id="sendButton">Submit</button>
+                            <button id="sendButton"></button>
                         </div>
                     </div>
 
@@ -226,18 +277,21 @@
 
     </div>
 
-    <div id="info">
-        <input type="text" name="fromUser" id="fromUser" placeholder="from" style="display: none;"></input>
+    <div style="display: none;">
+        
+    <div id="info" style="display: none;">
+        <input type="text" name="fromUser" id="fromUser" placeholder="from"></input>
     </div>
-
-    <div id="output">
+    <div id="output" style="display: none;">
         <div id="chatCount0">
 
         </div>
     </div>
-    <div id="chatWindow">
+    <div id="chatWindow" style="display: none;">
 
     </div>
+    </div>
+
     <script src="/javaScript/chatbox.js"></script>
 </body>
 
