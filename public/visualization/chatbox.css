@@ -10,6 +10,7 @@ body {
     flex-direction: column;
     justify-content: center;
     margin: auto;
+    margin-top: 50px;
     background-color: aqua;
 }
 
@@ -18,7 +19,7 @@ body {
     flex-direction: column;
     text-align: center;
     background-color: #FFFFFF;
-    height: 80%;
+    height: 90%;
     border: 1px solid black;
     box-shadow: 10px 10px;
     background-color: bisque;
@@ -27,7 +28,34 @@ body {
 #topBarDiv{
     display: flex;
     flex-direction: row;
+}
+
+.userTabDiv{
+    height: 100%;
+    flex-grow: 1;
+    min-width: 400px;
+    background-color: cornsilk;
+}
+
+.toUserTabDiv{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 10;
+    width: 95%;
+    background-color: chartreuse;
+}
+
+.chatWindowClassTest{
+    display: flex;
+    flex-direction: row;
     justify-content: space-around;
+    height: 70%;
+    width: 90%;
+    margin: auto;
+    margin-top: 15px;
+    box-shadow: 5px 5px;
+    border: 1px solid black;
+    background-color: tomato;
 }
 
 #userTab{
@@ -156,7 +184,7 @@ body {
     margin-top: 5px;
     box-shadow: 5px 5px;
     background-color: tomato;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .indiMessageDiv {

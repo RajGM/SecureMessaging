@@ -14,55 +14,67 @@
 
 <body>
 
-    <h1>Shadow </h1>
-
     <div id="pageDiv">
+
+        <div style="text-align: center;width: 10%; margin: auto; margin-bottom: 10px;">
+            <div style="box-shadow: 5px 5px, -5px -5px;border: 1px solid black;">
+                <h1>Shadow</h1>
+            </div>
+        </div>
 
         <diV id="mainDiv">
 
             <div id="topBarDiv">
 
-                <div id="userTab">
-                    <div>
-                        
+                <div class="userTabDiv">
+
+                    <div class="singleContactTest">
+                       
+                        <div>
+                            <img src="/assets/student.png" class="displayImageTag">
+                        </div>
+                        <div class="verticalFlexParent">
+                            RajGM
+                        </div>
+                        <div class="verticalFlexParent">
+                            <button id="logoutButton">Logout</button>
+                        </div>
+                        <div class="verticalFlexParent">
+                            <img src="/assets/more.png" class="moreImageTag">
+                        </div>
+
                     </div>
-                    <div style="background-color: aqua;" class="displayImageTag">
-                        <img src="/assets/student.png" style="height: 80%; margin-top: 4px; border-radius: 50%;" >
-                    </div>
-                    <div class="verticalFlexParent" >
-                        RajGM
-                    </div>
-                    <div class="verticalFlexParent">
-                        <button id="logoutButton">Logout</button>
-                    </div>
+
                 </div>
 
-                <div id="toUserTab">
+                <div class="toUserTabDiv">
 
-                    <div class="verticalFlexParent">
-                        <img src="/assets/student.png" style="height: 50px; width: 50px;">
+                    <div class="chatWindowClassTest">
+                        
+                        <div class="verticalFlexParent">
+                            <img src="/assets/student.png" style="height: 50px; width: 50px;">
+                        </div>
+                        <div class="verticalFlexParent">
+                            UserName
+                        </div>
+                        <div class="verticalFlexParent">
+                            Not Connected
+                        </div>
+                        <div class="verticalFlexParent">
+                            +
+                        </div>
+                        <div style="display: none;" class="verticalFlexParent">
+                            <img src="/assets/student.png" style="height: 50px; width: 50px;">
+                        </div>
+                        <div style="display: none;" class="verticalFlexParent">
+                            <img src="/assets/student.png" style="height: 50px; width: 50px;">
+                        </div>
+                        <div class="verticalFlexParent">
+                            <img src="/assets/student.png" style="height: 50px; width: 50px;">
+                        </div>
+
                     </div>
-
-                    <div class="verticalFlexParent" style="background-color: blanchedalmond; width: 100px;">
-                        <input type="text" name="toUser" id="toUser" placeholder="RajGM123Test"></input>
-                    </div>
-
-                    <div class="verticalFlexParent" style="background-color: blanchedalmond;">
-                        This is my status of 35s characters
-                    </div>
-
-                    <div class="verticalFlexParent">
-                        <img src="/assets/phone.png" style="height: 40px; width: 50px;">
-                    </div>
-
-                    <div class="verticalFlexParent">
-                        <img src="/assets/video-call.png" style="height: 50px; width: 50px;">
-                    </div>
-
-                    <div class="verticalFlexParent">
-                        <img src="/assets/more.png" style="height: 30px; width: 30px;">
-                    </div>
-
+                    
                 </div>
 
             </div>
@@ -184,8 +196,6 @@
 
                 <div id="chatParentDiv">
 
-                    
-
                     <div class="chatWindowClass">
 
                         <div class="fullWidth">
@@ -303,3 +313,78 @@
 </body>
 
 </html>
+
+
+<!--
+
+
+    <div id="userTab">
+                        <div>
+
+                        </div>
+                        <div style="background-color: aqua;" class="displayImageTag">
+                            <img src="/assets/student.png" style="height: 80%; margin-top: 4px; border-radius: 50%;">
+                        </div>
+                        <div class="verticalFlexParent">
+                            RajGM
+                        </div>
+                        <div class="verticalFlexParent">
+                            
+                        </div>
+                    </div>
+                
+
+
+
+
+
+
+
+
+
+
+
+-->
+
+
+<!--
+
+
+
+
+
+
+
+
+ <div id="toUserTab">
+
+                        <div class="verticalFlexParent">
+                            <img src="/assets/student.png" style="height: 50px; width: 50px;">
+                        </div>
+
+                        <div class="verticalFlexParent" style="background-color: blanchedalmond; width: 100px;">
+                            <input type="text" name="toUser" id="toUser" placeholder="RajGM123Test"></input>
+                        </div>
+
+                        <div class="verticalFlexParent" style="background-color: blanchedalmond;">
+                            This is my status of 35s characters
+                        </div>
+
+                        <div class="verticalFlexParent">
+                            <img src="/assets/phone.png" style="height: 40px; width: 50px;">
+                        </div>
+
+                        <div class="verticalFlexParent">
+                            <img src="/assets/video-call.png" style="height: 50px; width: 50px;">
+                        </div>
+
+                        <div class="verticalFlexParent">
+                            <img src="/assets/more.png" style="height: 30px; width: 30px;">
+                        </div>
+
+                    </div>
+
+
+
+
+-->
