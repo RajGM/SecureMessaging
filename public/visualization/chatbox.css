@@ -24,6 +24,25 @@ body {
     background-color: bisque;
 }
 
+#topBarDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#userTab{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 60px;
+    width: 23%;
+    box-shadow: 5px 5px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    border: 1px solid black;
+    background-color: yellow;
+}
+
 #contactsMenu {
     border: 1px solid black;
     height: 500px;
@@ -69,6 +88,20 @@ body {
     flex-grow: 1;
     min-width: 400px;
     background-color: cornsilk;
+}
+
+#searchDiv{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 70px;
+        width: 350px;
+        box-shadow: 5px 5px;
+        margin: auto;
+        margin-top: 15px;
+        margin-bottom: 20px;
+        background-color: ghostwhite;
+        border: 1px solid black;
 }
 
 .singleContactTest {
@@ -160,10 +193,11 @@ body {
 }
 
 #toUserTab {
-    width: 90%;
-    margin: auto;
+    width: 65%;
+    height: 60px;
     display: flex;
     flex-direction: row;
+    margin-top: 15px;
     justify-content: space-around;
     background-color: tomato;
     box-shadow: 5px 5px;
@@ -194,3 +228,72 @@ body {
     background-image: url("http://i.stack.imgur.com/BSVeQ.gif");
     background-repeat: no-repeat;
 }
+
+
+
+
+
+
+
+
+/*Toogle Switch Test*/
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 32px;
+    height: 16px;
+  }
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: gold;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 8px;
+    width: 8px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(16px);
+    -ms-transform: translateX(16px);
+    transform: translateX(16px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }

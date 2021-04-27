@@ -19,13 +19,17 @@
     <div id="pageDiv">
 
         <diV id="mainDiv">
+
             <div id="topBarDiv">
 
-                <div class="singleContactTest" style="width: 90%;">
+                <div id="userTab">
                     <div>
-                        <img src="/assets/student.png" class="displayImageTag">
+                        
                     </div>
-                    <div class="verticalFlexParent">
+                    <div style="background-color: aqua;" class="displayImageTag">
+                        <img src="/assets/student.png" style="height: 80%; margin-top: 4px; border-radius: 50%;" >
+                    </div>
+                    <div class="verticalFlexParent" >
                         RajGM
                     </div>
                     <div class="verticalFlexParent">
@@ -33,29 +37,55 @@
                     </div>
                 </div>
 
+                <div id="toUserTab">
+
+                    <div class="verticalFlexParent">
+                        <img src="/assets/student.png" style="height: 50px; width: 50px;">
+                    </div>
+
+                    <div class="verticalFlexParent" style="background-color: blanchedalmond; width: 100px;">
+                        <input type="text" name="toUser" id="toUser" placeholder="RajGM123Test"></input>
+                    </div>
+
+                    <div class="verticalFlexParent" style="background-color: blanchedalmond;">
+                        This is my status of 35s characters
+                    </div>
+
+                    <div class="verticalFlexParent">
+                        <img src="/assets/phone.png" style="height: 40px; width: 50px;">
+                    </div>
+
+                    <div class="verticalFlexParent">
+                        <img src="/assets/video-call.png" style="height: 50px; width: 50px;">
+                    </div>
+
+                    <div class="verticalFlexParent">
+                        <img src="/assets/more.png" style="height: 30px; width: 30px;">
+                    </div>
+
+                </div>
+
             </div>
+
             <div id="allChatDiv">
 
                 <div id="contactParentDiv">
 
-                    <div class="singleContactTest">
+                    <div id="searchDiv">
 
                         <div>
-                            <img src="/assets/student.png" class="displayImageTag">
+                            Search from Web <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider round"></span>
+                            </label> Contacts
                         </div>
-                        <div class="verticalFlexParent">
-                            RajGM
-                        </div>
-                        <div class="verticalFlexParent typing">
-                            Typing
-                        </div>
-                        <div class="verticalFlexParent">
-                            <img src="/assets/more.png" class="moreImageTag">
+                        <div>
+                            <input type="text" placeholder="Enter userName to search"> <button>Go</button>
                         </div>
 
                     </div>
 
-                    <hr>
+
 
                     <div class="singleContactTest">
 
@@ -154,33 +184,7 @@
 
                 <div id="chatParentDiv">
 
-                    <div id="toUserTab">
-
-                            <div class="verticalFlexParent">
-                                <img src="/assets/student.png" style="height: 50px; width: 50px;">
-                            </div>
-
-                            <div class="verticalFlexParent" style="background-color: blanchedalmond; width: 100px;">
-                                <input type="text" name="toUser" id="toUser" placeholder="RajGM123Test"></input>
-                            </div>
-
-                            <div class="verticalFlexParent" style="background-color: blanchedalmond;">
-                                This is my status of 35s characters
-                            </div>
-
-                            <div class="verticalFlexParent">
-                                <img src="/assets/phone.png" style="height: 40px; width: 50px;">
-                            </div>
-
-                            <div class="verticalFlexParent">
-                                <img src="/assets/video-call.png" style="height: 50px; width: 50px;">
-                            </div>
-
-                            <div class="verticalFlexParent">
-                                <img src="/assets/more.png" style="height: 30px; width: 30px;">
-                            </div>
-
-                    </div>
+                    
 
                     <div class="chatWindowClass">
 
@@ -262,8 +266,10 @@
                         <div>
                             <button style="height: 40px; width: 40px; border-radius: 50%;">EP</button>
                         </div>
-                        <div >
-                            <p id="messageUser" contenteditable="true" style="min-width: 700px; max-width: 700px ;max-height: 80px; overflow-y:auto; border: 1px solid black;" placeholder="message">Check</p>
+                        <div>
+                            <p id="messageUser" contenteditable="true"
+                                style="min-width: 700px; max-width: 700px ;max-height: 80px; overflow-y:auto; border: 1px solid black;"
+                                placeholder="message">Check</p>
                         </div>
                         <div>
                             <button id="sendButton"></button>
@@ -273,23 +279,24 @@
                 </div>
 
             </div>
+
         </diV>
 
     </div>
 
     <div style="display: none;">
-        
-    <div id="info" style="display: none;">
-        <input type="text" name="fromUser" id="fromUser" placeholder="from"></input>
-    </div>
-    <div id="output" style="display: none;">
-        <div id="chatCount0">
+
+        <div id="info" style="display: none;">
+            <input type="text" name="fromUser" id="fromUser" placeholder="from"></input>
+        </div>
+        <div id="output" style="display: none;">
+            <div id="chatCount0">
+
+            </div>
+        </div>
+        <div id="chatWindow" style="display: none;">
 
         </div>
-    </div>
-    <div id="chatWindow" style="display: none;">
-
-    </div>
     </div>
 
     <script src="/javaScript/chatbox.js"></script>
