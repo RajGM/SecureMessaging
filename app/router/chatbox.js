@@ -9,8 +9,22 @@ const authToken = require('./../models/authToken');
 const helperFun = require('./../serverSideJs/chatboxHelper');
 const helperFun2 = require('./../serverSideJs/registerHelper');
 
+//jwt web token
+const jwt = require("jsonwebtoken");
+
 router.get('/',verifyToken ,function (req, res) {
-    res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
+    jwt.verify(req.token, 'secretkey', (err, authData) => {
+        if(err) {
+          res.sendStatus(403);
+        } else {
+        //      res.json({
+        //      authData,
+        //      testData:"Hi Test"
+        //    })
+        res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
+        }
+      });
+    //res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
 });
 
 router.get('/data', async function (req, res) {
