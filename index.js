@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const bodyparser = require("body-parser");
 const indexHelper = require('./app/serverSideJs/indexHelper');
 
+
 // Define our application
 const app = express();
 
@@ -19,8 +20,9 @@ app.set('port', process.env.PORT || 8000);
 app.use(express.static(__dirname + '/public'));
 
 //Middleware for bodyparser
+//changed from true to false
 app.use(bodyparser.urlencoded({
-  extended: true
+  extended: false
 }));
 app.use(bodyparser.json());
 
@@ -32,6 +34,8 @@ mongoose
   .connect(db)
   .then(() => console.log("Connected Successfully"))
   .catch(err => console.log(err));
+
+
 
 // Router listens on / (root)
 var route = require('./router');

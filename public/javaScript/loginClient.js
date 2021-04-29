@@ -9,8 +9,8 @@ LoginButton.onclick = function () {
 
     var objSent = {
         userName:"",
-        Password:""
-    }
+        Password:"",
+        }
 
     objSent.userName = userName.value;
     objSent.Password = Password.value;

@@ -9,11 +9,11 @@ const authToken = require('./../models/authToken');
 const helperFun = require('./../serverSideJs/chatboxHelper');
 const helperFun2 = require('./../serverSideJs/registerHelper');
 
-router.get('/', function (req, res) {
+router.get('/',verifyToken ,function (req, res) {
     res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
 });
 
-router.get('/data',async function(req,res){
+router.get('/data', async function (req, res) {
     let chatData = await chatboxHelper.getWholeChat('test2');
     res.status(200).json(chatData);
 });
@@ -42,12 +42,12 @@ router.post('/logout', async (req, res) => {
     res.status(200).json(returnDoc);
 });
 
+//check eachTime for auth Token verification
+//Then
+//Check for socketIDToken of from and to if all good 
+//Then save and sent message 
+//Else save message only
 router.post('/', async (req, res) => {
-    //check eachTime for auth Token verification
-    //Then
-    //Check for socketIDToken of from and to if all good 
-    //Then save and sent message 
-    //Else save message only
     console.log("Posting Message");
     const msgValues = { from: "", to: "", message: "" };
     console.log(req.body);
@@ -85,22 +85,22 @@ router.post('/', async (req, res) => {
         usr1and2 = usr1 + usr2;
 
         let chatboxState = await helperFun.chatWinowFinder(usr1and2);
-        
+
         if (chatboxState == "exists") {
-            helperFun.socketIDUpdate(newMessage.from,req.body.socketID);
-            helperFun.insertData(usr1and2,newMessage);
+            helperFun.socketIDUpdate(newMessage.from, req.body.socketID);
+            helperFun.insertData(usr1and2, newMessage);
             res.status(200).json({ pro: "Chatwindow exists" });
         } else {
             let chatW = new chatWindow({
-                user1:usr1,
-                user2:usr2,
-                usr12:usr1and2
+                user1: usr1,
+                user2: usr2,
+                usr12: usr1and2
             });
-            let profileUpdateStateFrom = await helperFun.updateProfile(newMessage.from,usr1and2);
-            let profileUpdateStateTo = await helperFun.updateProfile(newMessage.to,usr1and2);
+            let profileUpdateStateFrom = await helperFun.updateProfile(newMessage.from, usr1and2);
+            let profileUpdateStateTo = await helperFun.updateProfile(newMessage.to, usr1and2);
             let collectionCreationState = await helperFun.createCollections(usr1and2);
             let chatWindowCollUpdateState = await helperFun.chatWindowCollectionUpdate(chatW);
-            let dataInsertState = await helperFun.insertData(usr1and2,newMessage);
+            let dataInsertState = await helperFun.insertData(usr1and2, newMessage);
             res.status(200).json({ pro: "Chatwindow does not exists created new collection" });
         }
 
@@ -109,5 +109,19 @@ router.post('/', async (req, res) => {
     }
 
 });
+
+function verifyToken(req,res,next){
+    const bearerHeader = req.headers['authorization'];
+
+    if(typeof bearerHeader !== 'undefined'){
+        const bearer = bearerHeader.split(' ');
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+        next();
+    }else{
+        res.status(404).json("unAuthorized");
+    }
+
+}
 
 module.exports = router;

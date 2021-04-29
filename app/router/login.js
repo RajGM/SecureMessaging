@@ -3,6 +3,10 @@ const router = new express.Router();
 var path = require('path');
 const helperFunction = require('./../serverSideJs/loginHelper');
 
+//jwt
+const jwt = require("jsonwebtoken");
+
+
 router.get('/',function(req,res){
     res.sendFile(path.join(__dirname+'./../views/'+'login.html'));
 })
@@ -25,18 +29,29 @@ router.post('/', async (req,res)=>{
         userName:"",
         authToken:""
     }
+
+    let authTokenTest;
     
     if(loginState=="correct"){
         responseObj.logInfo="Success";
         responseObj.userName=profileValues.username;
-        responseObj.authToken="ABCDEFG"; 
+        jwt.sign({responseObj},'secretkey',{expiresIn:'300s'},(err,token)=>{
+            
+             authTokenTest = token;
+            console.log("authTokenTest:"+authTokenTest);
+            console.log(typeof token);
+            console.log("SecretKey"+token);
+            res.status(200).json({token});
+        });
+            
     }else if(loginState=="incorrect"){
         responseObj.logInfo="Fail";
     }else if(loginState=="notExists"){
         responseObj.logInfo="Fail";
     }
     
-    res.status(200).json(responseObj);
+    responseObj.authToken = authTokenTest;
+    //res.status(200).json(responseObj);
 });
 
 module.exports = router;
