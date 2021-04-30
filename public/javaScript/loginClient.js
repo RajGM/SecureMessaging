@@ -29,15 +29,11 @@ LoginButton.onclick = function () {
       } else if (response.success == true) {
         console.log("Correct Username and password");
         sessionStorage.setItem("userName", response.userName);
-        //sessionStorage.setItem("authToken", response.authToken);
+        sessionStorage.setItem("authToken", response.token);
         userName.value = "";
         Password.value = "";
-        var tokenObject = {
-          token:""
-        }
-        tokenObject.token =  response.token;
-        console.log(tokenObject.token);
-        //window.location.href = "http://localhost:8000/chatbox";
+        console.log(response.token);
+        window.location.href = "http://localhost:8000/chatbox";
       }
     };
     xhttp.open("POST", "/login", true);

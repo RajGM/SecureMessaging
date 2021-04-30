@@ -12,19 +12,22 @@ const helperFun2 = require('./../serverSideJs/registerHelper');
 //jwt web token
 const jwt = require("jsonwebtoken");
 
-router.get('/',verifyToken ,function (req, res) {
-    jwt.verify(req.token, 'secretkey', (err, authData) => {
-        if(err) {
-          res.sendStatus(403);
-        } else {
-        //      res.json({
-        //      authData,
-        //      testData:"Hi Test"
-        //    })
-        res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
-        }
-      });
-    //res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
+router.get('/' ,function (req, res) {
+    // jwt.verify(req.token, 'secretkey', (err, authData) => {
+    //     if(err) {
+    //       res.sendStatus(403);
+    //     } else {
+    //     // console.log(req.token);
+    //     // console.log("Auth Data:",authData);
+    //     // console.log("Auth Data:"+authData.responseObj.userName);
+    //     //       res.json({
+    //           authData,
+    //           testData:"Hi Test"
+    //         })
+    //     //res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
+    //     }
+    //   });
+    res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
 });
 
 router.get('/data', async function (req, res) {
