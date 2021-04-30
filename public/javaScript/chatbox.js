@@ -86,16 +86,12 @@ function hideShow(chatIndex) {
     modiDom.style.display = "inline-block";
 }
 
-async function getData(userData) {
+async function showData(userData) {
     console.log("User Data", userData);
-    let jsonData = JSON.stringify(userData);
-    console.log("User Data", jsonData);
-    try {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onload = function () {
-            var response = JSON.parse(this.responseText);
+    console.log("All chatWindow list:"+userData[0]);
+        
             let chatCount = 1;
-            for (let i = 0; i < response.length; i++) {
+            for (let i = 0; i < userData[0].length; i++) {
                 if (i != 0) {
                     let showusr;
                     if (response[i][0].from == sessionStorage.getItem("userName")) {
@@ -120,20 +116,11 @@ async function getData(userData) {
                         indiChat.innerHTML += "<br>";
                     }
 
-
-
                     chatCount += 1;
                 }
             }
-        }
-        xhttp.open("GET", "/data", true);
-        xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
-        xhttp.send(jsonData);
-
-    }
-    catch (err) {
-        console.log("Error" + err);
-    }
+        
+    
 
 }
 
@@ -163,6 +150,7 @@ socket.on('connect', async function () {
         }
     })
         .then(function (response) {
+            showData(response.data);
             console.log(response);
         })
         .catch(function (error) {

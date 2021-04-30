@@ -306,21 +306,38 @@ async function getCollectionData(collName) {
         client.close();
     }
 
-    // console.log("End of getCollectionData");
+    //console.log("End of getCollectionData",dataArr);
     return dataArr;
 }
 
 async function getWholeChat(userName) {
     //let collName = await dumpData("testdb");
     var newArr = await getCollectionNames(userName);
-    
+    console.log("newArr list::::::"+newArr);
     let totalDump = [];
     totalDump.push(newArr);
+
+    let allData = {
+        chatWindows:totalDump
+    }
     
+    //start debugging from this point next time 
     for (let i = 0; i < newArr.length; i++) {
         let collDump = await getCollectionData(newArr[i]);
         totalDump.push(collDump);
+        let tempChatWindowName; 
+        
+        if(collDump[0].from <= collDump[0].to){
+            tempChatWindowName = collDump[0].from + collDump[0].to;
+        }else{
+            tempChatWindowName = collDump[0].to + collDump[0].from;
+        }
+
+        allData[tempChatWindowName] = collDump;
     }
+    console.log("Beautified Dump:",allData);
+    console.log("Window Name:",allData.chatWindows);
+    console.log("Window Data:",allData[allData.chatWindows[0]]);    
     //console.log(totalDump);
     return totalDump;
 }
