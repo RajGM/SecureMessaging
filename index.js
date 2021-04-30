@@ -22,7 +22,7 @@ app.use(express.static(__dirname + '/public'));
 //Middleware for bodyparser
 //changed from true to false
 app.use(bodyparser.urlencoded({
-  extended: false
+  extended: true
 }));
 app.use(bodyparser.json());
 

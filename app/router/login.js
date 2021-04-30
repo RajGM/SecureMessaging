@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 
 router.get('/',function(req,res){
     res.sendFile(path.join(__dirname+'./../views/'+'login.html'));
-})
+});
 
 router.post('/', async (req,res)=>{
     const profileValues = { username: "", password: "" };

@@ -1,4 +1,8 @@
 var socket = io.connect('http://localhost:8000');
+//axios test
+//import axios from 'axios';
+//const axios = require('axios').default;
+//ends here
 var from = document.getElementById("fromUser");
 var to = document.getElementById("toUser");
 var message = document.getElementById("messageUser");
@@ -8,11 +12,13 @@ var chatWindow = document.getElementById("chatWindow");
 var messageBlock = document.getElementById("messageUser");
 var logoutButton = document.getElementById('logoutButton');
 var currentChatOpenIndex = 0;
-if (sessionStorage.getItem("userName") === null && sessionStorage.getItem("authTokenuserName") === null) {
+
+if (sessionStorage.getItem("userName") === undefined || sessionStorage.getItem("authToken") === "undefined") {
     window.location.href = "http://localhost:8000/login";
 } else {
     from.value = sessionStorage.getItem("userName");
 }
+
 sendButton.onclick = function () {
 
     var objSent = {
@@ -29,20 +35,8 @@ sendButton.onclick = function () {
     objSent.authToken = sessionStorage.getItem("authToken");
     objSent.socketID = socket.id;
 
-    var jsonFormat = JSON.stringify(objSent);
     message.value = "";
     try {
-
-        /*
-        var xhttp = new XMLHttpRequest();
-        xhttp.onload = function(){
-            var response = JSON.parse(this.responseText);
-            console.log(response);
-        }
-        xhttp.open("POST", "/chatbox/", true);
-        xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
-        xhttp.send(jsonFormat);    
-        */
 
         socket.emit('chat', {
             from: objSent.from,
@@ -80,21 +74,22 @@ logoutButton.onclick = function () {
     }
 }
 
-function hideShow(chatIndex){
-    console.log("chatIndex Passed:"+chatIndex);
-    console.log("Global open Index:"+currentChatOpenIndex);
-    let finalID = "chatCount"+currentChatOpenIndex;
+function hideShow(chatIndex) {
+    console.log("chatIndex Passed:" + chatIndex);
+    console.log("Global open Index:" + currentChatOpenIndex);
+    let finalID = "chatCount" + currentChatOpenIndex;
     let modiDom = document.getElementById(finalID);
     modiDom.style.display = "none";
     currentChatOpenIndex = chatIndex;
-    finalID = "chatCount"+chatIndex;
+    finalID = "chatCount" + chatIndex;
     modiDom = document.getElementById(finalID);
     modiDom.style.display = "inline-block";
 }
 
-async function getData(userName) {
-    console.log("Inside getData");
-    console.log("userName:",userName);
+async function getData(userData) {
+    console.log("User Data", userData);
+    let jsonData = JSON.stringify(userData);
+    console.log("User Data", jsonData);
     try {
         var xhttp = new XMLHttpRequest();
         xhttp.onload = function () {
@@ -103,38 +98,38 @@ async function getData(userName) {
             for (let i = 0; i < response.length; i++) {
                 if (i != 0) {
                     let showusr;
-                    if(response[i][0].from == sessionStorage.getItem("userName") ){
+                    if (response[i][0].from == sessionStorage.getItem("userName")) {
                         showusr = response[i][0].to;
-                    }else{
+                    } else {
                         showusr = response[i][0].from;
                     }
-                    let finalID = "chatCount"+chatCount;
-                    console.log("finalID:"+finalID);
-                    chatWindow.innerHTML += '<div class="chatBox" onclick="hideShow('+chatCount+')" id='+chatCount+'><strong>' + showusr + '</strong></div>';
-                    output.innerHTML += '<div id='+finalID+'></div>';
+                    let finalID = "chatCount" + chatCount;
+                    console.log("finalID:" + finalID);
+                    chatWindow.innerHTML += '<div class="chatBox" onclick="hideShow(' + chatCount + ')" id=' + chatCount + '><strong>' + showusr + '</strong></div>';
+                    output.innerHTML += '<div id=' + finalID + '></div>';
                     let indiChat = document.getElementById(finalID);
-                    
+
                     let newEle = document.createElement('div');
-                        indiChat.appendChild(newEle);
-                        indiChat.style.display = "none";
-                        for (let j = 0; j < response[i].length; j++) {
-                            for(let [key,value] of Object.entries(response[i][j])){
-                                indiChat.innerHTML+= key+":"+value+" ";
-                                console.log(`${key}:${value}`);
-                            }
-                            indiChat.innerHTML+= "<br>";
+                    indiChat.appendChild(newEle);
+                    indiChat.style.display = "none";
+                    for (let j = 0; j < response[i].length; j++) {
+                        for (let [key, value] of Object.entries(response[i][j])) {
+                            indiChat.innerHTML += key + ":" + value + " ";
+                            console.log(`${key}:${value}`);
                         }
+                        indiChat.innerHTML += "<br>";
+                    }
 
 
 
-                    chatCount+=1;
+                    chatCount += 1;
                 }
             }
         }
-        xhttp.open("GET", "/chatbox/data", true);
+        xhttp.open("GET", "/data", true);
         xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
-        xhttp.send(userName);
-        
+        xhttp.send(jsonData);
+
     }
     catch (err) {
         console.log("Error" + err);
@@ -154,11 +149,26 @@ socket.on('connect', async function () {
         authToken: sessionStorage.getItem("authToken"),
         socketID: socket.id
     });
-    let uN = {userName:""}; 
-    uN.userName = sessionStorage.getItem("userName");
-    uN = JSON.stringify(uN);
-    console.log(uN);
-    await getData(uN);
+
+    let uN = { socketID: "", authToken: "" };
+    uN.socketID = socket.id;
+    uN.authToken = sessionStorage.getItem("authToken");
+    console.log("Before sending DATA", uN);
+    let jsonData = JSON.stringify(uN);
+    axios.get('http://localhost:8000/chatbox/data', {
+        params: {
+            authToken: "authToken",
+            socketID: "socketID"
+        }
+    })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+    //await getData(uN);
 
 });
 

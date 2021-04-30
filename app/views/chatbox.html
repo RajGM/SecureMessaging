@@ -10,14 +10,18 @@
         crossorigin="anonymous">
         </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
 </head>
 
 <body>
 
     <div id="pageDiv">
 
-        <div style="text-align: center;width: 10%; margin: auto; margin-bottom: 10px; box-shadow: 5px 5px, -5px -5px;border: 1px solid black;">
-                <h1>Shadow</h1>
+        <div
+            style="text-align: center;width: 10%; margin: auto; margin-bottom: 10px; box-shadow: 5px 5px, -5px -5px;border: 1px solid black;">
+            <h1>Shadow</h1>
         </div>
 
         <diV id="mainDiv">
@@ -27,7 +31,7 @@
                 <div class="userTabDiv">
 
                     <div class="singleContactTest" style="margin-left: 15px;">
-                       
+
                         <div>
                             <img src="/assets/student.png" class="displayImageTag">
                         </div>
@@ -48,7 +52,7 @@
                 <div class="toUserTabDiv">
 
                     <div class="chatWindowClassTest">
-                        
+
                         <div class="verticalFlexParent">
                             <img src="/assets/student.png" style="height: 50px; width: 50px;">
                         </div>
@@ -72,7 +76,7 @@
                         </div>
 
                     </div>
-                    
+
                 </div>
 
             </div>
@@ -81,158 +85,159 @@
 
                 <div id="contactParentDiv">
 
-                    
-
-                        <div id="searchDiv">
-
-                            <div>
-                                Search from Web <label class="switch">
-                                    <input type="checkbox">
-                                    <span class="slider round"></span>
-                                </label> Contacts
-                            </div>
-                            <div>
-                                <input type="text" placeholder="Enter userName to search" id="searchInput"> <button id="searchButton">Go</button>
-                            </div>
-    
-                        </div>
-    
-                        <hr>
-    
-                        <div class="singleContactTest">
-    
-                            <div>
-                                <img src="/assets/student.png" class="displayImageTag">
-                            </div>
-                            <div class="verticalFlexParent">
-                                RajGM
-                            </div>
-                            <div class="verticalFlexParent typing">
-                                Typing
-                            </div>
-                            <div class="verticalFlexParent">
-                                <img src="/assets/more.png" class="moreImageTag">
-                            </div>
-    
-                        </div>
-    
-                        <hr>
-    
-                        <div class="singleContactTest">
-    
-                            <div>
-                                <img src="/assets/student.png" class="displayImageTag">
-                            </div>
-                            <div class="verticalFlexParent">
-                                RajGM
-                            </div>
-                            <div class="verticalFlexParent typing">
-                                Typing
-                            </div>
-                            <div class="verticalFlexParent">
-                                <img src="/assets/more.png" class="moreImageTag">
-                            </div>
-    
-                        </div>
-    
-                        <hr>
-    
-                        <div class="singleContactTest">
-    
-                            <div>
-                                <img src="/assets/student.png" class="displayImageTag">
-                            </div>
-                            <div class="verticalFlexParent">
-                                RajGM
-                            </div>
-                            <div class="verticalFlexParent typing">
-                                Typing
-                            </div>
-                            <div class="verticalFlexParent">
-                                <img src="/assets/more.png" class="moreImageTag">
-                            </div>
-    
-                        </div>
-    
-                        <hr>
-    
-                        <div class="singleContactTest">
-    
-                            <div>
-                                <img src="/assets/student.png" class="displayImageTag">
-                            </div>
-                            <div class="verticalFlexParent">
-                                RajGM
-                            </div>
-                            <div class="verticalFlexParent typing">
-                                Typing
-                            </div>
-                            <div class="verticalFlexParent">
-                                <img src="/assets/more.png" class="moreImageTag">
-                            </div>
-    
-                        </div>
-    
-                        <hr>
-    
-                        <div class="singleContactTest">
-    
-                            <div>
-                                <img src="/assets/student.png" class="displayImageTag">
-                            </div>
-                            <div class="verticalFlexParent">
-                                RajGM
-                            </div>
-                            <div class="verticalFlexParent typing">
-                                Typing
-                            </div>
-                            <div class="verticalFlexParent">
-                                <img src="/assets/more.png" class="moreImageTag">
-                            </div>
-    
-                        </div>
-    
-                        <hr>
-                        
-                        <div class="singleContactTest">
-    
-                            <div>
-                                <img src="/assets/student.png" class="displayImageTag">
-                            </div>
-                            <div class="verticalFlexParent">
-                                RajGM
-                            </div>
-                            <div class="verticalFlexParent typing">
-                                Typing
-                            </div>
-                            <div class="verticalFlexParent">
-                                <img src="/assets/more.png" class="moreImageTag">
-                            </div>
-    
-                        </div>
-
-                        <hr>
-    
-                        <div class="singleContactTest">
-    
-                            <div>
-                                <img src="/assets/student.png" class="displayImageTag">
-                            </div>
-                            <div class="verticalFlexParent">
-                                RajGM
-                            </div>
-                            <div class="verticalFlexParent typing">
-                                Typing
-                            </div>
-                            <div class="verticalFlexParent">
-                                <img src="/assets/more.png" class="moreImageTag">
-                            </div>
-    
-                        </div>
 
 
-                    
-                    
+                    <div id="searchDiv">
+
+                        <div>
+                            Search from Web <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider round"></span>
+                            </label> Contacts
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Enter userName to search" id="searchInput"> <button
+                                id="searchButton">Go</button>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="singleContactTest">
+
+                        <div>
+                            <img src="/assets/student.png" class="displayImageTag">
+                        </div>
+                        <div class="verticalFlexParent">
+                            RajGM
+                        </div>
+                        <div class="verticalFlexParent typing">
+                            Typing
+                        </div>
+                        <div class="verticalFlexParent">
+                            <img src="/assets/more.png" class="moreImageTag">
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="singleContactTest">
+
+                        <div>
+                            <img src="/assets/student.png" class="displayImageTag">
+                        </div>
+                        <div class="verticalFlexParent">
+                            RajGM
+                        </div>
+                        <div class="verticalFlexParent typing">
+                            Typing
+                        </div>
+                        <div class="verticalFlexParent">
+                            <img src="/assets/more.png" class="moreImageTag">
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="singleContactTest">
+
+                        <div>
+                            <img src="/assets/student.png" class="displayImageTag">
+                        </div>
+                        <div class="verticalFlexParent">
+                            RajGM
+                        </div>
+                        <div class="verticalFlexParent typing">
+                            Typing
+                        </div>
+                        <div class="verticalFlexParent">
+                            <img src="/assets/more.png" class="moreImageTag">
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="singleContactTest">
+
+                        <div>
+                            <img src="/assets/student.png" class="displayImageTag">
+                        </div>
+                        <div class="verticalFlexParent">
+                            RajGM
+                        </div>
+                        <div class="verticalFlexParent typing">
+                            Typing
+                        </div>
+                        <div class="verticalFlexParent">
+                            <img src="/assets/more.png" class="moreImageTag">
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="singleContactTest">
+
+                        <div>
+                            <img src="/assets/student.png" class="displayImageTag">
+                        </div>
+                        <div class="verticalFlexParent">
+                            RajGM
+                        </div>
+                        <div class="verticalFlexParent typing">
+                            Typing
+                        </div>
+                        <div class="verticalFlexParent">
+                            <img src="/assets/more.png" class="moreImageTag">
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="singleContactTest">
+
+                        <div>
+                            <img src="/assets/student.png" class="displayImageTag">
+                        </div>
+                        <div class="verticalFlexParent">
+                            RajGM
+                        </div>
+                        <div class="verticalFlexParent typing">
+                            Typing
+                        </div>
+                        <div class="verticalFlexParent">
+                            <img src="/assets/more.png" class="moreImageTag">
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="singleContactTest">
+
+                        <div>
+                            <img src="/assets/student.png" class="displayImageTag">
+                        </div>
+                        <div class="verticalFlexParent">
+                            RajGM
+                        </div>
+                        <div class="verticalFlexParent typing">
+                            Typing
+                        </div>
+                        <div class="verticalFlexParent">
+                            <img src="/assets/more.png" class="moreImageTag">
+                        </div>
+
+                    </div>
+
+
+
+
                 </div>
 
                 <div id="chatParentDiv">
@@ -352,12 +357,13 @@
                             </div>
 
                         </div>
-                        
+
                     </div>
 
                     <div class="keyBoardDivClass">
                         <div>
-                            <button style="height: 40px; width: 40px; border-radius: 50%;" id="emojiButton" disabled>EP</button>
+                            <button style="height: 40px; width: 40px; border-radius: 50%;" id="emojiButton"
+                                disabled>EP</button>
                         </div>
                         <div>
                             <p id="messageUser" contenteditable="true"

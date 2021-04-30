@@ -28,11 +28,10 @@ LoginButton.onclick = function () {
         console.log("Incorrect User Name or password");
       } else if (response.success == true) {
         console.log("Correct Username and password");
-        sessionStorage.setItem("userName", response.userName);
+        sessionStorage.setItem("userName", objSent.userName);
         sessionStorage.setItem("authToken", response.token);
         userName.value = "";
         Password.value = "";
-        console.log(response.token);
         window.location.href = "http://localhost:8000/chatbox";
       }
     };

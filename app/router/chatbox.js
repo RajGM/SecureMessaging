@@ -3,6 +3,11 @@ const router = new express.Router();
 var path = require('path');
 var chatboxHelper = require('./../serverSideJs/chatboxHelper');
 
+var bodyParser = require('body-parser')
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+
 const msgSent = require('../models/chatMsg');
 const chatWindow = require('./../models/chatWindow');
 const authToken = require('./../models/authToken');
@@ -30,9 +35,13 @@ router.get('/' ,function (req, res) {
     res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
 });
 
-router.get('/data', async function (req, res) {
-    let chatData = await chatboxHelper.getWholeChat('test2');
-    res.status(200).json(chatData);
+router.get('/data',jsonParser ,async function (req, res) {
+    console.log("Trying to grab userData");
+    console.log(req.query);
+    console.log("SocketID on server:", req.query.socketID);
+    console.log("AuthToken on server:", req.query.authToken);
+    //let chatData = await chatboxHelper.getWholeChat('test2');
+    res.status(200).json("chatData");
 });
 
 router.post('/logout', async (req, res) => {
