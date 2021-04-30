@@ -17,31 +17,15 @@ const helperFun2 = require('./../serverSideJs/registerHelper');
 //jwt web token
 const jwt = require("jsonwebtoken");
 
-router.get('/' ,function (req, res) {
-    // jwt.verify(req.token, 'secretkey', (err, authData) => {
-    //     if(err) {
-    //       res.sendStatus(403);
-    //     } else {
-    //     // console.log(req.token);
-    //     // console.log("Auth Data:",authData);
-    //     // console.log("Auth Data:"+authData.responseObj.userName);
-    //     //       res.json({
-    //           authData,
-    //           testData:"Hi Test"
-    //         })
-    //     //res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
-    //     }
-    //   });
+router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
 });
 
-router.get('/data',jsonParser ,async function (req, res) {
-    console.log("Trying to grab userData");
-    console.log(req.query);
-    console.log("SocketID on server:", req.query.socketID);
-    console.log("AuthToken on server:", req.query.authToken);
-    //let chatData = await chatboxHelper.getWholeChat('test2');
-    res.status(200).json("chatData");
+router.get('/data', verifyToken, async function (req, res) {
+
+    let chatData = await chatboxHelper.getWholeChat(req.query.userName);
+    res.status(200).json(chatData);
+
 });
 
 router.post('/logout', async (req, res) => {
@@ -136,15 +120,36 @@ router.post('/', async (req, res) => {
 
 });
 
-function verifyToken(req,res,next){
-    const bearerHeader = req.headers['authorization'];
-
-    if(typeof bearerHeader !== 'undefined'){
+async function verifyToken(req, res, next) {
+    const bearerHeader = req.query.authToken;
+    let authorized = false;
+    if (typeof bearerHeader !== 'undefined') {
         const bearer = bearerHeader.split(' ');
         const bearerToken = bearer[1];
         req.token = bearerToken;
+        console.log("req.token = Bearer token");
+        jwt.verify(bearerToken, 'secretkey', (err, authData) => {
+            if (err) {
+                console.log("Forbidden error" + err);
+                res.sendStatus(403).json(err);
+            } else {
+                console.log("Auth Data:", authData);
+                if(authData.responseObj.userName == req.query.userName){
+                    authorized = true;
+                }else{
+                    res.status(403);
+                }
+                console.log("Everything is good UPDATE SOCKET ID NOW");
+            }
+        });
+
+        if (authorized == true) {
+            let socketIDstatus = await chatboxHelper.socketIDUpdate(req.query.userName, req.query.socketID);
+            console.log("SOCKET ID STATUS:" + socketIDstatus);
+        }
+
         next();
-    }else{
+    } else {
         res.status(404).json("unAuthorized");
     }
 

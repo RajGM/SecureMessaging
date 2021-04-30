@@ -157,8 +157,9 @@ socket.on('connect', async function () {
     let jsonData = JSON.stringify(uN);
     axios.get('http://localhost:8000/chatbox/data', {
         params: {
-            authToken: "authToken",
-            socketID: "socketID"
+            authToken: sessionStorage.getItem("authToken"),
+            socketID: socket.id,
+            userName:sessionStorage.getItem("userName")
         }
     })
         .then(function (response) {
@@ -167,8 +168,6 @@ socket.on('connect', async function () {
         .catch(function (error) {
             console.log(error);
         });
-
-    //await getData(uN);
 
 });
 

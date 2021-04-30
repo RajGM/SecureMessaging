@@ -201,8 +201,7 @@ async function socketIDUpdate(userName, socketID) {
 
     try {
         const db = client.db("testdb").collection("sockettoken");
-        //        dataArr = await db.updateOne({ userName: userName }, { $set: { authToken: "ABCDEFG", authExpire: "Soon2Expire" } }, { upsert: true, useFindAndModify: false });
-
+        
         let returnData = await db.updateOne({ userName: userName }, { $set: { socketID: socketID } }, { upsert: true, useFindAndModify: false });
         if (returnData) {
             //console.log("socketID Updated:" + returnData);

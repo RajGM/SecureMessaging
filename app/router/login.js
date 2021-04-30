@@ -32,7 +32,7 @@ router.post('/', async (req,res)=>{
     if(loginState=="correct"){
         responseObj.logInfo="Success";
         responseObj.userName=profileValues.username;
-        jwt.sign({responseObj},'secretkey',{expiresIn:'300s'},(err,token)=>{
+        jwt.sign({responseObj},'secretkey',{expiresIn:'3000s'},(err,token)=>{
             authTokenTest = token;
             res.status(200).json({
                 success: true,
