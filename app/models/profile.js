@@ -10,8 +10,19 @@ const ProfileSchema = new Schema({
         type:String,
         require:true
     },
+    email:{
+        type:String,
+        require:true
+    },
+    isEmailVerified:{
+        type:Boolean,
+        default:false
+    },
+    isProfessionalEmailUsed:{
+        type:Boolean,
+        default:false
+    },
     chatWindow:[{type:String}]
-    //chatWindow:{type:Array,"default":[]}
 });
 
 module.exports = Profile = mongoose.model("userProfile",ProfileSchema);

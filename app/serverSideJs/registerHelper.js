@@ -2,11 +2,15 @@ const regProfile = require('../models/profile');
 const authToken = require('./../models/authToken');
 const socketToken = require('./../models/socketToken');
 const configFile = require('./../../myUrl');
+const jwt = require("jsonwebtoken");
 
-async function findProfile(userName) {
+async function findProfile(userName,email) {
+    console.log("UserName:"+userName);
+    console.log("Email:"+email);
     let MongoClient = require('mongodb').MongoClient;
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
     let dataArr;
+    let dataArr2;
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
@@ -15,6 +19,10 @@ async function findProfile(userName) {
 
         dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
             .toArray();
+
+        dataArr2 = await db.find({ email }, { projection: { "_id": 0 } })
+            .toArray();
+
     }
     catch (err) {
         console.log(err);
@@ -22,8 +30,15 @@ async function findProfile(userName) {
         client.close();
     }
 
-    console.log(typeof dataArr);
-    if (Object.keys(dataArr).length === 0) {
+    // console.log("DATA ARR");
+    // console.log(dataArr);
+    // console.log("DATA ARR 2");
+    // console.log(dataArr2);
+    // console.log("DATA ARR SIZE");
+    // console.log(Object.keys(dataArr).length);
+    // console.log(Object.keys(dataArr2).length);
+
+    if (Object.keys(dataArr).length === 0 && Object.keys(dataArr2).length === 0 ) {
         console.log("blank");
         return "notExists"
     }
@@ -31,7 +46,7 @@ async function findProfile(userName) {
 
 }
 
-async function createProfile(userName, password) {
+async function createProfile(userName, password,email) {
 
     let MongoClient = require('mongodb').MongoClient;
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
@@ -45,7 +60,8 @@ async function createProfile(userName, password) {
 
         const newProfile = new regProfile({
             userName: userName,
-            password: password
+            password: password,
+            email:email
         });
 
         let dbInsert = await db.insertOne(newProfile)
@@ -75,7 +91,7 @@ async function createProfile(userName, password) {
 
         console.log("AuthToken state", authInsert);
 
-        
+
         let newSocketToken = await new socketToken({
             userName: userName,
             socketID: ""
@@ -99,6 +115,32 @@ async function createProfile(userName, password) {
     return "profileCreated";
 
 }
+
+async function sendConfirmationEmail(email){
+
+    // async email
+      jwt.sign(
+        {
+          user: "testID",
+        },
+        "EMAIL_SECRET",
+        {
+          expiresIn: '1d',
+        },
+        (err, emailToken) => {
+          const url = `http://localhost:8000/confirmation/${emailToken}`;
+
+          transporter.sendMail({
+            to: email,
+            subject: 'Confirm Email',
+            html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
+          });
+        },
+      );
+
+}
+
+sendConfirmationEmail("rei04533@zwoho.com");
 
 exports.findProfile = findProfile;
 exports.createProfile = createProfile;
