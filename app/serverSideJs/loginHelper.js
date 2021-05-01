@@ -12,7 +12,7 @@ async function loginProfile(userName, password) {
         //console.log("socketID return State:",socketIDTok);
         return "correct";
     } else {
-        console.log("incorrect");
+        // console.log("incorrect");
         return "incorrect";
     }
 
@@ -25,8 +25,8 @@ async function verifyUNamePass(userName, password) {
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
-    console.log("Values in loginHelper function");
-    console.log("userName:" + userName + " password:" + password);
+    // console.log("Values in loginHelper function");
+    // console.log("userName:" + userName + " password:" + password);
     try {
         const db = client.db('testdb').collection("userprofiles");
         dataArr = await db.find({ userName }, { projection: { "_id": 0, "__v": 0 } })
@@ -38,10 +38,10 @@ async function verifyUNamePass(userName, password) {
         client.close();
     }
 
-    console.log(typeof dataArr);
-    console.log("dataArr", dataArr);
+    // console.log(typeof dataArr);
+    // console.log("dataArr", dataArr);
     if (Object.keys(dataArr).length === 0) {
-        console.log("blank");
+        // console.log("blank");
         return "notExists"
     } else {
         if (password == dataArr[0].password) {
@@ -64,7 +64,7 @@ async function updateAuthToken(userName) {
         const db = client.db('testdb').collection('authtokens');
         dataArr = await db.updateOne({ userName: userName }, { $set: { authToken: "ABCDEFG", authExpire: "Soon2Expire" } }, { upsert: true, useFindAndModify: false });
 
-        console.log("authTOken update state:" + dataArr);
+        // console.log("authTOken update state:" + dataArr);
     } catch (err) {
         console.log("authToken updation error:" + err);
     } finally {

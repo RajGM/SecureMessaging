@@ -4,13 +4,13 @@ var path = require('path');
 const registerHelper = require('./../serverSideJs/registerHelper');
 
 router.get('/', function (req, res) {
-    console.log("Sending Reg page");
-    res.sendFile(path.join(__dirname + './../views/' + 'register.html'));
+    // console.log("Sending Reg page");
+    // res.sendFile(path.join(__dirname + './../views/' + 'register.html'));
 });
 
 router.post('/', async (req, res) => {
-    console.log("Posting request");
-    console.log(req.body);
+    // console.log("Posting request");
+    // console.log(req.body);
     const profileValues = { username: "", password: "" };
     if (req.body.username != "" && req.body.password != "") {
         profileValues.username = req.body.userName;
@@ -21,13 +21,13 @@ router.post('/', async (req, res) => {
     //console.log(profileValues);
 
     let fpv = await registerHelper.findProfile(profileValues.username);
-    console.log("fpv:", fpv);
+    // console.log("fpv:", fpv);
     if(fpv=="exists"){
-        console.log("Profile exists cannot create new");
+        // console.log("Profile exists cannot create new");
         res.status(200).json("Profile exists");
     }else{
         let cpv = await registerHelper.createProfile(profileValues.username,profileValues.password);
-        console.log(cpv);
+        // console.log(cpv);
         res.status(200).json("Success");
     }
 

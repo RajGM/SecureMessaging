@@ -162,8 +162,8 @@ async function verifyAuthToken(userName, authToken) {
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
-    console.log("Values in verifyAuthToken function");
-    console.log("userName:" + userName + " authToken:" + authToken);
+    // console.log("Values in verifyAuthToken function");
+    // console.log("userName:" + userName + " authToken:" + authToken);
     try {
         const db = client.db('testdb').collection("authtokens");
         dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
@@ -175,8 +175,8 @@ async function verifyAuthToken(userName, authToken) {
         client.close();
     }
 
-    console.log(typeof dataArr);
-    console.log("dataArr", dataArr);
+    // console.log(typeof dataArr);
+    // console.log("dataArr", dataArr);
     if (Object.keys(dataArr).length === 0) {
         console.log("blank");
         return "notExists"
@@ -241,10 +241,10 @@ async function findSocketID(userName) {
         client.close();
     }
 
-    console.log(typeof dataArr);
-    console.log("dataArr", dataArr);
+    // console.log(typeof dataArr);
+    // console.log("dataArr", dataArr);
     if (Object.keys(dataArr).length === 0) {
-        console.log("blank");
+        // console.log("blank");
         return "notExists"
     } else {
         return dataArr[0].socketID;
@@ -264,7 +264,7 @@ async function getCollectionNames(userName) {
     try {
         const db = client.db('testdb').collection("userprofiles");
 
-        dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
+        dataArr = await db.find({ userName:userName }, { projection: { "_id": 0 } })
             .toArray();
     }
     catch (err) {
@@ -274,16 +274,21 @@ async function getCollectionNames(userName) {
     }
 
     if (Object.keys(dataArr).length === 0) {
-        console.log("blank");
+        // console.log("blank");
         return "notExists"
     }
-    
+
     return dataArr[0].chatWindow;
 
 }
 
 async function getCollectionData(collName) {
     //console.log("Start of getCollectionData");
+    console.log(typeof collName);
+    if(collName === undefined){
+        return null;
+    }
+
     let MongoClient = require('mongodb').MongoClient;
     const configFile = require('./../../myUrl');
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
@@ -313,20 +318,27 @@ async function getCollectionData(collName) {
 async function getWholeChat(userName) {
     //let collName = await dumpData("testdb");
     var newArr = await getCollectionNames(userName);
-    console.log("newArr list::::::"+newArr);
     let totalDump = [];
-    totalDump.push(newArr);
 
     let allData = {
-        chatWindows:totalDump
+        chatWindows:newArr
+    }
+
+    console.log("TEST LOG HERE");
+    console.log(allData.chatWindows);
+    console.log(allData.chatWindows.length);
+
+    for(let i=0;i<allData.chatWindows.length;i++){
+        console.log(allData.chatWindows[i]);
+        totalDump.push(allData.chatWindows[i]);
     }
     
     //start debugging from this point next time 
-    for (let i = 0; i < newArr.length; i++) {
-        let collDump = await getCollectionData(newArr[i]);
+    for (let i = 0; i < allData.chatWindows.length; i++) {
+        let collDump = await getCollectionData(allData.chatWindows[i]);
         totalDump.push(collDump);
+
         let tempChatWindowName; 
-        
         if(collDump[0].from <= collDump[0].to){
             tempChatWindowName = collDump[0].from + collDump[0].to;
         }else{
@@ -335,15 +347,12 @@ async function getWholeChat(userName) {
 
         allData[tempChatWindowName] = collDump;
     }
-    console.log("Beautified Dump:",allData);
-    console.log("Window Name:",allData.chatWindows);
-    console.log("Window Data:",allData[allData.chatWindows[0]]);    
-    //console.log(totalDump);
-    return totalDump;
+     //console.log("Beautified Dump:",JSON.stringify(allData));
+     
+     return allData;
 }
 
 //getWholeChat("test2");
-
 exports.createCollections = createCollections;
 exports.insertData = insertData;
 exports.updateProfile = updateProfile;

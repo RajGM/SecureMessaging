@@ -7,7 +7,6 @@ var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-
 const msgSent = require('../models/chatMsg');
 const chatWindow = require('./../models/chatWindow');
 const authToken = require('./../models/authToken');
@@ -24,7 +23,8 @@ router.get('/', function (req, res) {
 router.get('/data', verifyToken, async function (req, res) {
 
     let chatData = await chatboxHelper.getWholeChat(req.query.userName);
-    res.status(200).json(chatData);
+    res.json(chatData);
+    //res.status(200).json(chatData);
 
 });
 
@@ -127,25 +127,25 @@ async function verifyToken(req, res, next) {
         const bearer = bearerHeader.split(' ');
         const bearerToken = bearer[1];
         req.token = bearerToken;
-        console.log("req.token = Bearer token");
+        // console.log("req.token = Bearer token");
         jwt.verify(bearerToken, 'secretkey', (err, authData) => {
             if (err) {
                 console.log("Forbidden error" + err);
-                res.sendStatus(403).json(err);
+                res.status(403).json(err);
             } else {
-                console.log("Auth Data:", authData);
+                // console.log("Auth Data:", authData);
                 if(authData.responseObj.userName == req.query.userName){
                     authorized = true;
                 }else{
                     res.status(403);
                 }
-                console.log("Everything is good UPDATE SOCKET ID NOW");
+                // console.log("Everything is good UPDATE SOCKET ID NOW");
             }
         });
 
         if (authorized == true) {
             let socketIDstatus = await chatboxHelper.socketIDUpdate(req.query.userName, req.query.socketID);
-            console.log("SOCKET ID STATUS:" + socketIDstatus);
+            // console.log("SOCKET ID STATUS:" + socketIDstatus);
         }
 
         next();

@@ -17,11 +17,11 @@ router.post('/', async (req,res)=>{
         profileValues.password = req.body.Password;
     }
 
-    console.log("Values in server object");
-    console.log(profileValues);
+    // console.log("Values in server object");
+    // console.log(profileValues);
 
     let loginState = await helperFunction.loginProfile(profileValues.username,profileValues.password);
-    console.log("loginState",loginState);
+    // console.log("loginState",loginState);
     
     let responseObj = {
         userName:"",
