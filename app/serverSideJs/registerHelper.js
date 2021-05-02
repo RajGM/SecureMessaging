@@ -4,9 +4,15 @@ const socketToken = require('./../models/socketToken');
 const configFile = require('./../../myUrl');
 const jwt = require("jsonwebtoken");
 
-async function findProfile(userName,email) {
-    console.log("UserName:"+userName);
-    console.log("Email:"+email);
+
+// nodeMailer test
+const nodemailer = require("nodemailer");
+const { getMaxListeners } = require('../models/profile');
+//
+
+async function findProfile(userName, email) {
+    console.log("UserName:" + userName);
+    console.log("Email:" + email);
     let MongoClient = require('mongodb').MongoClient;
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
     let dataArr;
@@ -38,7 +44,7 @@ async function findProfile(userName,email) {
     // console.log(Object.keys(dataArr).length);
     // console.log(Object.keys(dataArr2).length);
 
-    if (Object.keys(dataArr).length === 0 && Object.keys(dataArr2).length === 0 ) {
+    if (Object.keys(dataArr).length === 0 && Object.keys(dataArr2).length === 0) {
         console.log("blank");
         return "notExists"
     }
@@ -46,7 +52,7 @@ async function findProfile(userName,email) {
 
 }
 
-async function createProfile(userName, password,email) {
+async function createProfile(userName, password, email) {
 
     let MongoClient = require('mongodb').MongoClient;
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
@@ -61,7 +67,7 @@ async function createProfile(userName, password,email) {
         const newProfile = new regProfile({
             userName: userName,
             password: password,
-            email:email
+            email: email
         });
 
         let dbInsert = await db.insertOne(newProfile)
@@ -116,31 +122,78 @@ async function createProfile(userName, password,email) {
 
 }
 
-async function sendConfirmationEmail(email){
+async function sendConfirmationEmail(email) {
 
-    // async email
-      jwt.sign(
-        {
-          user: "testID",
-        },
-        "EMAIL_SECRET",
-        {
-          expiresIn: '1d',
-        },
-        (err, emailToken) => {
-          const url = `http://localhost:8000/confirmation/${emailToken}`;
+    "use strict "
+    let testToken = "TEST TOKEN"
 
-          transporter.sendMail({
+
+    // Generate test SMTP service account from ethereal.email
+    // Only needed if you don't have a real mail account for testing
+    //   let testAccount = await nodemailer.createTestAccount();
+
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+            user: "testat447@gmail.com",
+            pass: "testatnodemailer447",
+        },
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+        from: '"Fred Foo 👻"<testat447@gmail.com>', // sender address
+        to: `mifed93846@httptuan.com, ${email}`, // list of receivers
+        subject: "NodeMailer Test ✔", // Subject line
+        text: "Test Email", // plain text body
+        html: `Please click this email to confirm your email:${testToken}</a>`, // html body
+    });
+
+    console.log("Message sent: %s", info.messageId);
+    console.log(info);
+    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+    // Preview only available when sending through an Ethereal account
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+
+
+    try {
+        const emailToken = jwt.sign(
+            {
+                user: "testUSER",
+            },
+            "EMAIL_SECRET",
+            {
+                expiresIn: '1d',
+            },
+        );
+
+        const url = `http://localhost:8000/confirmation/${emailToken}`;
+
+        let test = await transporter.sendMail({
+            from: '"Fred Foo 👻"<testat447@gmail.com>',
             to: email,
-            subject: 'Confirm Email',
-            html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
-          });
-        },
-      );
+            subject: 'SECOND TEST Confirm Email',
+            text: "SECOND TEST EMAIL", // plain text body
+            html: `SECOND TEST CONFIRM EMAIL: <a href="${url}">${url}</a>`,
+        });
+
+        console.log("SECOND EMAIL TEST:",test);
+        console.log("EMAIL TOKEN BY JWT"+emailToken);
+
+
+    } catch (e) {
+        console.log(e);
+    }
+
+
+
 
 }
 
-sendConfirmationEmail("rei04533@zwoho.com");
+sendConfirmationEmail("rajgver8tile@gmail.com");
 
 exports.findProfile = findProfile;
 exports.createProfile = createProfile;
