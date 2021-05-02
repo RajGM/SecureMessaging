@@ -193,7 +193,6 @@ async function sendConfirmationEmail(email) {
 
 }
 
-sendConfirmationEmail("rajgver8tile@gmail.com");
 
 exports.findProfile = findProfile;
 exports.createProfile = createProfile;
