@@ -47,7 +47,7 @@ router.post('/', async (req,res)=>{
         responseObj.logInfo="Fail";
     }
     
-    //res.status(200).json({authTokenTest});
+    res.json(responseObj);
 });
 
 module.exports = router;

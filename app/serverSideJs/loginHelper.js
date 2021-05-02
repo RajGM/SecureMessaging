@@ -1,13 +1,17 @@
 const configFile = require('./../../myUrl');
 
+//bcrypt test
+const bcrypt = require('bcrypt');
+//
+
 async function loginProfile(userName, password) {
 
     //verify then update
     let logA = await verifyUNamePass(userName, password);
     if (logA == "correct") {
         let authTok = await updateAuthToken(userName);
-        //console.log("authTok return State:", authTok);
-        //console.log("updated");
+        console.log("authTok return State:", authTok);
+        console.log("updated");
         //let socketIDTok = await updateSocketToken(userName,"socketID");
         //console.log("socketID return State:",socketIDTok);
         return "correct";
@@ -44,9 +48,14 @@ async function verifyUNamePass(userName, password) {
         // console.log("blank");
         return "notExists"
     } else {
-        if (password == dataArr[0].password) {
+        let hashedPassword = await generateHashedPassword(password);
+         // true
+        //hashedPassword == dataArr[0].password
+        if (bcrypt.compareSync(password, dataArr[0].password)) {
+            console.log("Correct password");
             return "correct";
         } else {
+            console.log("Incorrect password");
             return "incorrect";
         }
     }
@@ -73,5 +82,16 @@ async function updateAuthToken(userName) {
 
     return "ABCDEFGH";
 }
+
+async function generateHashedPassword(password){
+    let saltRounds = 10;
+    const salt = await bcrypt.genSaltSync(saltRounds);
+    const hashedPassword = await bcrypt.hashSync(password, salt);
+
+    console.log("HASHED PASSWORD:"+hashedPassword);
+
+    return hashedPassword;
+}
+
 
 exports.loginProfile = loginProfile;

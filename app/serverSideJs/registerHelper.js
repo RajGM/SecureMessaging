@@ -7,7 +7,10 @@ const jwt = require("jsonwebtoken");
 
 // nodeMailer test
 const nodemailer = require("nodemailer");
-const { getMaxListeners } = require('../models/profile');
+//
+
+//bcrypt test
+const bcrypt = require('bcrypt');
 //
 
 async function findProfile(userName, email) {
@@ -69,6 +72,9 @@ async function createProfile(userName, password, email) {
             password: password,
             email: email
         });
+
+        let hashedPassword = await generateHashedPassword(password);
+        newProfile.password = hashedPassword;
 
         let dbInsert = await db.insertOne(newProfile)
             .then(pro => {
@@ -192,6 +198,18 @@ async function sendConfirmationEmail(email) {
 
 
 }
+
+async function generateHashedPassword(password){
+    let saltRounds = 10;
+    const salt = await bcrypt.genSaltSync(saltRounds);
+    const hashedPassword = await bcrypt.hashSync(password, salt);
+
+    console.log("HASHED PASSWORD:"+hashedPassword);
+
+    return hashedPassword;
+}
+
+//generateHashedPassword("test123");
 
 
 exports.findProfile = findProfile;
