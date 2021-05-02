@@ -1,8 +1,6 @@
 const configFile = require('./../../myUrl');
-
-//bcrypt test
 const bcrypt = require('bcrypt');
-//
+
 
 async function loginProfile(userName, password) {
 
@@ -92,6 +90,8 @@ async function generateHashedPassword(password){
 
     return hashedPassword;
 }
+
+
 
 
 exports.loginProfile = loginProfile;

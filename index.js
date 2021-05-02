@@ -46,8 +46,13 @@ const login = require('./app/router/login');
 app.use("/login", login);
 const chatbox = require('./app/router/chatbox');
 app.use('/chatbox', chatbox);
+const confirmation = require('./app/router/confirmation');
+app.use('/confirmation',confirmation);
+
+//testing purposes
 const dumpDB = require('./app/router/dump');
 app.use('/dump', dumpDB);
+//testing purposes ends here
 
 const cssFiles = require('./app/router/cssFiles');
 app.use('/public', cssFiles);
