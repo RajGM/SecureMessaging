@@ -67,6 +67,8 @@ var io = socket(server);
 
 io.on('connection', function (socket) {
   console.log('Socket made connection with client id:' + socket.id);
+  //do socketToken update here
+
 
   socket.on('chat', async function (data) {
     console.log("Socket chat data");
@@ -80,15 +82,13 @@ io.on('connection', function (socket) {
       io.sockets.to(toSocketID).emit("chat", data);
     }
     else {
-      //if sockeID to is not found
+      //if toSockeID is not found
       console.log("Data saved to DB user is offline");
     }
 
   });
 
   socket.on('socketIDUpdate', async function (data) {
-    //update socket id from here
-    //console.log("Updation data:", data);
     let upSid = await indexHelper.updateSocketID(data.from, data.authToken, data.socketID);
     //console.log("SocketID update:" + upSid);
   });
