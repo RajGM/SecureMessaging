@@ -52,11 +52,6 @@ router.post('/logout', async (req, res) => {
     res.status(200).json(returnDoc);
 });
 
-//check eachTime for auth Token verification
-//Then
-//Check for socketIDToken of from and to if all good 
-//Then save and sent message 
-//Else save message only
 router.post('/', async (req, res) => {
     console.log("Posting Message");
     const msgValues = { from: "", to: "", message: "" };
@@ -154,7 +149,5 @@ async function verifyToken(req, res, next) {
     }
 
 }
-
-
 
 module.exports = router;

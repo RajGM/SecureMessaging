@@ -91,7 +91,4 @@ async function generateHashedPassword(password){
     return hashedPassword;
 }
 
-
-
-
 exports.loginProfile = loginProfile;
