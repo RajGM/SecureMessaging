@@ -9,7 +9,6 @@ const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
 //
 
-
 async function findProfile(userName, email) {
     console.log("UserName:" + userName);
     console.log("Email:" + email);
@@ -36,16 +35,7 @@ async function findProfile(userName, email) {
         client.close();
     }
 
-    // console.log("DATA ARR");
-    // console.log(dataArr);
-    // console.log("DATA ARR 2");
-    // console.log(dataArr2);
-    // console.log("DATA ARR SIZE");
-    // console.log(Object.keys(dataArr).length);
-    // console.log(Object.keys(dataArr2).length);
-
     if (Object.keys(dataArr).length === 0 && Object.keys(dataArr2).length === 0) {
-        console.log("blank");
         return "notExists"
     }
     return "exists";
@@ -59,10 +49,8 @@ async function createProfile(userName, password, email) {
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
-    console.log("Before catch");
     try {
         const db = client.db('testdb').collection("userprofiles");
-        console.log("Catch point 1");
 
         const newProfile = new regProfile({
             userName: userName,
@@ -81,26 +69,6 @@ async function createProfile(userName, password, email) {
                 console.log("Profile creation problem", err);
             });
 
-        console.log("dbInsert state:", dbInsert);
-
-        const dbaT = client.db('testdb').collection("authtokens");
-        const authTokenDB = new authToken({
-            userName: userName,
-            authToken: "",
-            authExpire: ""
-        });
-
-        let authInsert = await dbaT.insertOne(authTokenDB)
-            .then(aT => {
-                console.log("Auth Token created", aT);
-            })
-            .catch(err => {
-                console.log("Auth Token creation problem", err)
-            });
-
-        console.log("AuthToken state", authInsert);
-
-
         let newSocketToken = await new socketToken({
             userName: userName,
             socketID: ""
@@ -115,7 +83,9 @@ async function createProfile(userName, password, email) {
                 console.log("SocketToken creation error:" + err)
             });
 
-
+        //confirmation email sending
+        await generateEmailConfirmationToken(email);
+        //
 
     }
     catch (err) {
@@ -138,15 +108,19 @@ async function generateHashedPassword(password) {
     return hashedPassword;
 }
 
+async function generateEmailConfirmationToken(email) {
+
+    let confirmationToken = await jwt.sign({ email }, 'secretkey', { expiresIn: '1d' }, (err, token) => {
+            sendConfirmationEmail(email,token);
+        });
+
+    return confirmationToken;
+}
+
 async function sendConfirmationEmail(email, emailConfirmationToken) {
 
     "use strict "
 
-    // Generate test SMTP service account from ethereal.email
-    // Only needed if you don't have a real mail account for testing
-    //   let testAccount = await nodemailer.createTestAccount();
-
-    // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
         service: "Gmail",
         auth: {
@@ -154,24 +128,6 @@ async function sendConfirmationEmail(email, emailConfirmationToken) {
             pass: "testatnodemailer447",
         },
     });
-
-    // send mail with defined transport object
-    // let info = await transporter.sendMail({
-    //     from: '"Fred Foo 👻"<testat447@gmail.com>', // sender address
-    //     to: `mifed93846@httptuan.com, ${email}`, // list of receivers
-    //     subject: "NodeMailer Test ✔", // Subject line
-    //     text: "Test Email", // plain text body
-    //     html: `Please click this email to confirm your email:${testToken}</a>`, // html body
-    // });
-
-    // console.log("Message sent: %s", info.messageId);
-    // console.log(info);
-    // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-    // // Preview only available when sending through an Ethereal account
-    // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    // // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-
 
     try {
 
@@ -185,44 +141,11 @@ async function sendConfirmationEmail(email, emailConfirmationToken) {
             html: `SECOND TEST CONFIRM EMAIL: <a href="${email}">${url}</a>`,
         });
 
-        console.log("EMAIL TOKEN BY JWT", emailConfirmationToken);
-
-
     } catch (e) {
         console.log(e);
     }
 
-
-
-
 }
-
-async function generateEmailConfirmationToken(email) {
-
-    try {
-        let confirmationToken;
-        await jwt.sign({ email }, 'secretkey', { expiresIn: '300000s' }, (err, token) => {
-            console.log("EMAIL TOKEN From inside GENERATE EMAIL CONFIRMATION TOKEN:" + token);
-            confirmationToken = token;
-        });
-        return confirmationToken;
-    } catch (e) {
-        console.log(e);
-        return false;
-    }
-
-}
-
-async function testFun(email){
-    let confirmationToken = await generateEmailConfirmationToken(email);
-    console.log("Confirmation Token:", confirmationToken);
-    let emailStatus = await sendConfirmationEmail(email, confirmationToken);
-    console.log("EMAIL STATUS:", emailStatus);
-}
-
-//testFun("foe05479@eoopy.com");
-
-
 
 exports.findProfile = findProfile;
 exports.createProfile = createProfile;
