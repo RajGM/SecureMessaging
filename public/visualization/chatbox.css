@@ -284,8 +284,22 @@ hr{
     width: 90%;
 }
 
+#toUser{
+    color: black;
+    font-size: 15px;
+    font-family: Cursive;
+    width:100px;
+    background-color: #2196F3;
+}
 
-
+#fromUser{ 
+    color: black;
+    font-size: 15px;
+    font-family: Cursive;
+    width:100px;
+    outline: none;
+    border: 0px solid;
+}
 
 
 

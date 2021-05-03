@@ -8,9 +8,10 @@ const jwt = require("jsonwebtoken");
 
 router.get('/:token', async function (req, res) {
 
+    let checkHeader;
     try{
         let confirmationToken = req.params.token;
-        let checkHeader = await verifyToken(confirmationToken);
+        checkHeader = await verifyToken(confirmationToken);
         if(checkHeader != false){
             helperFunction.updateEmailVerificationStatus(checkHeader)
         }
@@ -19,7 +20,11 @@ router.get('/:token', async function (req, res) {
         res.send(e);
     }
 
-    res.write('<h1>Correct ConFIRmatION Page</h1>');
+    if(checkHeader!= false){
+        res.write('<h1>Email Verified Enjoy The Platform</h1>');
+    }else{
+        res.write('<h1>Email Verification problem</h1>');
+    }
     res.send();
 });
 

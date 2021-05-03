@@ -1,8 +1,4 @@
 var socket = io.connect('http://localhost:8000');
-//axios test
-//import axios from 'axios';
-//const axios = require('axios').default;
-//ends here
 var from = document.getElementById("fromUser");
 var to = document.getElementById("toUser");
 var message = document.getElementById("messageUser");
@@ -16,7 +12,10 @@ var currentChatOpenIndex = 0;
 if (sessionStorage.getItem("userName") === undefined || sessionStorage.getItem("authToken") === "undefined") {
     window.location.href = "http://localhost:8000/login";
 } else {
-    from.value = sessionStorage.getItem("userName");
+    // from.value = sessionStorage.getItem("userName");
+    //for testing only
+    from.value = "rajgver8tile@gmail.com";
+    //test ends here
 }
 
 sendButton.onclick = function () {
