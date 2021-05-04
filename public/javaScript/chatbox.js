@@ -159,6 +159,7 @@ socket.on('connect', async function () {
 });
 
 socket.on('typing', function (data) {
+    
     console.log("Typing a message");
 });
 

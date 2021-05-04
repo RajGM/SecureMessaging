@@ -70,12 +70,8 @@ io.on('connection', function (socket) {
   //do socketToken update here
 
   socket.on('socketIDUpdate', async function (data) {
-    console.log("SOCKET ID UPDATE INSIDE");
-    console.log("SOCEKT DATA",data);
     let finalToken = data.authToken.split(" ")[1];
-    console.log("WITHOUT BEARER TOKEN:"+finalToken);
     let upSid = await indexHelper.updateSocketID(data.from, finalToken, data.socketID);
-    console.log("SocketID update:" + upSid);
   });
   
   socket.on('chat', async function (data) {
@@ -98,17 +94,18 @@ io.on('connection', function (socket) {
 
   socket.on('typing', async function (data) {
     console.log("Typing");
-    let toSocketID = await indexHelper.findSocketID(data.to, data.authToken, data.socketID);
+    //let finalToken = data.authToken.split(" ")[1];
+    // let toSocketID = await indexHelper.findSocketID(data.to, finalToken, data.socketID);
 
     //if sockeID to is found
-    if (toSocketID != "notexists") {
-      io.sockets.to(toSocketID).emit("typing", data);
-      //socket.broadcast.emit('typing', data);
-    }
-    else {
-      //if sockeID to is not found
-      //console.log("Emitting typing makes no sense as touser is offline");
-    }
+    // if (toSocketID != "notexists") {
+    //   io.sockets.to(toSocketID).emit("typing", data);
+    //   //socket.broadcast.emit('typing', data);
+    // }
+    // else {
+    //   //if sockeID to is not found
+    //   //console.log("Emitting typing makes no sense as touser is offline");
+    // }
 
   });
 });
