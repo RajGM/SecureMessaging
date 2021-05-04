@@ -68,8 +68,7 @@ var io = socket(server);
 io.on('connection', function (socket) {
   console.log('Socket made connection with client id:' + socket.id);
   //do socketToken update here
-
-
+  
   socket.on('chat', async function (data) {
     console.log("Socket chat data");
     console.log("Socket:", data);

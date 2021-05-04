@@ -1,20 +1,16 @@
 const configFile = require('./../../myUrl');
+const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
-
 
 async function loginProfile(userName, password) {
 
-    //verify then update
     let logA = await verifyUNamePass(userName, password);
     if (logA == "correct") {
         let authTok = await updateAuthToken(userName);
         console.log("authTok return State:", authTok);
         console.log("updated");
-        //let socketIDTok = await updateSocketToken(userName,"socketID");
-        //console.log("socketID return State:",socketIDTok);
-        return "correct";
+        return ["correct",authTok];
     } else {
-        // console.log("incorrect");
         return "incorrect";
     }
 
@@ -46,9 +42,7 @@ async function verifyUNamePass(userName, password) {
         // console.log("blank");
         return "notExists"
     } else {
-        let hashedPassword = await generateHashedPassword(password);
-         // true
-        //hashedPassword == dataArr[0].password
+        // true
         if (bcrypt.compareSync(password, dataArr[0].password)) {
             console.log("Correct password");
             return "correct";
@@ -64,31 +58,42 @@ async function updateAuthToken(userName) {
     let MongoClient = require('mongodb').MongoClient;
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
     let dataArr;
+    let token;
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
     try {
-        const db = client.db('testdb').collection('authtokens');
-        dataArr = await db.updateOne({ userName: userName }, { $set: { authToken: "ABCDEFG", authExpire: "Soon2Expire" } }, { upsert: true, useFindAndModify: false });
 
-        // console.log("authTOken update state:" + dataArr);
+        token = await generateAuthToken(userName);
+
+        const db = await client.db('testdb').collection('authtokens');
+        dataArr = await db.updateOne({ userName: userName }, { $set: { authToken: token } }, { upsert: true, useFindAndModify: false });
+
     } catch (err) {
         console.log("authToken updation error:" + err);
     } finally {
         client.close();
     }
 
-    return "ABCDEFGH";
+    return token;
 }
 
-async function generateHashedPassword(password){
-    let saltRounds = 10;
-    const salt = await bcrypt.genSaltSync(saltRounds);
-    const hashedPassword = await bcrypt.hashSync(password, salt);
+async function generateAuthToken(userName) {
+    return new Promise(async (resolve, reject) => {
+        let confirmationToken = await jwt.sign({ userName }, 'secretkey', { expiresIn: '1d' }, (err, token) => {
+            resolve(token)
+        });
+    })
 
-    console.log("HASHED PASSWORD:"+hashedPassword);
-
-    return hashedPassword;
 }
+
+// async function test(){
+//     // let v2 = await updateAuthToken("rajgver8tle@gmail.com");
+//     // console.log(v2);
+//     let v3 = await loginProfile("rajgver8tile@gmail.com","rajgver8tile@gmail.com");
+//     console.log(v3);
+// }
+
+// test();
 
 exports.loginProfile = loginProfile;

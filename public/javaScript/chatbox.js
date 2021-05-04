@@ -130,31 +130,31 @@ messageBlock.addEventListener('keypress', function () {
 socket.on('connect', async function () {
     console.log("SocketID:" + socket.id);
 
-    socket.emit('socketIDUpdate', {
-        from: from.value,
-        authToken: sessionStorage.getItem("authToken"),
-        socketID: socket.id
-    });
+    // socket.emit('socketIDUpdate', {
+    //     from: from.value,
+    //     authToken: sessionStorage.getItem("authToken"),
+    //     socketID: socket.id
+    // });
 
     let uN = { socketID: "", authToken: "" };
     uN.socketID = socket.id;
     uN.authToken = sessionStorage.getItem("authToken");
     console.log("Before sending DATA", uN);
     let jsonData = JSON.stringify(uN);
-    axios.get('http://localhost:8000/chatbox/data', {
-        params: {
-            authToken: sessionStorage.getItem("authToken"),
-            socketID: socket.id,
-            userName:sessionStorage.getItem("userName")
-        }
-    })
-        .then(function (response) {
-            showData(response.data);
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+    // axios.get('http://localhost:8000/chatbox/data', {
+    //     params: {
+    //         authToken: sessionStorage.getItem("authToken"),
+    //         socketID: socket.id,
+    //         userName:sessionStorage.getItem("userName")
+    //     }
+    // })
+    //     .then(function (response) {
+    //         showData(response.data);
+    //         console.log(response);
+    //     })
+    //     .catch(function (error) {
+    //         console.log(error);
+    //     });
 
 });
 

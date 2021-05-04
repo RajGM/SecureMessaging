@@ -24,13 +24,12 @@ LoginButton.onclick = function () {
     xhttp.onload = function () {
       var response = JSON.parse(this.responseText);
       console.log(this.responseText);
-      console.log(response.success);
       if (response.logInfo == "Fail") {
         console.log("Incorrect User Name or password");
-      } else if (response.success == true) {
+      } else if (response.logInfo == "Success") {
         console.log("Correct Username and password");
         sessionStorage.setItem("userName", objSent.userName);
-        sessionStorage.setItem("authToken", response.token);
+        sessionStorage.setItem("authToken", response.authToken);
         userName.value = "";
         Password.value = "";
         window.location.href = "http://localhost:8000/chatbox";

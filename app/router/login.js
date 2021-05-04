@@ -17,37 +17,38 @@ router.post('/', async (req,res)=>{
         profileValues.password = req.body.Password;
     }
 
-    // console.log("Values in server object");
-    // console.log(profileValues);
-
-    let loginState = await helperFunction.loginProfile(profileValues.username,profileValues.password);
-    // console.log("loginState",loginState);
     
+    let loginState = await helperFunction.loginProfile(profileValues.username,profileValues.password);
+    console.log("LOGIN STATE:"+loginState);
+
     let responseObj = {
+        logInfo:"",
         userName:"",
+        authToken:""
     }
 
-    let authTokenTest;
+    // let authTokenTest;
     
-    if(loginState=="correct"){
+    if(loginState[0]=="correct"){
         responseObj.logInfo="Success";
         responseObj.userName=profileValues.username;
-        jwt.sign({responseObj},'secretkey',{expiresIn:'3000s'},(err,token)=>{
-            authTokenTest = token;
-            res.status(200).json({
-                success: true,
-                token: "Bearer " + token
-              });
-            res.status(200).json({token:token,userName:"userTest"}); 
-        });
-                
+        responseObj.authToken="Bearer "+loginState[1];
+        // jwt.sign({responseObj},'secretkey',{expiresIn:'3000s'},(err,token)=>{
+        //     authTokenTest = token;
+        //     res.status(200).json({
+        //         success: true,
+        //         token: "Bearer " + token
+        //       });
+        //     res.status(200).json(responseObj); 
+        // });
     }else if(loginState=="incorrect"){
         responseObj.logInfo="Fail";
     }else if(loginState=="notExists"){
         responseObj.logInfo="Fail";
     }
     
-    res.json(responseObj);
+    res.status(200).json(responseObj);
+    // res.json(responseObj);
 });
 
 module.exports = router;
