@@ -68,6 +68,15 @@ var io = socket(server);
 io.on('connection', function (socket) {
   console.log('Socket made connection with client id:' + socket.id);
   //do socketToken update here
+
+  socket.on('socketIDUpdate', async function (data) {
+    console.log("SOCKET ID UPDATE INSIDE");
+    console.log("SOCEKT DATA",data);
+    let finalToken = data.authToken.split(" ")[1];
+    console.log("WITHOUT BEARER TOKEN:"+finalToken);
+    let upSid = await indexHelper.updateSocketID(data.from, finalToken, data.socketID);
+    console.log("SocketID update:" + upSid);
+  });
   
   socket.on('chat', async function (data) {
     console.log("Socket chat data");
@@ -85,11 +94,6 @@ io.on('connection', function (socket) {
       console.log("Data saved to DB user is offline");
     }
 
-  });
-
-  socket.on('socketIDUpdate', async function (data) {
-    let upSid = await indexHelper.updateSocketID(data.from, data.authToken, data.socketID);
-    //console.log("SocketID update:" + upSid);
   });
 
   socket.on('typing', async function (data) {

@@ -3,13 +3,6 @@ const chatboxHelper = require('./chatboxHelper');
 const registerHelper = require('./registerHelper');
 
 async function updateSocketID(userName, authToken, socketID) {
-    //if auth equal then update socketID
-    /*
-    console.log("Inside updateSocketID");
-    console.log("userName:" + userName);
-    console.log("authToken:" + authToken);
-    console.log("socketID:" + socketID);
-    */
     let authVerified = await chatboxHelper.verifyAuthToken(userName, authToken);
     if (authVerified == "correct") {
         await chatboxHelper.socketIDUpdate(userName, socketID);

@@ -162,8 +162,6 @@ async function verifyAuthToken(userName, authToken) {
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
-    // console.log("Values in verifyAuthToken function");
-    // console.log("userName:" + userName + " authToken:" + authToken);
     try {
         const db = client.db('testdb').collection("authtokens");
         dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
@@ -175,12 +173,12 @@ async function verifyAuthToken(userName, authToken) {
         client.close();
     }
 
-    // console.log(typeof dataArr);
-    // console.log("dataArr", dataArr);
     if (Object.keys(dataArr).length === 0) {
         console.log("blank");
         return "notExists"
     } else {
+        console.log("PASSED AUTHTOKEN:"+authToken);
+        console.log("DB AUTHTOKEN:"+dataArr[0].authToken);
         if (authToken == dataArr[0].authToken) {
             return "correct";
         } else {

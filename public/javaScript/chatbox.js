@@ -12,10 +12,7 @@ var currentChatOpenIndex = 0;
 if (sessionStorage.getItem("userName") === undefined || sessionStorage.getItem("authToken") === "undefined") {
     window.location.href = "http://localhost:8000/login";
 } else {
-    // from.value = sessionStorage.getItem("userName");
-    //for testing only
-    from.value = "rajgver8tile@gmail.com";
-    //test ends here
+    from.value = sessionStorage.getItem("userName");
 }
 
 sendButton.onclick = function () {
@@ -129,18 +126,21 @@ messageBlock.addEventListener('keypress', function () {
 
 socket.on('connect', async function () {
     console.log("SocketID:" + socket.id);
+    console.log("userName:"+sessionStorage.getItem("userName"));
+    console.log("authTOKEN:"+sessionStorage.getItem("authToken"));
 
-    // socket.emit('socketIDUpdate', {
-    //     from: from.value,
-    //     authToken: sessionStorage.getItem("authToken"),
-    //     socketID: socket.id
-    // });
+    socket.emit('socketIDUpdate', {
+        from: from.value,
+        authToken: sessionStorage.getItem("authToken"),
+        socketID: socket.id
+    });
 
-    let uN = { socketID: "", authToken: "" };
+    let uN = { socketID: "", authToken: "" ,userName:""};
     uN.socketID = socket.id;
+    uN.userName = sessionStorage.getItem("userName");
     uN.authToken = sessionStorage.getItem("authToken");
     console.log("Before sending DATA", uN);
-    let jsonData = JSON.stringify(uN);
+    // let jsonData = JSON.stringify(uN);
     // axios.get('http://localhost:8000/chatbox/data', {
     //     params: {
     //         authToken: sessionStorage.getItem("authToken"),
