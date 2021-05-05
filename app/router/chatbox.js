@@ -22,9 +22,10 @@ router.get('/', function (req, res) {
 
 router.get('/data', verifyToken, async function (req, res) {
 
+    console.log("Query of Get DATA on server side Inside route query:",req.query);
     let chatData = await chatboxHelper.getWholeChat(req.query.userName);
-    res.json(chatData);
-    //res.status(200).json(chatData);
+    // res.json(chatData);
+    res.status(200).json(chatData);
 
 });
 
@@ -116,6 +117,16 @@ router.post('/', async (req, res) => {
 });
 
 async function verifyToken(req, res, next) {
+
+    console.log("Query of Get DATA on server side:",req.query);
+    console.log("userName:"+req.query.userName);
+  
+    let userData = {
+        userName:req.query.userName,
+        authToken:req.query.authToken,
+        socketID:req.query.socketID
+    }
+
     const bearerHeader = req.query.authToken;
     let authorized = false;
     if (typeof bearerHeader !== 'undefined') {
@@ -128,8 +139,8 @@ async function verifyToken(req, res, next) {
                 console.log("Forbidden error" + err);
                 res.status(403).json(err);
             } else {
-                // console.log("Auth Data:", authData);
-                if(authData.responseObj.userName == req.query.userName){
+                 console.log("Auth Data:", authData);
+                if(authData.userName == userData.userName){
                     authorized = true;
                 }else{
                     res.status(403);

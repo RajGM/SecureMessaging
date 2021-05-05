@@ -49,7 +49,7 @@ async function insertChatData(data) {
         if (chatboxState == "exists") {
             //helperFun.socketIDUpdate(newMessage.from,req.body.socketID);
             chatboxHelper.insertData(usr1and2,newMessage);
-            return "chatSent to existing collection"
+            return ["doneOld",usr1and2];
             //res.status(200).json({ pro: "Chatwindow exists" });
         } else {
             let chatW = new chatWindow({
@@ -63,7 +63,7 @@ async function insertChatData(data) {
             let chatWindowCollUpdateState = await chatboxHelper.chatWindowCollectionUpdate(chatW);
             let dataInsertState = await chatboxHelper.insertData(usr1and2,newMessage);
             console.log("Chatwindow does not exists created new collection");
-            return "chatSent to new collection";
+            ["doneNew",usr1and2]
         }
 
     } else {

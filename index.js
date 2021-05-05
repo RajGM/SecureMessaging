@@ -76,12 +76,10 @@ io.on('connection', function (socket) {
   socket.on('chat', async function (data) {
     console.log("Socket chat data");
     console.log("Socket:", data);
-    io.sockets.emit('chat', data);
     let finalToken = data.authToken.split(" ")[1];
     let toSocketID = await indexHelper.findSocketID(data.from, finalToken,data.to);
     let dataInsertState = await indexHelper.insertChatData(data);
-    console.log("dataInsertState"+dataInsertState);
-
+    
     console.log("toSocketID"+toSocketID);
     if (toSocketID != "notexists") {
       //if sockeID to is found
@@ -89,13 +87,15 @@ io.on('connection', function (socket) {
         from: data.from,
         to: data.to,
         message: data.message,
+        chatWindow:dataInsertState[1]
       }
       console.log("DATA THE USER WILL BE RECIEVING"+datatoSend);
-      io.sockets.to(toSocketID).emit("chat", {datatoSend});
+      io.sockets.to(toSocketID).emit("chat", datatoSend);
+      //make it double tick here
     }
     else {
-      //if toSockeID is not found
       console.log("Data saved to DB user is offline");
+      //make it single tick here
     }
 
   });
