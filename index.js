@@ -43,7 +43,7 @@ app.use("/login", login);
 const chatbox = require('./app/router/chatbox');
 app.use('/chatbox', chatbox);
 const confirmation = require('./app/router/confirmation');
-app.use('/confirmation',confirmation);
+app.use('/confirmation', confirmation);
 
 //testing purposes
 const dumpDB = require('./app/router/dump');
@@ -51,7 +51,7 @@ app.use('/dump', dumpDB);
 //testing purposes ends here
 
 const invalidRoute = require('./app/router/invalidRoute');
-app.use('*',invalidRoute);
+app.use('*', invalidRoute);
 
 const cssFiles = require('./app/router/cssFiles');
 app.use('/public', cssFiles);
@@ -67,23 +67,31 @@ var io = socket(server);
 
 io.on('connection', function (socket) {
   console.log('Socket made connection with client id:' + socket.id);
-  //do socketToken update here
 
   socket.on('socketIDUpdate', async function (data) {
     let finalToken = data.authToken.split(" ")[1];
     let upSid = await indexHelper.updateSocketID(data.from, finalToken, data.socketID);
   });
-  
+
   socket.on('chat', async function (data) {
     console.log("Socket chat data");
     console.log("Socket:", data);
     io.sockets.emit('chat', data);
-    let toSocketID = await indexHelper.findSocketID(data.to, data.authToken, data.socketID);
+    let finalToken = data.authToken.split(" ")[1];
+    let toSocketID = await indexHelper.findSocketID(data.from, finalToken,data.to);
+    let dataInsertState = await indexHelper.insertChatData(data);
+    console.log("dataInsertState"+dataInsertState);
 
-    //if sockeID to is found
+    console.log("toSocketID"+toSocketID);
     if (toSocketID != "notexists") {
-      let dataInsertState = await indexHelper.insertChatData(data);
-      io.sockets.to(toSocketID).emit("chat", data);
+      //if sockeID to is found
+      let datatoSend = {
+        from: data.from,
+        to: data.to,
+        message: data.message,
+      }
+      console.log("DATA THE USER WILL BE RECIEVING"+datatoSend);
+      io.sockets.to(toSocketID).emit("chat", {datatoSend});
     }
     else {
       //if toSockeID is not found
@@ -94,6 +102,7 @@ io.on('connection', function (socket) {
 
   socket.on('typing', async function (data) {
     console.log("Typing");
+
     //let finalToken = data.authToken.split(" ")[1];
     // let toSocketID = await indexHelper.findSocketID(data.to, finalToken, data.socketID);
 

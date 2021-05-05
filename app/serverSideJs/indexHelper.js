@@ -14,28 +14,14 @@ async function updateSocketID(userName, authToken, socketID) {
 }
 
 async function insertChatData(data) {
-    //insert Data to database from socket.io call
-    //userName, authToken, from, to, message
-    //console.log(data);
-
-    //console.log("Posting Message");
-    //const msgValues = { from: "", to: "", message: "" ,timeStamp:""};
     var timeStamp = new Date();
 
     if (data.from != "" && data.to != "" && data.message != "" && data.authToken != "" && data.socketID != "") {
-       //continue operation if everythin is correct
-        /*
-        msgValues.from = data.from;
-        msgValues.to = data.to;
-        msgValues.message = data.message;
-        msgValues.timeStamp = timeStamp;
-        */
+    
     }else{
         return "dataForm incorrect"
     }
-    //console.log("Values in server object");
-    //console.log(msgValues);
-
+    
     const newMessage = new msgSent({
         from: data.from,
         to: data.to,
@@ -63,7 +49,7 @@ async function insertChatData(data) {
         if (chatboxState == "exists") {
             //helperFun.socketIDUpdate(newMessage.from,req.body.socketID);
             chatboxHelper.insertData(usr1and2,newMessage);
-            return "chatSent"
+            return "chatSent to existing collection"
             //res.status(200).json({ pro: "Chatwindow exists" });
         } else {
             let chatW = new chatWindow({
@@ -76,8 +62,8 @@ async function insertChatData(data) {
             let collectionCreationState = await chatboxHelper.createCollections(usr1and2);
             let chatWindowCollUpdateState = await chatboxHelper.chatWindowCollectionUpdate(chatW);
             let dataInsertState = await chatboxHelper.insertData(usr1and2,newMessage);
-            //res.status(200).json({ pro: "Chatwindow does not exists created new collection" });
-            return "chatSent";
+            console.log("Chatwindow does not exists created new collection");
+            return "chatSent to new collection";
         }
 
     } else {
@@ -87,13 +73,13 @@ async function insertChatData(data) {
         return "errDataUpload";
 }
 
-async function findSocketID(userName, authToken) {
+async function findSocketID(userName, authToken, toUser) {
     let authVerified = await chatboxHelper.verifyAuthToken(userName, authToken);
     if (authVerified == "correct") {
-        let socID = await chatboxHelper.findSocketID(userName);
+        let socID = await chatboxHelper.findSocketID(toUser);
         return socID;
     } else {
-        return "notexists"
+        return "incorrect Auth Token"
     }
 }
 

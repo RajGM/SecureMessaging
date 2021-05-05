@@ -239,12 +239,12 @@ async function findSocketID(userName) {
         client.close();
     }
 
-    // console.log(typeof dataArr);
-    // console.log("dataArr", dataArr);
+
     if (Object.keys(dataArr).length === 0) {
-        // console.log("blank");
+        console.log("Test@123 socket not exists");
         return "notExists"
     } else {
+        console.log("Test@123 socketID:"+dataArr[0].socketID);
         return dataArr[0].socketID;
     }
 
