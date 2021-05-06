@@ -87,7 +87,7 @@ function hideShow(chatIndex) {
 }
 
 async function showData(userData) {
-    
+
     for (let i = 0; i < userData.chatWindows.length; i++) {
         let contactDivID = userData.chatWindows[i] + "ContactDiv";
         let chatWindowDisplayDivID = userData.chatWindows[i] + "DisplayBox";
@@ -99,21 +99,21 @@ async function showData(userData) {
         } else {
             toUserName = userData[userData.chatWindows[i]][0].from;
         }
-        
+
         let contactDiv = makeContactDiv(toUserName);
         contactDiv.setAttribute("id", contactDivID);
-        contactDiv.addEventListener("click",showClickedChatDiv,false);
+        contactDiv.addEventListener("click", showClickedChatDiv, false);
         contactParentDiv.appendChild(contactDiv);
-        
-        
+
+
         let chatDiv = makeChatWindowDiv(userData[userData.chatWindows[i]], chatWindowDisplayDivID);
-        chatParentDiv.insertBefore(chatDiv,chatParentDiv.children[1]);
+        chatParentDiv.insertBefore(chatDiv, chatParentDiv.children[1]);
         chatDiv.style.display = "none";
-        
+
         chatWindowandDisplayBoxTracker[contactDivID] = {
-            windowName:chatWindowDisplayDivID,
-            isDisplayed:false,
-            currentIndex:i
+            windowName: chatWindowDisplayDivID,
+            isDisplayed: false,
+            currentIndex: i
         }
 
     }
@@ -211,9 +211,9 @@ function makeChatWindowDiv(chatData, chatDataWindowID) {
         let msgDiv = document.createElement("div");
         msgDiv.classList.add("indiMessageDiv");
         msgDiv.innerHTML = chatData[i].message;
-        if(sessionStorage.getItem("userName") == chatData[i].from){
+        if (sessionStorage.getItem("userName") == chatData[i].from) {
             msgDiv.classList.add("right");
-        }else{
+        } else {
             msgDiv.classList.add("left");
         }
         fullWidthDiv.appendChild(msgDiv);
@@ -223,10 +223,13 @@ function makeChatWindowDiv(chatData, chatDataWindowID) {
     return mainDiv;
 }
 
-function showClickedChatDiv(event){
+function showClickedChatDiv(event) {
     document.getElementById(lastDisplayedChatWindow).style.display = "none";
     chatWindowandDisplayBoxTracker[event.target.id].isDisplayed = true;
     let toShowWindow = chatWindowandDisplayBoxTracker[event.target.id].windowName;
     document.getElementById(toShowWindow).style.display = "flex";
     lastDisplayedChatWindow = toShowWindow;
+    let toSendID = toShowWindow.replace("DisplayBox", "");
+    toSendID = toSendID.replace(from.value, "");
+    toUser.value = toSendID;
 }
