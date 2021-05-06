@@ -11,7 +11,7 @@ var contactParentDiv = document.getElementById("contactParentDiv");
 
 var currentChatOpenIndex = 0;
 var chatWindowandDisplayBoxTracker = {};
-
+var lastDisplayedChatWindow = "dummyChatWindow";
 
 if (sessionStorage.getItem("userName") === undefined || sessionStorage.getItem("authToken") === "undefined") {
     window.location.href = "http://localhost:8000/login";
@@ -87,60 +87,36 @@ function hideShow(chatIndex) {
 }
 
 async function showData(userData) {
-    console.log("User Data", userData);
-    console.log("All chatWindow list:" + userData.chatWindows);
-    console.log("All chatWindow list Length:" + userData.chatWindows.length);
-
+    
     for (let i = 0; i < userData.chatWindows.length; i++) {
-        let contactDivID = userData.chatWindows[i]+"ContactDiv";
-        let chatWindowDisplayDivID = userData.chatWindows[i]+"DisplayBox";
+        let contactDivID = userData.chatWindows[i] + "ContactDiv";
+        let chatWindowDisplayDivID = userData.chatWindows[i] + "DisplayBox";
         let toUserName;
         console.log(userData[userData.chatWindows[i]][0].from);
         console.log(userData[userData.chatWindows[i]][0].to);
-        if( userData[userData.chatWindows[i]][0].from == sessionStorage.getItem("userName")){
+        if (userData[userData.chatWindows[i]][0].from == sessionStorage.getItem("userName")) {
             toUserName = userData[userData.chatWindows[i]][0].to;
-        }else{
+        } else {
             toUserName = userData[userData.chatWindows[i]][0].from;
         }
-        //first create a div for chatContact
-        //convert this into funtion
-        let contactDiv = makeContactDiv(toUserName);
-        contactDiv.setAttribute("id",contactDivID);
-        contactParentDiv.appendChild(contactDiv);
-        //test to check it looks better without hr
-        // let hr = document.createElement("hr");
-        // contactParentDiv.appendChild(hr);
-        //test ends here
         
-        let chatDiv = makeChatWindowDiv( userData[userData.chatWindows[i]], userData.chatWindows[i] );
+        let contactDiv = makeContactDiv(toUserName);
+        contactDiv.setAttribute("id", contactDivID);
+        contactDiv.addEventListener("click",showClickedChatDiv,false);
+        contactParentDiv.appendChild(contactDiv);
+        
+        
+        let chatDiv = makeChatWindowDiv(userData[userData.chatWindows[i]], chatWindowDisplayDivID);
+        chatParentDiv.insertBefore(chatDiv,chatParentDiv.children[1]);
+        chatDiv.style.display = "none";
+        
+        chatWindowandDisplayBoxTracker[contactDivID] = {
+            windowName:chatWindowDisplayDivID,
+            isDisplayed:false,
+            currentIndex:i
+        }
 
-        //second create a div for chatDisplayWindow
-        //then fill it 
-        //  do this until all messages are done
-        //      then create a message div
-        //      then fill it
-        //      then push it
-        //then push it 
-         
     }
-    //         chatWindow.innerHTML += '<div class="chatBox" onclick="hideShow(' + chatCount + ')" id=' + chatCount + '><strong>' + showusr + '</strong></div>';
-    //         output.innerHTML += '<div id=' + finalID + '></div>';
-    //         let indiChat = document.getElementById(finalID);
-
-    //         let newEle = document.createElement('div');
-    //         indiChat.appendChild(newEle);
-    //         indiChat.style.display = "none";
-    //         for (let j = 0; j < response[i].length; j++) {
-    //             for (let [key, value] of Object.entries(response[i][j])) {
-    //                 indiChat.innerHTML += key + ":" + value + " ";
-    //                 console.log(`${key}:${value}`);
-    //             }
-    //             indiChat.innerHTML += "<br>";
-    //         }
-
-    //         chatCount += 1;
-    //     }
-    // }
 
 }
 
@@ -194,7 +170,7 @@ function getChatFromServer() {
         });
 }
 
-function makeContactDiv(userName){
+function makeContactDiv(userName) {
 
     let mainDiv = document.createElement("div");
     mainDiv.classList.add("singleContactTest");
@@ -213,7 +189,7 @@ function makeContactDiv(userName){
     moreItemDiv.classList.add("verticalFlexParent");
     let moreImgEle = document.createElement("img");
     moreImgEle.classList.add("moreImageTag");
-    moreImgEle.src="/assets/more.png";
+    moreImgEle.src = "/assets/more.png";
     moreItemDiv.appendChild(moreImgEle);
     mainDiv.appendChild(imgDiv);
     mainDiv.appendChild(userNameDiv);
@@ -223,26 +199,34 @@ function makeContactDiv(userName){
     return mainDiv;
 }
 
-function makeChatWindowDiv(chatData,chatDataWindowID){
+function makeChatWindowDiv(chatData, chatDataWindowID) {
 
-    console.log("CHAT DATA BEFORE RENDERING");
-    console.log("Chat Data",chatData);
-    console.log("Chat Data Window ID",chatDataWindowID);
-    
     let mainDiv = document.createElement("div");
     mainDiv.classList.add("chatWindowClass");
-    mainDiv.setAttribute("id",chatDataWindowID);
+    mainDiv.setAttribute("id", chatDataWindowID);
 
-    console.log("chatData.length:"+chatData.length);
-    for(let i=0;i<chatData.length;i++){
-        
+    for (let i = 0; i < chatData.length; i++) {
+        let fullWidthDiv = document.createElement("div");
+        fullWidthDiv.classList.add("fullWidth");
+        let msgDiv = document.createElement("div");
+        msgDiv.classList.add("indiMessageDiv");
+        msgDiv.innerHTML = chatData[i].message;
+        if(sessionStorage.getItem("userName") == chatData[i].from){
+            msgDiv.classList.add("right");
+        }else{
+            msgDiv.classList.add("left");
+        }
+        fullWidthDiv.appendChild(msgDiv);
+        mainDiv.appendChild(fullWidthDiv);
     }
 
-    //loop to add whole chat
-    let fullWidthDiv = document.createElement("div");
-    fullWidthDiv.classList.add("fullWidth");
-    let msgDiv = document.createElement("div");
-    msgDiv.classList.add("indiMessageDiv");
-    //according to conditions left || middle || right
+    return mainDiv;
+}
 
+function showClickedChatDiv(event){
+    document.getElementById(lastDisplayedChatWindow).style.display = "none";
+    chatWindowandDisplayBoxTracker[event.target.id].isDisplayed = true;
+    let toShowWindow = chatWindowandDisplayBoxTracker[event.target.id].windowName;
+    document.getElementById(toShowWindow).style.display = "flex";
+    lastDisplayedChatWindow = toShowWindow;
 }
