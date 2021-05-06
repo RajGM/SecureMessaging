@@ -145,7 +145,6 @@ socket.on('typing', function (data) {
 
 socket.on('chat', function (data) {
     console.log(data);
-    output.innerHTML += '<p><strong>' + data.message + '</strong></p>';
 });
 
 function getChatFromServer() {
