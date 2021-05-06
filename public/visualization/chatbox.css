@@ -196,7 +196,7 @@ body {
 }
 
 .left {
-    justify-content: flex-start;
+    float: left;
     margin-left: 10px;
     box-shadow: -5px 5px;
 }

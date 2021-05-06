@@ -26,7 +26,8 @@ sendButton.onclick = function () {
         to: "",
         message: "",
         authToken: "",
-        socketID: ""
+        socketID: "",
+        chatWindow:""
     }
 
     objSent.from = from.value;
@@ -35,9 +36,15 @@ sendButton.onclick = function () {
     objSent.authToken = sessionStorage.getItem("authToken");
     objSent.socketID = socket.id;
 
-    message.innerHTML = "";
-    try {
+    var selfData = {
+        from:from.value,
+        to:to.value,
+        message:message.innerHTML,
+        chatWindow:lastDisplayedChatWindow
+    }
 
+    message.innerHTML = "";
+    
         socket.emit('chat', {
             from: objSent.from,
             to: objSent.to,
@@ -45,11 +52,9 @@ sendButton.onclick = function () {
             authToken: sessionStorage.getItem("authToken"),
             socketID: objSent.socketID
         });
-        output.innerHTML += '<p><strong>' + objSent.message + '</strong></p>';
-    }
-    catch (err) {
-        console.log("Error" + err);
-    }
+
+        selfDisplay(selfData);
+    
 }
 
 logoutButton.onclick = function () {
@@ -240,9 +245,30 @@ function individualMessagetoChatDiv(data) {
     let msgDiv = document.createElement("div");
     msgDiv.classList.add("indiMessageDiv");
     msgDiv.innerHTML = data.message;
-    msgDiv.classList.add("left");
+    if (sessionStorage.getItem("userName") == data.from) {
+        msgDiv.classList.add("right");
+    } else {
+        msgDiv.classList.add("left");
+    }
     fullWidthDiv.appendChild(msgDiv);
-    chatWindowID = data.chatWindow+"DisplayBox";
+    let chatWindowID = data.chatWindow+"DisplayBox";
+    console.log("chatWindowID:"+chatWindowID);
     document.getElementById(chatWindowID).appendChild(fullWidthDiv);
 }
 
+function selfDisplay(data){
+    let fullWidthDiv = document.createElement("div");
+    fullWidthDiv.classList.add("fullWidth");
+    let msgDiv = document.createElement("div");
+    msgDiv.classList.add("indiMessageDiv");
+    msgDiv.innerHTML = data.message;
+    if (sessionStorage.getItem("userName") == data.from) {
+        msgDiv.classList.add("right");
+    } else {
+        msgDiv.classList.add("left");
+    }
+    fullWidthDiv.appendChild(msgDiv);
+    let chatWindowID = data.chatWindow;
+    console.log("chatWindowID:"+chatWindowID);
+    document.getElementById(chatWindowID).appendChild(fullWidthDiv);
+}
