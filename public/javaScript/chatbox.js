@@ -86,7 +86,7 @@ function hideShow(chatIndex) {
     modiDom.style.display = "inline-block";
 }
 
-async function showData(userData) {
+function showData(userData) {
 
     for (let i = 0; i < userData.chatWindows.length; i++) {
         let contactDivID = userData.chatWindows[i] + "ContactDiv";
@@ -145,6 +145,7 @@ socket.on('typing', function (data) {
 
 socket.on('chat', function (data) {
     console.log(data);
+    individualMessagetoChatDiv(data);
 });
 
 function getChatFromServer() {
@@ -230,5 +231,18 @@ function showClickedChatDiv(event) {
     lastDisplayedChatWindow = toShowWindow;
     let toSendID = toShowWindow.replace("DisplayBox", "");
     toSendID = toSendID.replace(from.value, "");
-    toUser.value = toSendID;
+    toUser.value = toSendID;    
 }
+
+function individualMessagetoChatDiv(data) {
+    let fullWidthDiv = document.createElement("div");
+    fullWidthDiv.classList.add("fullWidth");
+    let msgDiv = document.createElement("div");
+    msgDiv.classList.add("indiMessageDiv");
+    msgDiv.innerHTML = data.message;
+    msgDiv.classList.add("left");
+    fullWidthDiv.appendChild(msgDiv);
+    chatWindowID = data.chatWindow+"DisplayBox";
+    document.getElementById(chatWindowID).appendChild(fullWidthDiv);
+}
+
