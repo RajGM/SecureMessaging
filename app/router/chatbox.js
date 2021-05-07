@@ -1,126 +1,71 @@
+//importing modules
 const express = require('express');
 const router = new express.Router();
-var path = require('path');
-var chatboxHelper = require('./../serverSideJs/chatboxHelper');
-
+const jwt = require("jsonwebtoken");
 var bodyParser = require('body-parser')
-var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+//getting path of public files
+var path = require('path');
+
+//getting models
 const msgSent = require('../models/chatMsg');
 const chatWindow = require('./../models/chatWindow');
 const authToken = require('./../models/authToken');
+
+//getting custom build funtions for this file
+var chatboxHelper = require('./../serverSideJs/chatboxHelper');
 const helperFun = require('./../serverSideJs/chatboxHelper');
 const helperFun2 = require('./../serverSideJs/registerHelper');
 
-//jwt web token
-const jwt = require("jsonwebtoken");
-
+// @type    GET
+//@route    /chatbox
+// @desc    for sending chatbox page
+// @access  PUBLIC
 router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + './../views/' + 'chatbox.html'));
 });
 
+// @type    GET
+//@route    /chatbox/data
+// @desc    for sending data of particular user
+// @access  PRIVATE
 router.get('/data', verifyToken, async function (req, res) {
 
-    console.log("Query of Get DATA on server side Inside route query:",req.query);
     let chatData = await chatboxHelper.getWholeChat(req.query.userName);
-    // res.json(chatData);
     res.status(200).json(chatData);
 
 });
 
+// @type    POST
+//@route    /chatbox/logout
+// @desc    for logging out user 
+// @access  PRIVATE
+//fix this as it is not working
 router.post('/logout', async (req, res) => {
-    console.log("Logging out");
-    console.log("Body data", req.body);
     const aT = new authToken({
         userName: req.body.from,
-        authToken: ""
+        authToken: req.body.authToken
     });
+    console.log("LOGOUT DATA:",aT);
     let returnDoc;
-    await authToken.findOneAndUpdate({ userName: req.body.from }, { authToken: "", authExpire: "" }, { upsert: true, useFindAndModify: false })
+    await authToken.findOneAndUpdate({ userName: req.body.from }, { authToken: ""}, { upsert: true, useFindAndModify: false })
         .then(updatedDocument => {
             if (updatedDocument) {
-                console.log("Updated" + updatedDocument);
+                //document updated
             } else {
-                console.log("Not updated" + updatedDocument);
+                //document not updated
             }
             returnDoc = updatedDocument;
             return updatedDocument;
         })
         .catch(err => console.log(err));
 
-    console.log("Logout catch Point 2");
-    res.status(200).json(returnDoc);
+    res.status(200).json("logout success");
 });
 
-router.post('/', async (req, res) => {
-    console.log("Posting Message");
-    const msgValues = { from: "", to: "", message: "" };
-    console.log(req.body);
-    var timeStamp = new Date();
-
-    if (req.body.from != "" && req.body.to != "" && req.body.message != "") {
-        msgValues.from = req.body.from;
-        msgValues.to = req.body.to;
-        msgValues.message = req.body.message;
-        msgValues.timeStamp = timeStamp;
-    }
-    console.log("Values in server object");
-    console.log(msgValues);
-
-    const newMessage = new msgSent({
-        from: req.body.from,
-        to: req.body.to,
-        message: req.body.message,
-        timeStamp: timeStamp
-    });
-
-    let fromProfile = await helperFun2.findProfile(newMessage.from);
-    let toProfile = await helperFun2.findProfile(newMessage.to);
-    if (toProfile == "exists" && fromProfile == "exists") {
-        var usr1;
-        var usr2;
-        var usr1and2;
-        if (req.body.to > req.body.from) {
-            usr1 = req.body.from;
-            usr2 = req.body.to;
-        } else {
-            usr1 = req.body.to;
-            usr2 = req.body.from;
-        }
-        usr1and2 = usr1 + usr2;
-
-        let chatboxState = await helperFun.chatWinowFinder(usr1and2);
-
-        if (chatboxState == "exists") {
-            helperFun.socketIDUpdate(newMessage.from, req.body.socketID);
-            helperFun.insertData(usr1and2, newMessage);
-            res.status(200).json({ pro: "Chatwindow exists" });
-        } else {
-            let chatW = new chatWindow({
-                user1: usr1,
-                user2: usr2,
-                usr12: usr1and2
-            });
-            let profileUpdateStateFrom = await helperFun.updateProfile(newMessage.from, usr1and2);
-            let profileUpdateStateTo = await helperFun.updateProfile(newMessage.to, usr1and2);
-            let collectionCreationState = await helperFun.createCollections(usr1and2);
-            let chatWindowCollUpdateState = await helperFun.chatWindowCollectionUpdate(chatW);
-            let dataInsertState = await helperFun.insertData(usr1and2, newMessage);
-            res.status(200).json({ pro: "Chatwindow does not exists created new collection" });
-        }
-
-    } else {
-        res.status(200).json({ pro: "Reciever profile does not exists" });
-    }
-
-});
-
+//funtion to verify authToken
 async function verifyToken(req, res, next) {
 
-    console.log("Query of Get DATA on server side:",req.query);
-    console.log("userName:"+req.query.userName);
-  
     let userData = {
         userName:req.query.userName,
         authToken:req.query.authToken,
@@ -133,25 +78,20 @@ async function verifyToken(req, res, next) {
         const bearer = bearerHeader.split(' ');
         const bearerToken = bearer[1];
         req.token = bearerToken;
-        // console.log("req.token = Bearer token");
         jwt.verify(bearerToken, 'secretkey', (err, authData) => {
             if (err) {
-                console.log("Forbidden error" + err);
                 res.status(403).json(err);
             } else {
-                 console.log("Auth Data:", authData);
                 if(authData.userName == userData.userName){
                     authorized = true;
                 }else{
                     res.status(403);
                 }
-                // console.log("Everything is good UPDATE SOCKET ID NOW");
             }
         });
 
         if (authorized == true) {
             let socketIDstatus = await chatboxHelper.socketIDUpdate(req.query.userName, req.query.socketID);
-            // console.log("SOCKET ID STATUS:" + socketIDstatus);
         }
 
         next();
@@ -161,4 +101,5 @@ async function verifyToken(req, res, next) {
 
 }
 
+//export all of the routers 
 module.exports = router;

@@ -62,14 +62,18 @@ logoutButton.onclick = function () {
         from: "",
         authToken: ""
     }
-    objSent.from = localStorage.getItem("userName");
-    objSent.authToken = localStorage.getItem("authToken");
+    objSent.from = sessionStorage.getItem("userName");
+    objSent.authToken = sessionStorage.getItem("authToken");
     var jsonFormat = JSON.stringify(objSent);
     try {
         var xhttp = new XMLHttpRequest();
         xhttp.onload = function () {
             var response = JSON.parse(this.responseText);
             console.log(response);
+            if(response == "logout success"){
+                sessionStorage.clear();
+                window.location.href = "http://localhost:8000/login";
+            }
         }
         xhttp.open("POST", "/chatbox/logout", true);
         xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
@@ -269,6 +273,5 @@ function selfDisplay(data){
     }
     fullWidthDiv.appendChild(msgDiv);
     let chatWindowID = data.chatWindow;
-    console.log("chatWindowID:"+chatWindowID);
     document.getElementById(chatWindowID).appendChild(fullWidthDiv);
 }

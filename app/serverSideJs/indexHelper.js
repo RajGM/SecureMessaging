@@ -47,10 +47,8 @@ async function insertChatData(data) {
         let chatboxState = await chatboxHelper.chatWinowFinder(usr1and2);
         
         if (chatboxState == "exists") {
-            //helperFun.socketIDUpdate(newMessage.from,req.body.socketID);
             chatboxHelper.insertData(usr1and2,newMessage);
             return ["doneOld",usr1and2];
-            //res.status(200).json({ pro: "Chatwindow exists" });
         } else {
             let chatW = new chatWindow({
                 user1:usr1,
@@ -67,7 +65,6 @@ async function insertChatData(data) {
         }
 
     } else {
-        //res.status(200).json({ pro: "Reciever profile does not exists" });
         return "errChat";
     }
         return "errDataUpload";
