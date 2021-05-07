@@ -8,14 +8,10 @@ var bodyParser = require('body-parser')
 var path = require('path');
 
 //getting models
-const msgSent = require('../models/chatMsg');
-const chatWindow = require('./../models/chatWindow');
 const authToken = require('./../models/authToken');
 
 //getting custom build funtions for this file
 var chatboxHelper = require('./../serverSideJs/chatboxHelper');
-const helperFun = require('./../serverSideJs/chatboxHelper');
-const helperFun2 = require('./../serverSideJs/registerHelper');
 
 // @type    GET
 //@route    /chatbox
@@ -40,7 +36,7 @@ router.get('/data', verifyToken, async function (req, res) {
 //@route    /chatbox/logout
 // @desc    for logging out user 
 // @access  PRIVATE
-//fix this as it is not working
+//fix this so that it only let user logout after verifying the token
 router.post('/logout', async (req, res) => {
     const aT = new authToken({
         userName: req.body.from,

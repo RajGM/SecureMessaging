@@ -60,7 +60,6 @@ async function insertChatData(data) {
             let collectionCreationState = await chatboxHelper.createCollections(usr1and2);
             let chatWindowCollUpdateState = await chatboxHelper.chatWindowCollectionUpdate(chatW);
             let dataInsertState = await chatboxHelper.insertData(usr1and2,newMessage);
-            console.log("Chatwindow does not exists created new collection");
             ["doneNew",usr1and2]
         }
 
