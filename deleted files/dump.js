@@ -1,7 +1,7 @@
 const express = require('express');
 const router = new express.Router();
 var path = require('path');
-const regProfile = require('./../models/profile');
+const regProfile = require('../app/models/profile');
 
 router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + './../views/' + 'dump.html'));
@@ -21,7 +21,7 @@ router.get('/data', async function (req, res) {
 
 async function dumpData(DBname) {
     var MongoClient = require('mongodb').MongoClient;
-    const configFile = require('./../../myUrl');
+    const configFile = require('../myUrl');
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
     let collectionNames;
 
@@ -59,7 +59,7 @@ async function getCollectionNames(userName) {
 async function getCollectionData(collName) {
     //console.log("Start of getCollectionData");
     let MongoClient = require('mongodb').MongoClient;
-    const configFile = require('./../../myUrl');
+    const configFile = require('../myUrl');
     const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
     let dataArr;
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })

@@ -1,13 +1,10 @@
 const regProfile = require('../models/profile');
-const authToken = require('./../models/authToken');
 const socketToken = require('./../models/socketToken');
 const configFile = require('./../../myUrl');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
-
-// nodeMailer test
 const nodemailer = require("nodemailer");
-//
+const confidential = require('./../../confidential');
 
 async function findProfile(userName, email) {
     console.log("UserName:" + userName);
@@ -103,14 +100,12 @@ async function generateHashedPassword(password) {
     const salt = await bcrypt.genSaltSync(saltRounds);
     const hashedPassword = await bcrypt.hashSync(password, salt);
 
-    console.log("HASHED PASSWORD:" + hashedPassword);
-
     return hashedPassword;
 }
 
 async function generateEmailConfirmationToken(email) {
 
-    let confirmationToken = await jwt.sign({ email }, 'secretkey', { expiresIn: '1d' }, (err, token) => {
+    let confirmationToken = await jwt.sign({ email }, confidential.emailSecretKey , { expiresIn: '1d' }, (err, token) => {
             sendConfirmationEmail(email,token);
         });
 
@@ -124,8 +119,8 @@ async function sendConfirmationEmail(email, emailConfirmationToken) {
     let transporter = nodemailer.createTransport({
         service: "Gmail",
         auth: {
-            user: "testat447@gmail.com",
-            pass: "testatnodemailer447",
+            user: confidential.mailID,
+            pass: confidential.mailPassword,
         },
     });
 
@@ -137,7 +132,7 @@ async function sendConfirmationEmail(email, emailConfirmationToken) {
             from: '"Fred Foo 👻"<testat447@gmail.com>',
             to: email,
             subject: 'SECOND TEST Confirm Email',
-            text: "SECOND TEST EMAIL", // plain text body
+            text: "SECOND TEST EMAIL", 
             html: `SECOND TEST CONFIRM EMAIL: <a href="${email}">${url}</a>`,
         });
 

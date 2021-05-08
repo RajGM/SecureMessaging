@@ -45,11 +45,6 @@ app.use('/chatbox', chatbox);
 const confirmation = require('./app/router/confirmation');
 app.use('/confirmation', confirmation);
 
-//testing purposes
-const dumpDB = require('./app/router/dump');
-app.use('/dump', dumpDB);
-//testing purposes ends here
-
 const invalidRoute = require('./app/router/invalidRoute');
 app.use('*', invalidRoute);
 

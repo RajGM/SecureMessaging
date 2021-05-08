@@ -6,9 +6,9 @@ async function updateSocketID(userName, authToken, socketID) {
     let authVerified = await chatboxHelper.verifyAuthToken(userName, authToken);
     if (authVerified == "correct") {
         await chatboxHelper.socketIDUpdate(userName, socketID);
-        return "done"
+        return "done";
     } else {
-        return "notDone"
+        return "notDone";
     }
 
 }

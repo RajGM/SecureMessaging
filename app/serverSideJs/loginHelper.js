@@ -1,3 +1,4 @@
+const confidential = require('./../../confidential');
 const configFile = require('./../../myUrl');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
@@ -23,8 +24,6 @@ async function verifyUNamePass(userName, password) {
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
-    // console.log("Values in loginHelper function");
-    // console.log("userName:" + userName + " password:" + password);
     try {
         const db = client.db('testdb').collection("userprofiles");
         dataArr = await db.find({ userName }, { projection: { "_id": 0, "__v": 0 } })
@@ -36,13 +35,9 @@ async function verifyUNamePass(userName, password) {
         client.close();
     }
 
-    // console.log(typeof dataArr);
-    // console.log("dataArr", dataArr);
     if (Object.keys(dataArr).length === 0) {
-        // console.log("blank");
         return "notExists"
     } else {
-        // true
         if (bcrypt.compareSync(password, dataArr[0].password)) {
             console.log("Correct password");
             return "correct";
@@ -80,20 +75,11 @@ async function updateAuthToken(userName) {
 
 async function generateAuthToken(userName) {
     return new Promise(async (resolve, reject) => {
-        let confirmationToken = await jwt.sign({ userName }, 'secretkey', { expiresIn: '1d' }, (err, token) => {
+        let confirmationToken = await jwt.sign({ userName }, confidential.secretkey , { expiresIn: '1d' }, (err, token) => {
             resolve(token)
         });
     })
 
 }
-
-// async function test(){
-//     // let v2 = await updateAuthToken("rajgver8tle@gmail.com");
-//     // console.log(v2);
-//     let v3 = await loginProfile("rajgver8tile@gmail.com","rajgver8tile@gmail.com");
-//     console.log(v3);
-// }
-
-// test();
 
 exports.loginProfile = loginProfile;

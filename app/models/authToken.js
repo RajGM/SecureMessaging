@@ -9,9 +9,6 @@ const ProfileSchema = new Schema({
     authToken:{
         type:String,
         require:true
-    },
-    authExpire:{
-        type:String
     }
 });
 

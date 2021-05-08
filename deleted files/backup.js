@@ -61,3 +61,11 @@ router.post('/', async (req, res) => {
     }
 
 });
+
+
+//index.js
+
+//testing purposes
+const dumpDB = require('./app/router/dump');
+app.use('/dump', dumpDB);
+//testing purposes ends here
