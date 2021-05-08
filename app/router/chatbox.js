@@ -28,8 +28,12 @@ router.get('/', function (req, res) {
 router.get('/data', verifyToken, async function (req, res) {
 
     let chatData = await chatboxHelper.getWholeChat(req.query.userName);
-    res.status(200).json(chatData);
-
+    try{
+        res.status(200).json(chatData);
+    }catch(err){
+        console.log("HEADER ERROR:"+err);
+    }
+    
 });
 
 // @type    POST

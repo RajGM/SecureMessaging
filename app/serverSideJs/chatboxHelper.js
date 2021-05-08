@@ -12,7 +12,6 @@ async function createCollections(name) {
         let returnData = await db.createCollection(name)
             .catch(err => console.log(err));
         if (returnData) {
-            //console.log("Collection created:", returnData);
             creationState = "collectionCreated";
         } else {
             console.log("Some went wrong");
@@ -137,7 +136,6 @@ async function socketIDUpdate(userName, socketID) {
         
         let returnData = await db.updateOne({ userName: userName }, { $set: { socketID: socketID } }, { upsert: true, useFindAndModify: false });
         if (returnData) {
-            //console.log("socketID Updated:" + returnData);
             updationState = "socketIDupdated";
         } else {
             console.log("Something went wrong during profile updation");
@@ -173,7 +171,6 @@ async function chatWinowFinder(windowName) {
         client.close();
     }
 
-    //console.log(typeof dataArr);
     if (Object.keys(dataArr).length === 0) {
         console.log("blank");
         return "notExists"
@@ -192,8 +189,6 @@ async function findSocketID(userName) {
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
-    //console.log("Values in verifyAuthToken function");
-    //console.log("userName:" + userName + " socketID:" + socketID);
     try {
         const db = client.db('testdb').collection("sockettoken");
         dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
@@ -239,8 +234,6 @@ async function verifyAuthToken(userName, authToken) {
         console.log("blank");
         return "notExists"
     } else {
-        console.log("PASSED AUTHTOKEN:"+authToken);
-        console.log("DB AUTHTOKEN:"+dataArr[0].authToken);
         if (authToken == dataArr[0].authToken) {
             return "correct";
         } else {
@@ -272,7 +265,6 @@ async function getCollectionNames(userName) {
     }
 
     if (Object.keys(dataArr).length === 0) {
-        // console.log("blank");
         return "notExists"
     }
 
@@ -281,8 +273,8 @@ async function getCollectionNames(userName) {
 }
 
 async function getCollectionData(collName) {
-    //console.log("Start of getCollectionData");
-    console.log(typeof collName);
+    
+    //console.log(typeof collName);
     if(collName === undefined){
         return null;
     }
@@ -296,12 +288,10 @@ async function getCollectionData(collName) {
 
     try {
         const db = client.db('testdb').collection(collName);
-        //  console.log("Catch point 1");
-
+        
         dataArr = await db.find({}, { projection: { "_id": 0 } })
             .toArray();
-        //console.log(dataArr);
-        // console.log("End of data catch point");
+        
     }
     catch (err) {
         console.log(err);
@@ -309,12 +299,10 @@ async function getCollectionData(collName) {
         client.close();
     }
 
-    //console.log("End of getCollectionData",dataArr);
     return dataArr;
 }
 
 async function getWholeChat(userName) {
-    //let collName = await dumpData("testdb");
     var newArr = await getCollectionNames(userName);
     let totalDump = [];
 
@@ -331,7 +319,7 @@ async function getWholeChat(userName) {
         totalDump.push(allData.chatWindows[i]);
     }
     
-    //start debugging from this point next time 
+    //start debugging from this point next time
     for (let i = 0; i < allData.chatWindows.length; i++) {
         let collDump = await getCollectionData(allData.chatWindows[i]);
         totalDump.push(collDump);
@@ -345,8 +333,7 @@ async function getWholeChat(userName) {
 
         allData[tempChatWindowName] = collDump;
     }
-     //console.log("Beautified Dump:",JSON.stringify(allData));
-     
+    
      return allData;
 }
 
