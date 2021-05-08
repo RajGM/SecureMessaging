@@ -2,7 +2,7 @@
 const express = require('express');
 const router = new express.Router();
 const jwt = require("jsonwebtoken");
-var bodyParser = require('body-parser')
+const confidential = require('./../../confidential');
 
 //getting path of public files
 var path = require('path');
@@ -26,7 +26,7 @@ router.get('/', function (req, res) {
 // @desc    for sending data of particular user
 // @access  PRIVATE
 router.get('/data', verifyToken, async function (req, res) {
-
+    console.log("REQ.QUERY:",req.query);
     let chatData = await chatboxHelper.getWholeChat(req.query.userName);
     try{
         res.status(200).json(chatData);
@@ -78,7 +78,7 @@ async function verifyToken(req, res, next) {
         const bearer = bearerHeader.split(' ');
         const bearerToken = bearer[1];
         req.token = bearerToken;
-        jwt.verify(bearerToken, 'secretkey', (err, authData) => {
+        jwt.verify(bearerToken, confidential.secretkey , (err, authData) => {
             if (err) {
                 res.status(403).json(err);
             } else {
