@@ -1,23 +1,19 @@
 const regProfile = require('../models/profile');
 const socketToken = require('./../models/socketToken');
-const configFile = require('./../../myUrl');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
 const confidential = require('./../../confidential');
 
 async function findProfile(userName, email) {
-    console.log("UserName:" + userName);
-    console.log("Email:" + email);
     let MongoClient = require('mongodb').MongoClient;
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     let dataArr;
     let dataArr2;
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
-
     try {
-        const db = client.db('testdb').collection("userprofiles");
+        const db = client.db(process.env.mongoDBName).collection("userprofiles");
 
         dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
             .toArray();
@@ -42,12 +38,12 @@ async function findProfile(userName, email) {
 async function createProfile(userName, password, email) {
 
     let MongoClient = require('mongodb').MongoClient;
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
     try {
-        const db = client.db('testdb').collection("userprofiles");
+        const db = client.db(process.env.mongoDBName).collection("userprofiles");
 
         const newProfile = new regProfile({
             userName: userName,
@@ -71,7 +67,7 @@ async function createProfile(userName, password, email) {
             socketID: ""
         });
 
-        const dbsT = client.db("testdb").collection("sockettoken");
+        const dbsT = client.db(process.env.mongoDBName).collection("sockettoken");
         let stInsert = await dbsT.insertOne(newSocketToken)
             .then(stTok => {
                 console.log("SocketToken created:" + stTok);

@@ -1,5 +1,4 @@
 const confidential = require('./../../confidential');
-const configFile = require('./../../myUrl');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 
@@ -19,13 +18,13 @@ async function loginProfile(userName, password) {
 
 async function verifyUNamePass(userName, password) {
     let MongoClient = require('mongodb').MongoClient;
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     let dataArr;
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
     try {
-        const db = client.db('testdb').collection("userprofiles");
+        const db = client.db(process.env.mongoDBName).collection("userprofiles");
         dataArr = await db.find({ userName }, { projection: { "_id": 0, "__v": 0 } })
             .toArray();
     }
@@ -51,7 +50,7 @@ async function verifyUNamePass(userName, password) {
 
 async function updateAuthToken(userName) {
     let MongoClient = require('mongodb').MongoClient;
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     let dataArr;
     let token;
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -61,7 +60,7 @@ async function updateAuthToken(userName) {
 
         token = await generateAuthToken(userName);
 
-        const db = await client.db('testdb').collection('authtokens');
+        const db = await client.db(process.env.mongoDBName).collection('authtokens');
         dataArr = await db.updateOne({ userName: userName }, { $set: { authToken: token } }, { upsert: true, useFindAndModify: false });
 
     } catch (err) {

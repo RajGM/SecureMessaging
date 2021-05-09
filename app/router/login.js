@@ -13,7 +13,6 @@ router.post('/', async (req,res)=>{
         profileValues.username = req.body.userName;
         profileValues.password = req.body.Password;
     }
-
     
     let loginState = await helperFunction.loginProfile(profileValues.username,profileValues.password);
     console.log("LOGIN STATE:"+loginState);

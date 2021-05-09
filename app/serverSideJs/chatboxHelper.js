@@ -1,14 +1,14 @@
 async function createCollections(name) {
     var MongoClient = require('mongodb').MongoClient;
-    const configFile = require('./../../myUrl');
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
     let creationState;
 
     try {
-        const db = client.db('testdb');
+        const db = client.db(process.env.mongoDBName);
         let returnData = await db.createCollection(name)
             .catch(err => console.log(err));
         if (returnData) {
@@ -29,8 +29,8 @@ async function createCollections(name) {
 
 async function insertData(name, data) {
     var MongoClient = require('mongodb').MongoClient;
-    const configFile = require('./../../myUrl');
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
@@ -60,8 +60,8 @@ async function insertData(name, data) {
 
 async function updateProfile(userName, chatboxName) {
     var MongoClient = require('mongodb').MongoClient;
-    const configFile = require('./../../myUrl');
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
     let updationState;
@@ -93,8 +93,8 @@ async function updateProfile(userName, chatboxName) {
 
 async function chatWindowCollectionUpdate(data) {
     var MongoClient = require('mongodb').MongoClient;
-    const configFile = require('./../../myUrl');
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
 
@@ -125,8 +125,8 @@ async function chatWindowCollectionUpdate(data) {
 async function socketIDUpdate(userName, socketID) {
 
     var MongoClient = require('mongodb').MongoClient;
-    const configFile = require('./../../myUrl');
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
     let updationState;
@@ -153,8 +153,8 @@ async function socketIDUpdate(userName, socketID) {
 
 async function chatWinowFinder(windowName) {
     let MongoClient = require('mongodb').MongoClient;
-    const configFile = require('./../../myUrl');
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     let dataArr;
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
@@ -183,8 +183,8 @@ async function chatWinowFinder(windowName) {
 
 async function findSocketID(userName) {
     let MongoClient = require('mongodb').MongoClient;
-    const configFile = require('./../../myUrl');
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     let dataArr;
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
@@ -213,8 +213,8 @@ async function findSocketID(userName) {
 
 async function verifyAuthToken(userName, authToken) {
     let MongoClient = require('mongodb').MongoClient;
-    const configFile = require('./../../myUrl');
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     let dataArr;
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
@@ -245,9 +245,9 @@ async function verifyAuthToken(userName, authToken) {
 
 async function getCollectionNames(userName) {
 
-    const configFile = require('./../../myUrl');
+    
     let MongoClient = require('mongodb').MongoClient;
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     let dataArr;
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
@@ -280,8 +280,8 @@ async function getCollectionData(collName) {
     }
 
     let MongoClient = require('mongodb').MongoClient;
-    const configFile = require('./../../myUrl');
-    const url = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
+    
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
     let dataArr;
     let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         .catch(err => console.log(err));
