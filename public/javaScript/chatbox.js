@@ -73,7 +73,7 @@ logoutButton.onclick = function () {
             console.log(response);
             if(response == "logout success"){
                 sessionStorage.clear();
-                window.location.href = "http://localhost:8000/login";
+                window.location.href = "/login";
             }
         }
         xhttp.open("POST", "/chatbox/logout", true);
