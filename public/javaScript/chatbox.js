@@ -165,7 +165,7 @@ function getChatFromServer() {
     getDatafromServerObject.authToken = sessionStorage.getItem("authToken");
     console.log("Before sending DATA", getDatafromServerObject);
     let jsonData = JSON.stringify(getDatafromServerObject);
-    axios.get('https://chatapp2capstone.herokuapp.com/data', {
+    axios.get('https://chatapp2capstone.herokuapp.com/chatbox/data', {
         params: {
             authToken: sessionStorage.getItem("authToken"),
             socketID: socket.id,
