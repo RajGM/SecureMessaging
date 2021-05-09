@@ -1,7 +1,6 @@
 var userName = document.getElementById("userName");
 var Password = document.getElementById("Password");
 var LoginButton = document.getElementById("LoginButton");
-var registerPageRedirectButton = document.getElementById("registerPageRedirectButton");
 sessionStorage.clear()
 
 LoginButton.onclick = function () {
@@ -32,7 +31,7 @@ LoginButton.onclick = function () {
         sessionStorage.setItem("authToken", response.authToken);
         userName.value = "";
         Password.value = "";
-        window.location.href = "http://localhost:8000/chatbox";
+        window.location.href = "/chatbox";
       }
     };
     xhttp.open("POST", "/login", true);
@@ -43,8 +42,4 @@ LoginButton.onclick = function () {
     console.log("Error" + err);
   }
 
-}
-
-registerPageRedirectButton.onclick = function(){
-  window.location.href = "http://localhost:8000/register";
 }

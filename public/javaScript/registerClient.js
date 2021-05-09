@@ -2,7 +2,6 @@ var userName = document.getElementById("userName");
 var Password = document.getElementById("Password");
 var email = document.getElementById("email");
 var RegisterButton = document.getElementById("RegisterButton");
-var loginPageRedirectButton = document.getElementById("loginPageRedirectButton");
 
 RegisterButton.onclick = function () {
     console.log(userName.value);
@@ -29,8 +28,7 @@ RegisterButton.onclick = function () {
         if(response=="Fail"){
             console.log("Username exists");
         }else if(response=="Success"){
-            console.log("Registration success");
-            window.location.href = "http://localhost:8000/login";
+            window.location.href = "/login";
         }
     }
     xhttp.open("POST", "/register/", true);
@@ -40,8 +38,4 @@ RegisterButton.onclick = function () {
     catch(err){
         console.log("Error"+err);
     }
-}
-
-loginPageRedirectButton.onclick = function(){
-    window.location.href = "http://localhost:8000/login";
 }
