@@ -2,7 +2,6 @@
 const express = require('express');
 const router = new express.Router();
 const jwt = require("jsonwebtoken");
-const confidential = require('./../../confidential');
 
 //getting path of public files
 var path = require('path');
@@ -78,7 +77,7 @@ async function verifyToken(req, res, next) {
         const bearer = bearerHeader.split(' ');
         const bearerToken = bearer[1];
         req.token = bearerToken;
-        jwt.verify(bearerToken, confidential.secretkey , (err, authData) => {
+        jwt.verify(bearerToken, process.env.authSecretkey , (err, authData) => {
             if (err) {
                 res.status(403).json(err);
             } else {

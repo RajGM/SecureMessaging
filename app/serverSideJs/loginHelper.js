@@ -1,4 +1,3 @@
-const confidential = require('./../../confidential');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 
@@ -74,7 +73,7 @@ async function updateAuthToken(userName) {
 
 async function generateAuthToken(userName) {
     return new Promise(async (resolve, reject) => {
-        let confirmationToken = await jwt.sign({ userName }, confidential.secretkey , { expiresIn: '1d' }, (err, token) => {
+        let confirmationToken = await jwt.sign({ userName }, process.env.authSecretkey , { expiresIn: '1d' }, (err, token) => {
             resolve(token)
         });
     })

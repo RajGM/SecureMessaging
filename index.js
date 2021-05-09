@@ -28,11 +28,7 @@ app.use(bodyparser.urlencoded({
 app.use(bodyparser.json());
 
 //mongodb connect
-const configFile = require('./myUrl.js');
-const dbtest = configFile.mongoURL + configFile.userName + ":" + configFile.password + configFile.restUrl;
 const db = `${process.env.mongoURL}${process.env.mongoUserName}:${process.env.mongoPassword}${process.env.mongoRestUrl}`;
-console.log("DB:"+db);
-console.log("DT:"+dbtest);
 
 mongoose
   .connect(db)

@@ -3,7 +3,6 @@ const socketToken = require('./../models/socketToken');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
-const confidential = require('./../../confidential');
 
 async function findProfile(userName, email) {
     let MongoClient = require('mongodb').MongoClient;
@@ -101,7 +100,7 @@ async function generateHashedPassword(password) {
 
 async function generateEmailConfirmationToken(email) {
 
-    let confirmationToken = await jwt.sign({ email }, confidential.emailSecretKey , { expiresIn: '1d' }, (err, token) => {
+    let confirmationToken = await jwt.sign({ email }, process.env.emailSecretKey , { expiresIn: '1d' }, (err, token) => {
             sendConfirmationEmail(email,token);
         });
 
@@ -115,8 +114,8 @@ async function sendConfirmationEmail(email, emailConfirmationToken) {
     let transporter = nodemailer.createTransport({
         service: "Gmail",
         auth: {
-            user: confidential.mailID,
-            pass: confidential.mailPassword,
+            user: process.env.emailID,
+            pass: process.env.emailPassword,
         },
     });
 
