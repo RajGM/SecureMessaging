@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost:8000');
+var socket = io.connect('https://chatapp2capstone.herokuapp.com/');
 var from = document.getElementById("fromUser");
 var to = document.getElementById("toUser");
 var message = document.getElementById("messageUser");
@@ -14,9 +14,10 @@ var chatWindowandDisplayBoxTracker = {};
 var lastDisplayedChatWindow = "dummyChatWindow";
 
 if (sessionStorage.getItem("userName") === undefined || sessionStorage.getItem("authToken") === "undefined") {
-    window.location.href = "http://localhost:8000/login";
+    window.location.href = "/login";
 } else {
     from.value = sessionStorage.getItem("userName");
+    toUser.value = sessionStorage.getItem("userName");
 }
 
 sendButton.onclick = function () {
