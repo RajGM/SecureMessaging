@@ -23,28 +23,28 @@ body {
     background-color: #FFFFFF;
 }
 
-#topBarDiv{
+#topBarDiv {
     display: flex;
     flex-direction: row;
     height: 100px;
     border-bottom: 1px solid black;
 }
 
-.userTabDiv{
+.userTabDiv {
     height: 100%;
     flex-grow: 1;
     min-width: 403px;
     border-right: 1px solid black;
 }
 
-.toUserTabDiv{
+.toUserTabDiv {
     display: flex;
     flex-direction: column;
     flex-grow: 10;
     width: 95%;
 }
 
-.chatWindowClassTest{
+.chatWindowClassTest {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -58,7 +58,7 @@ body {
     border: 1px solid black;
 }
 
-#userTab{
+#userTab {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -118,18 +118,21 @@ body {
     border-right: 1px solid black;
 }
 
-#searchDiv{
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        height: 70px;
-        width: 350px;
-        box-shadow: 5px 5px;
-        margin: auto;
-        margin-top: 15px;
-        margin-bottom: 20px;
-        background-color: #FFFFFF;
-        border: 1px solid black;
+.searchDivClass{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 350px;
+    box-shadow: 5px 5px;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    background-color: #FFFFFF;
+    border: 1px solid black;   
+}
+
+#searchDiv {
+    height: 70px;
 }
 
 .singleContactTest {
@@ -247,7 +250,7 @@ body {
     border: 1px solid black;
 }
 
-#sendButton{
+#sendButton {
     height: 40px;
     width: 40px;
     border-radius: 50%;
@@ -256,53 +259,50 @@ body {
     background-size: cover;
 }
 
-#emojiButton{
+#emojiButton {
     background-image: url("../assets/cool.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
 
-#searchInput{
+.searchInputClass{
     border-radius: 20px;
     outline: none;
     border: 1px solid black;
     box-shadow: 3px 3px;
 }
 
-#searchButton{
+.searchButtonClass{
     margin-left: 5px;
     box-shadow: 3px 3px;
     font-family: Cursive;
 }
 
-#logoutButton{
+#logoutButton {
     box-shadow: 5px 5px;
     font-family: Cursive;
 }
 
-hr{
+hr {
     width: 90%;
 }
 
-#toUser{
+#toUser {
     color: black;
     font-size: 15px;
     font-family: Cursive;
-    width:100px;
+    width: 100px;
     background-color: #2196F3;
 }
 
-#fromUser{ 
+#fromUser {
     color: black;
     font-size: 15px;
     font-family: Cursive;
-    width:100px;
+    width: 100px;
     outline: none;
     border: 0px solid;
 }
-
-
-
 
 /*Toogle Switch Test*/
 
@@ -311,15 +311,15 @@ hr{
     display: inline-block;
     width: 32px;
     height: 16px;
-  }
-  
-  .switch input { 
+}
+
+.switch input {
     opacity: 0;
     width: 0;
     height: 0;
-  }
-  
-  .slider {
+}
+
+.slider {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -329,9 +329,9 @@ hr{
     background-color: gold;
     -webkit-transition: .4s;
     transition: .4s;
-  }
-  
-  .slider:before {
+}
+
+.slider:before {
     position: absolute;
     content: "";
     height: 8px;
@@ -341,50 +341,51 @@ hr{
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
-  }
-  
-  input:checked + .slider {
+}
+
+input:checked+.slider {
     background-color: #2196F3;
-  }
-  
-  input:focus + .slider {
+}
+
+input:focus+.slider {
     box-shadow: 0 0 1px #2196F3;
-  }
-  
-  input:checked + .slider:before {
+}
+
+input:checked+.slider:before {
     -webkit-transform: translateX(16px);
     -ms-transform: translateX(16px);
     transform: translateX(16px);
-  }
-  
-  /* Rounded sliders */
-  .slider.round {
+}
+
+/* Rounded sliders */
+
+.slider.round {
     border-radius: 34px;
-  }
-  
-  .slider.round:before {
+}
+
+.slider.round:before {
     border-radius: 50%;
-  }
+}
 
 /*Scroll Bar test*/
 
-
 /* custom scrollbar */
+
 ::-webkit-scrollbar {
     width: 20px;
-  }
-  
-  ::-webkit-scrollbar-track {
+}
+
+::-webkit-scrollbar-track {
     background-color: transparent;
-  }
-  
-  ::-webkit-scrollbar-thumb {
+}
+
+::-webkit-scrollbar-thumb {
     background-color: #d6dee1;
     border-radius: 20px;
     border: 6px solid transparent;
     background-clip: content-box;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
+}
+
+::-webkit-scrollbar-thumb:hover {
     background-color: #a8bbbf;
-  }
+}

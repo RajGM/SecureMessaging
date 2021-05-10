@@ -11,8 +11,6 @@
         </script>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-
 </head>
 
 <body>
@@ -56,7 +54,7 @@
                         <div class="verticalFlexParent">
                             <img src="/assets/student.png" style="height: 50px; width: 50px;">
                         </div>
-                        <div class="verticalFlexParent" >
+                        <div class="verticalFlexParent">
                             <input type="text" name="toUser" id="toUser" placeholder="To" value=""></input>
                         </div>
                         <div class="verticalFlexParent">
@@ -85,24 +83,22 @@
 
                 <div id="contactParentDiv">
 
-                    <div id="searchDiv">
+                    <div id="searchDiv" class="searchDivClass">
 
                         <div>
                             Search from Web <label class="switch">
-                                <input type="checkbox">
+                                <input type="checkbox" id="switchButton">
                                 <span class="slider round"></span>
                             </label> Contacts
                         </div>
                         <div>
-                            <input type="text" placeholder="Enter userName to search" id="searchInput"> <button
-                                id="searchButton">Go</button>
+                            <input type="text" placeholder="Enter userName to search" id="searchInput" class="searchInputClass">
+                            <button id="searchButton" class="searchButtonClass">Go</button>
                         </div>
 
                     </div>
 
                     <hr>
-
-                    
 
                 </div>
 
@@ -122,7 +118,7 @@
                         <div class="fullWidth">
 
                             <div class="indiMessageDiv left">
-                               I hope you will find this app useful.
+                                I hope you will find this app useful.
                             </div>
 
                         </div>
@@ -130,7 +126,7 @@
                         <div class="fullWidth">
 
                             <div class="indiMessageDiv right">
-                                Yes why not 
+                                Yes why not
                             </div>
 
                         </div>
@@ -158,20 +154,6 @@
 
         </diV>
 
-    </div>
-
-    <div style="display: none;">
-
-        <div id="info" style="display: none;">
-        </div>
-        <div id="output" style="display: none;">
-            <div id="chatCount0">
-
-            </div>
-        </div>
-        <div id="chatWindow" style="display: none;">
-
-        </div>
     </div>
 
     <script src="/javaScript/chatbox.js"></script>

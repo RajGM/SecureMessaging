@@ -337,6 +337,31 @@ async function getWholeChat(userName) {
      return allData;
 }
 
+async function findProfile(userName) {
+    let MongoClient = require('mongodb').MongoClient;
+    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
+    let dataArr;
+    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        .catch(err => console.log(err));
+    try {
+        const db = client.db(process.env.mongoDBName).collection("userprofiles");
+
+        dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
+            .toArray();
+
+    }
+    catch (err) {
+        console.log(err);
+    } finally {
+        client.close();
+    }
+
+    if (Object.keys(dataArr).length === 0 ) {
+        return "notExists"
+    }
+    return "exists";
+}
+
 exports.createCollections = createCollections;
 exports.insertData = insertData;
 exports.updateProfile = updateProfile;

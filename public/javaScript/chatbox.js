@@ -1,13 +1,18 @@
 var socket = io.connect('https://chatapp2capstone.herokuapp.com/');
 var from = document.getElementById("fromUser");
 var to = document.getElementById("toUser");
-var message = document.getElementById("messageUser");
 var sendButton = document.getElementById("sendButton");
 var output = document.getElementById("output");
 var chatWindow = document.getElementById("chatWindow");
 var messageBlock = document.getElementById("messageUser");
 var logoutButton = document.getElementById('logoutButton');
 var contactParentDiv = document.getElementById("contactParentDiv");
+
+//test starts here
+var switchButton = document.getElementById("switchButton");
+var searchInput = document.getElementById("searchInput");
+var searchButton = document.getElementById("searchButton");
+//test ends here
 
 var currentChatOpenIndex = 0;
 var chatWindowandDisplayBoxTracker = {};
@@ -28,7 +33,7 @@ sendButton.onclick = function () {
         message: "",
         authToken: "",
         socketID: "",
-        chatWindow:""
+        chatWindow: ""
     }
 
     objSent.from = from.value;
@@ -38,24 +43,24 @@ sendButton.onclick = function () {
     objSent.socketID = socket.id;
 
     var selfData = {
-        from:from.value,
-        to:to.value,
-        message:message.innerHTML,
-        chatWindow:lastDisplayedChatWindow
+        from: from.value,
+        to: to.value,
+        message: message.innerHTML,
+        chatWindow: lastDisplayedChatWindow
     }
 
     message.innerHTML = "";
-    
-        socket.emit('chat', {
-            from: objSent.from,
-            to: objSent.to,
-            message: objSent.message,
-            authToken: sessionStorage.getItem("authToken"),
-            socketID: objSent.socketID
-        });
 
-        selfDisplay(selfData);
-    
+    socket.emit('chat', {
+        from: objSent.from,
+        to: objSent.to,
+        message: objSent.message,
+        authToken: sessionStorage.getItem("authToken"),
+        socketID: objSent.socketID
+    });
+
+    selfDisplay(selfData);
+
 }
 
 logoutButton.onclick = function () {
@@ -71,7 +76,7 @@ logoutButton.onclick = function () {
         xhttp.onload = function () {
             var response = JSON.parse(this.responseText);
             console.log(response);
-            if(response == "logout success"){
+            if (response == "logout success") {
                 sessionStorage.clear();
                 window.location.href = "/login";
             }
@@ -97,7 +102,7 @@ function hideShow(chatIndex) {
 }
 
 function showData(userData) {
-
+    console.log(userData);
     for (let i = 0; i < userData.chatWindows.length; i++) {
         let contactDivID = userData.chatWindows[i] + "ContactDiv";
         let chatWindowDisplayDivID = userData.chatWindows[i] + "DisplayBox";
@@ -165,7 +170,8 @@ function getChatFromServer() {
     getDatafromServerObject.authToken = sessionStorage.getItem("authToken");
     console.log("Before sending DATA", getDatafromServerObject);
     let jsonData = JSON.stringify(getDatafromServerObject);
-    axios.get('https://chatapp2capstone.herokuapp.com/chatbox/data', {
+    // use this when on live server 'https://chatapp2capstone.herokuapp.com/chatbox/data'
+    axios.get('http://localhost:8000/chatbox/data', {
         params: {
             authToken: sessionStorage.getItem("authToken"),
             socketID: socket.id,
@@ -241,7 +247,7 @@ function showClickedChatDiv(event) {
     lastDisplayedChatWindow = toShowWindow;
     let toSendID = toShowWindow.replace("DisplayBox", "");
     toSendID = toSendID.replace(from.value, "");
-    toUser.value = toSendID;    
+    toUser.value = toSendID;
 }
 
 function individualMessagetoChatDiv(data) {
@@ -256,12 +262,12 @@ function individualMessagetoChatDiv(data) {
         msgDiv.classList.add("left");
     }
     fullWidthDiv.appendChild(msgDiv);
-    let chatWindowID = data.chatWindow+"DisplayBox";
-    console.log("chatWindowID:"+chatWindowID);
+    let chatWindowID = data.chatWindow + "DisplayBox";
+    console.log("chatWindowID:" + chatWindowID);
     document.getElementById(chatWindowID).appendChild(fullWidthDiv);
 }
 
-function selfDisplay(data){
+function selfDisplay(data) {
     let fullWidthDiv = document.createElement("div");
     fullWidthDiv.classList.add("fullWidth");
     let msgDiv = document.createElement("div");
@@ -275,4 +281,45 @@ function selfDisplay(data){
     fullWidthDiv.appendChild(msgDiv);
     let chatWindowID = data.chatWindow;
     document.getElementById(chatWindowID).appendChild(fullWidthDiv);
+}
+
+
+//this is not a good practice IMPROVE FROM HERE
+switchButton.onclick = function () {
+    console.log("Toggle Button Value:" + switchButton.checked);
+}
+
+messageBlock.onfocus = function () {
+    if (messageBlock.innerHTML == "Check") {
+        messageBlock.innerHTML = ""
+    }
+}
+
+searchButton.onclick = function () {
+    console.log("Toggle Button Value:" + switchButton.checked);
+
+    if (switchButton.checked == false) {
+        console.log("Toggle Button Check:" + switchButton.checked);
+        //implment search from contacts logic here
+    } else if (switchButton.checked == true) {
+        //implement search from web logic here
+        console.log("Toggle Button Check:" + switchButton.checked);
+        // use this when on live server 'https://chatapp2capstone.herokuapp.com/chatbox/data'
+    }
+
+    axios.get('http://localhost:8000/chatbox/searchProfile/tester@12345', {
+        params: {
+            authToken: sessionStorage.getItem("authToken"),
+            socketID: socket.id,
+            userName: sessionStorage.getItem("userName")
+        }
+    })
+        .then(function (response) {
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+
 }

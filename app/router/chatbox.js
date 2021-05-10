@@ -35,6 +35,15 @@ router.get('/data', verifyToken, async function (req, res) {
     
 });
 
+// @type    GET
+//@route    /chatbox/searchProfile
+// @desc    for finding profile of particular user
+// @access  PRIVATE
+router.get('/searchProfile/:profileUserName', verifyToken, async function (req, res) {
+    console.log("Profile Seach UserName:",req.params.profileUserName);
+    res.status(200).json(req.params.profileUserName);
+});
+
 // @type    POST
 //@route    /chatbox/logout
 // @desc    for logging out user 

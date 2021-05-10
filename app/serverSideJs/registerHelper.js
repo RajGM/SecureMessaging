@@ -19,7 +19,6 @@ async function findProfile(userName, email) {
 
         dataArr2 = await db.find({ email }, { projection: { "_id": 0 } })
             .toArray();
-
     }
     catch (err) {
         console.log(err);
