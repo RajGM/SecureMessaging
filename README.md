@@ -1,5 +1,12 @@
 # Shadow : Anonymous Chat Application for verified students and professionals. 
 
+#### Live Test Link : https://chatapp2capstone.herokuapp.com/
+
+#### Test accounts
+- Use test accounts to checkout the messaging feature because add friend feature is in progress 
+- userName: test@123 passowrd: test@123 
+- userName: rajgver8tile@gmail.com password: rajgver8tile@gmail.com
+
 ## Table of contents
 
 - [Quick start](#quick-start)

@@ -70,13 +70,6 @@ body {
     border: 1px solid black;
 }
 
-#contactsMenu {
-    border: 1px solid black;
-    height: 500px;
-    width: 200px;
-    overflow: scroll;
-}
-
 #chatMenu {
     height: 500px;
     width: 200px;
@@ -133,6 +126,16 @@ body {
 
 #searchDiv {
     height: 70px;
+}
+
+.showDivContactAndWebClass{
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 350px;
+    box-shadow: 5px 5px;
+    margin: auto;
+    border: 1px solid black;
 }
 
 .singleContactTest {
@@ -270,6 +273,10 @@ body {
     outline: none;
     border: 1px solid black;
     box-shadow: 3px 3px;
+    font-family: Cursive;
+    padding-left: 10px;
+    width: 180px;
+    max-width: 180px;
 }
 
 .searchButtonClass{
@@ -303,6 +310,7 @@ hr {
     outline: none;
     border: 0px solid;
 }
+
 
 /*Toogle Switch Test*/
 
