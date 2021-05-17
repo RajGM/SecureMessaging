@@ -7,6 +7,8 @@
 - userName: test@123 passowrd: test@123 
 - userName: rajgver8tile@gmail.com password: rajgver8tile@gmail.com
 
+#### If I am testing out new feature then messaging service will not work as CORS (Cross Origin Resource Sharing) is not allowed 
+
 ## Table of contents
 
 - [Quick start](#quick-start)
