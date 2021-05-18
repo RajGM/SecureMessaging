@@ -311,7 +311,10 @@ hr {
     border: 0px solid;
 }
 
-
+.userNameDivContactClass{
+    width:100px;
+    overflow-x: hidden;
+}
 /*Toogle Switch Test*/
 
 .switch {

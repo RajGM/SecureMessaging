@@ -38,18 +38,18 @@ sendButton.onclick = function () {
 
     objSent.from = from.value;
     objSent.to = to.value;
-    objSent.message = message.innerHTML;
+    objSent.message = messageBlock.innerHTML;
     objSent.authToken = sessionStorage.getItem("authToken");
     objSent.socketID = socket.id;
 
     var selfData = {
         from: from.value,
         to: to.value,
-        message: message.innerHTML,
+        message: messageBlock.innerHTML,
         chatWindow: lastDisplayedChatWindow
     }
 
-    message.innerHTML = "";
+    messageBlock.innerHTML = "";
 
     socket.emit('chat', {
         from: objSent.from,
@@ -198,6 +198,7 @@ function makeContactDiv(userName) {
     let userNameDiv = document.createElement("div");
     userNameDiv.innerHTML = userName;
     userNameDiv.classList.add("verticalFlexParent");
+    userNameDiv.classList.add("userNameDivContactClass");
     let isTypingDiv = document.createElement("div");
     isTypingDiv.classList.add("verticalFlexParent");
     isTypingDiv.innerHTML = "Typing";
@@ -280,9 +281,10 @@ function selfDisplay(data) {
     }
     fullWidthDiv.appendChild(msgDiv);
     let chatWindowID = data.chatWindow;
-    document.getElementById(chatWindowID).appendChild(fullWidthDiv);
+    let currentChatWindowElement = document.getElementById(chatWindowID);
+    currentChatWindowElement.appendChild(fullWidthDiv);
+    currentChatWindowElement.scrollTop = currentChatWindowElement.scrollHeight-currentChatWindowElement.clientHeight;
 }
-
 
 //this is not a good practice IMPROVE FROM HERE
 switchButton.onclick = function () {
@@ -307,19 +309,35 @@ searchButton.onclick = function () {
         // use this when on live server 'https://chatapp2capstone.herokuapp.com/chatbox/data'
     }
 
-    axios.get('http://localhost:8000/chatbox/searchProfile/tester@12345', {
-        params: {
-            authToken: sessionStorage.getItem("authToken"),
-            socketID: socket.id,
-            userName: sessionStorage.getItem("userName")
-        }
-    })
-        .then(function (response) {
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+    console.log("searchInput value:"+searchInput.value);
+    console.log("searchInput value length:"+searchInput.value.length);
 
+    //more input sanitization
+    //check so that it is not self nor already added friend CHECK before sending as well
+    if( searchInput.value.length != 0 ){
+        
+        axios.get('http://localhost:8000/chatbox/searchProfile/'+searchInput.value, {
+            params: {
+                authToken: sessionStorage.getItem("authToken"),
+                socketID: socket.id,
+                userName: sessionStorage.getItem("userName")
+            }
+        })
+            .then(function (response) {
+                if(response.data != "notFound"){
+                    //check so that it is not self nor already added friend
+                    
+                    console.log("Found");
+                }else{
+                    console.log("notFound");
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    
+    }
+
+    
 
 }

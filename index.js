@@ -98,6 +98,7 @@ io.on('connection', function (socket) {
 
   });
 
+  //do socket on typing events here
   // socket.on('typing', async function (data) {
   //   console.log("Typing");
   // });

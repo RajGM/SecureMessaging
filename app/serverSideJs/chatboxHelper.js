@@ -373,3 +373,4 @@ exports.findSocketID = findSocketID;
 exports.getCollectionNames = getCollectionNames;
 exports.getCollectionData = getCollectionData;
 exports.getWholeChat = getWholeChat;
+exports.findProfile = findProfile;

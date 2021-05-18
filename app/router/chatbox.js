@@ -41,7 +41,13 @@ router.get('/data', verifyToken, async function (req, res) {
 // @access  PRIVATE
 router.get('/searchProfile/:profileUserName', verifyToken, async function (req, res) {
     console.log("Profile Seach UserName:",req.params.profileUserName);
-    res.status(200).json(req.params.profileUserName);
+    let profileStatus = await chatboxHelper.findProfile(req.params.profileUserName);
+    console.log("Profile Find Status:"+profileStatus);
+    if(profileStatus=="notExists"){
+        res.status(200).json("notFound");
+    }else if(profileStatus=="exists"){
+        res.status(200).json(req.params.profileUserName);
+    }
 });
 
 // @type    POST
