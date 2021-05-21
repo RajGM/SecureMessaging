@@ -120,7 +120,6 @@ function showData(userData) {
         contactDiv.addEventListener("click", showClickedChatDiv, false);
         contactParentDiv.appendChild(contactDiv);
 
-
         let chatDiv = makeChatWindowDiv(userData[userData.chatWindows[i]], chatWindowDisplayDivID);
         chatParentDiv.insertBefore(chatDiv, chatParentDiv.children[1]);
         chatDiv.style.display = "none";
@@ -180,6 +179,13 @@ function getChatFromServer() {
     })
         .then(function (response) {
             showData(response.data);
+            let newContactDiv = makeContactDiv(response.data);
+            //newContactDiv.setAttribute("id",);
+            //make ID assign to it
+            //make contactDiv ID
+            //make chatWindow ID
+            //add event listener
+            //push divs to respective places
         })
         .catch(function (error) {
             console.log(error);
@@ -326,7 +332,7 @@ searchButton.onclick = function () {
             .then(function (response) {
                 if(response.data != "notFound"){
                     //check so that it is not self nor already added friend
-                    
+                    //add to the contact list
                     console.log("Found");
                 }else{
                     console.log("notFound");

@@ -1,3 +1,5 @@
+//Schema definition for chat Window
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 

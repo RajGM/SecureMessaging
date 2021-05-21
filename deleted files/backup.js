@@ -69,3 +69,16 @@ router.post('/', async (req, res) => {
 const dumpDB = require('./app/router/dump');
 app.use('/dump', dumpDB);
 //testing purposes ends here
+
+
+
+
+
+
+
+
+
+
+
+const cssFiles = require('./app/router/cssFiles');
+app.use('/public', cssFiles);

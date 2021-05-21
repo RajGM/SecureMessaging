@@ -1,11 +1,14 @@
+//importing modules
 const express = require('express');
 const router = new express.Router();
 var path = require('path');
 const helperFunction = require('./../serverSideJs/confirmationHelper');
-
-//jwt test
 const jwt = require("jsonwebtoken");
 
+// @type    GET
+//@route    /confirmation
+// @desc    for confirming email address by verifying email Token
+// @access  PUBLIC
 router.get('/:token', async function (req, res) {
 
     let checkHeader;
@@ -28,6 +31,7 @@ router.get('/:token', async function (req, res) {
     res.send();
 });
 
+//funtion to verify email token
 async function verifyToken(token) {
     let authorized = false;
     let email;

@@ -1,3 +1,5 @@
+//Schema definition for authentication Token storage 
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 

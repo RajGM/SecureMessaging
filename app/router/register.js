@@ -1,12 +1,21 @@
+//importing modules
 const express = require('express');
 const router = new express.Router();
 var path = require('path');
 const registerHelper = require('./../serverSideJs/registerHelper');
 
+// @type    GET
+//@route    /register
+// @desc    for sending register page
+// @access  PUBLIC
 router.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + './../views/' + 'register.html'));
 });
 
+// @type    POST
+//@route    /register
+// @desc    for sending register credentials and registering user
+// @access  PUBLIC
 router.post('/', async (req, res) => {
     const profileValues = { username: "", password: "" ,email:""};
     if (req.body.username != "" && req.body.password != "" && req.body.email != "") {

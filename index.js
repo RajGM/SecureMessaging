@@ -50,9 +50,6 @@ app.use('/confirmation', confirmation);
 const invalidRoute = require('./app/router/invalidRoute');
 app.use('*', invalidRoute);
 
-const cssFiles = require('./app/router/cssFiles');
-app.use('/public', cssFiles);
-
 //starting server
 var server = app.listen(app.get('port'), function () {
   console.log("Express server listening on port " + app.get('port'));

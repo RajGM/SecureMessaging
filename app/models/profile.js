@@ -1,3 +1,5 @@
+//Schema definition for profile
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 

@@ -1,12 +1,22 @@
+//importing modules
 const express = require('express');
 const router = new express.Router();
 var path = require('path');
 const helperFunction = require('./../serverSideJs/loginHelper');
 
+// @type    GET
+//@route    /login
+// @desc    for sendig login page
+// @access  PUBLIC
 router.get('/',function(req,res){
     res.sendFile(path.join(__dirname+'./../views/'+'login.html'));
 });
 
+
+// @type    POST
+//@route    /login
+// @desc    for posting login credentials and loggingIn user
+// @access  PUBLIC
 router.post('/', async (req,res)=>{
     const profileValues = { username: "", password: "" };
     if (req.body.username != "" && req.body.password != "") {
