@@ -4,6 +4,9 @@ const socketToken = require('./../models/socketToken');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
+const dotenv = require('dotenv');
+dotenv.config();
+
 
 //calls relevant funtions to check if userName or email already exists 
 async function findProfile(userName, email) {
