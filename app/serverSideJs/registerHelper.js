@@ -1,9 +1,11 @@
+//import required modules and required helper funtions
 const regProfile = require('../models/profile');
 const socketToken = require('./../models/socketToken');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
 
+//calls relevant funtions to check if userName or email already exists 
 async function findProfile(userName, email) {
     let MongoClient = require('mongodb').MongoClient;
     const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
@@ -33,6 +35,7 @@ async function findProfile(userName, email) {
 
 }
 
+//calls relevant functions to insert new user data into database 
 async function createProfile(userName, password, email) {
 
     let MongoClient = require('mongodb').MongoClient;
@@ -89,6 +92,7 @@ async function createProfile(userName, password, email) {
 
 }
 
+//generate hashed version of password
 async function generateHashedPassword(password) {
     let saltRounds = 10;
     const salt = await bcrypt.genSaltSync(saltRounds);
@@ -97,6 +101,7 @@ async function generateHashedPassword(password) {
     return hashedPassword;
 }
 
+//calls relevant function to generate jwt token and calls funtion to send confirmation email
 async function generateEmailConfirmationToken(email) {
 
     let confirmationToken = await jwt.sign({ email }, process.env.emailSecretKey , { expiresIn: '1d' }, (err, token) => {
@@ -106,6 +111,7 @@ async function generateEmailConfirmationToken(email) {
     return confirmationToken;
 }
 
+//sends confirmation email to user's email address
 async function sendConfirmationEmail(email, emailConfirmationToken) {
 
     "use strict "
@@ -136,5 +142,6 @@ async function sendConfirmationEmail(email, emailConfirmationToken) {
 
 }
 
+//exports respective modules
 exports.findProfile = findProfile;
 exports.createProfile = createProfile;

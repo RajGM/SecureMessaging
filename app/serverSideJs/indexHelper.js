@@ -1,7 +1,9 @@
+//import helper functions
 const msgSent = require('./../models/chatMsg');
 const chatboxHelper = require('./chatboxHelper');
 const registerHelper = require('./registerHelper');
 
+//calls relevant helper functions to update socketID after authentication is being verified
 async function updateSocketID(userName, authToken, socketID) {
     let authVerified = await chatboxHelper.verifyAuthToken(userName, authToken);
     if (authVerified == "correct") {
@@ -13,6 +15,7 @@ async function updateSocketID(userName, authToken, socketID) {
 
 }
 
+//calls relevant helper funtions to check for authentication and for inserting data into DB 
 async function insertChatData(data) {
     var timeStamp = new Date();
 
@@ -69,6 +72,7 @@ async function insertChatData(data) {
         return "errDataUpload";
 }
 
+//calls relevant funtions to find socketID for realtime communications
 async function findSocketID(userName, authToken, toUser) {
     let authVerified = await chatboxHelper.verifyAuthToken(userName, authToken);
     if (authVerified == "correct") {
@@ -79,6 +83,7 @@ async function findSocketID(userName, authToken, toUser) {
     }
 }
 
+//export all of the functions
 exports.updateSocketID = updateSocketID;
 exports.insertChatData = insertChatData;
 exports.findSocketID = findSocketID;

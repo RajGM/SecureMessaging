@@ -1,6 +1,8 @@
+//import required modules
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 
+//calls relevant funtion to login
 async function loginProfile(userName, password) {
 
     let logA = await verifyUNamePass(userName, password);
@@ -15,6 +17,7 @@ async function loginProfile(userName, password) {
 
 }
 
+//call relevant funtions to verify userName and password
 async function verifyUNamePass(userName, password) {
     let MongoClient = require('mongodb').MongoClient;
     const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
@@ -47,6 +50,7 @@ async function verifyUNamePass(userName, password) {
 
 }
 
+//update authentication token
 async function updateAuthToken(userName) {
     let MongoClient = require('mongodb').MongoClient;
     const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
@@ -71,6 +75,7 @@ async function updateAuthToken(userName) {
     return token;
 }
 
+//generate authentication token using jwt
 async function generateAuthToken(userName) {
     return new Promise(async (resolve, reject) => {
         let confirmationToken = await jwt.sign({ userName }, process.env.authSecretkey , { expiresIn: '1d' }, (err, token) => {
@@ -80,4 +85,5 @@ async function generateAuthToken(userName) {
 
 }
 
+//export required functions
 exports.loginProfile = loginProfile;

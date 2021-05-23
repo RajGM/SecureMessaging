@@ -1,3 +1,4 @@
+//update email verification status of user
 async function updateEmailVerificationStatus(email) {
     let MongoClient = require('mongodb').MongoClient;
     const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
@@ -18,4 +19,5 @@ async function updateEmailVerificationStatus(email) {
     return "ABCDEFGH";
 }
 
+//export updateEmailVerificationStatus function
 exports.updateEmailVerificationStatus = updateEmailVerificationStatus;

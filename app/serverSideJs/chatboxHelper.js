@@ -1,3 +1,5 @@
+
+//create Collection in MongoDB using the provided Name
 async function createCollections(name) {
     var MongoClient = require('mongodb').MongoClient;
     
@@ -27,6 +29,7 @@ async function createCollections(name) {
     return creationState;
 }
 
+//used to insert data in MongoDB
 async function insertData(name, data) {
     var MongoClient = require('mongodb').MongoClient;
     
@@ -58,6 +61,7 @@ async function insertData(name, data) {
     return insertionState;
 }
 
+//insert chatWindow between users talking first time in user's profile
 async function updateProfile(userName, chatboxName) {
     var MongoClient = require('mongodb').MongoClient;
     
@@ -91,6 +95,7 @@ async function updateProfile(userName, chatboxName) {
     return updationState;
 }
 
+//insert chatWindow in the list of all chatWindow 
 async function chatWindowCollectionUpdate(data) {
     var MongoClient = require('mongodb').MongoClient;
     
@@ -122,6 +127,7 @@ async function chatWindowCollectionUpdate(data) {
     return chatWindowCollectionState;
 }
 
+//update Socket for user
 async function socketIDUpdate(userName, socketID) {
 
     var MongoClient = require('mongodb').MongoClient;
@@ -151,6 +157,7 @@ async function socketIDUpdate(userName, socketID) {
 
 }
 
+//check if chatWindow exists between user or not
 async function chatWinowFinder(windowName) {
     let MongoClient = require('mongodb').MongoClient;
     
@@ -181,6 +188,7 @@ async function chatWinowFinder(windowName) {
     }
 }
 
+//find socketID of user
 async function findSocketID(userName) {
     let MongoClient = require('mongodb').MongoClient;
     
@@ -211,6 +219,7 @@ async function findSocketID(userName) {
 
 }
 
+//verify authToken of user
 async function verifyAuthToken(userName, authToken) {
     let MongoClient = require('mongodb').MongoClient;
     
@@ -243,6 +252,7 @@ async function verifyAuthToken(userName, authToken) {
 
 }
 
+//get whole profile of particular user 
 async function getCollectionNames(userName) {
 
     
@@ -272,6 +282,7 @@ async function getCollectionNames(userName) {
 
 }
 
+//get whole data of particular collection in MongoDB
 async function getCollectionData(collName) {
     
     //console.log(typeof collName);
@@ -302,6 +313,7 @@ async function getCollectionData(collName) {
     return dataArr;
 }
 
+//get all chat data of particular user
 async function getWholeChat(userName) {
     var newArr = await getCollectionNames(userName);
     let totalDump = [];
@@ -310,10 +322,7 @@ async function getWholeChat(userName) {
         chatWindows:newArr
     }
 
-    console.log("TEST LOG HERE");
-    console.log(allData.chatWindows);
-    console.log(allData.chatWindows.length);
-
+   
     for(let i=0;i<allData.chatWindows.length;i++){
         console.log(allData.chatWindows[i]);
         totalDump.push(allData.chatWindows[i]);
@@ -337,6 +346,7 @@ async function getWholeChat(userName) {
      return allData;
 }
 
+//check if user profile exists or not 
 async function findProfile(userName) {
     let MongoClient = require('mongodb').MongoClient;
     const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
@@ -362,6 +372,7 @@ async function findProfile(userName) {
     return "exists";
 }
 
+//export all of the functions
 exports.createCollections = createCollections;
 exports.insertData = insertData;
 exports.updateProfile = updateProfile;
