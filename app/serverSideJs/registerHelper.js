@@ -9,15 +9,12 @@ dotenv.config();
 
 
 //calls relevant funtions to check if userName or email already exists 
-async function findProfile(userName, email) {
-    let MongoClient = require('mongodb').MongoClient;
-    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
+async function findProfile(userName, email, mongoClient) {
     let dataArr;
     let dataArr2;
-    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-        .catch(err => console.log(err));
-    try {
-        const db = client.db(process.env.mongoDBName).collection("userprofiles");
+    
+        try {
+        const db = mongoClient.db(process.env.mongoDBName).collection("userprofiles");
 
         dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
             .toArray();
@@ -27,9 +24,7 @@ async function findProfile(userName, email) {
     }
     catch (err) {
         console.log(err);
-    } finally {
-        client.close();
-    }
+    } 
 
     if (Object.keys(dataArr).length === 0 && Object.keys(dataArr2).length === 0) {
         return "notExists"
@@ -39,15 +34,10 @@ async function findProfile(userName, email) {
 }
 
 //calls relevant functions to insert new user data into database 
-async function createProfile(userName, password, email) {
-
-    let MongoClient = require('mongodb').MongoClient;
-    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
-    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-        .catch(err => console.log(err));
+async function createProfile(userName, password, email,mongoClient) {
 
     try {
-        const db = client.db(process.env.mongoDBName).collection("userprofiles");
+        const db = mongoClient.db(process.env.mongoDBName).collection("userprofiles");
 
         const newProfile = new regProfile({
             userName: userName,
@@ -71,7 +61,7 @@ async function createProfile(userName, password, email) {
             socketID: ""
         });
 
-        const dbsT = client.db(process.env.mongoDBName).collection("sockettoken");
+        const dbsT = mongoClient.db(process.env.mongoDBName).collection("sockettoken");
         let stInsert = await dbsT.insertOne(newSocketToken)
             .then(stTok => {
                 console.log("SocketToken created:" + stTok);
@@ -82,14 +72,11 @@ async function createProfile(userName, password, email) {
 
         //confirmation email sending
         await generateEmailConfirmationToken(email);
-        //
 
     }
     catch (err) {
         console.log(err);
-    } finally {
-        client.close();
-    }
+    } 
 
     return "profileCreated";
 
