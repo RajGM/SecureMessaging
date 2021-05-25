@@ -4,6 +4,8 @@ const router = new express.Router();
 var path = require('path');
 const helperFunction = require('./../serverSideJs/confirmationHelper');
 const jwt = require("jsonwebtoken");
+const allHelper = require('./../serverSideJs/allHelper');
+
 
 // @type    GET
 //@route    /confirmation
@@ -11,12 +13,14 @@ const jwt = require("jsonwebtoken");
 // @access  PUBLIC
 router.get('/:token', async function (req, res) {
 
+    let mongoClient = await allHelper.connectionToDB();
+    
     let checkHeader;
     try{
         let confirmationToken = req.params.token;
         checkHeader = await verifyToken(confirmationToken);
         if(checkHeader != false){
-            helperFunction.updateEmailVerificationStatus(checkHeader)
+            helperFunction.updateEmailVerificationStatus(checkHeader,mongoClient)
         }
     }catch(e){
         console.log(e);
@@ -28,6 +32,8 @@ router.get('/:token', async function (req, res) {
     }else{
         res.write('<h1>Email Verification problem</h1>');
     }
+
+    mongoClient.close();
     res.send();
 });
 
@@ -37,7 +43,7 @@ async function verifyToken(token) {
     let email;
     if (token !== undefined) {
         // console.log("req.token = Bearer token");
-        await jwt.verify(token, 'secretkey', (err, authData) => {
+        await jwt.verify(token, process.env.emailSecretKey, (err, authData) => {
             if (err) {
                 console.log("Forbidden error" + err);
                 return err;

@@ -1,12 +1,10 @@
 var userName = document.getElementById("userName");
 var Password = document.getElementById("Password");
 var LoginButton = document.getElementById("LoginButton");
-sessionStorage.clear()
+sessionStorage.clear();
 
 LoginButton.onclick = function () {
-  console.log(userName.value);
-  console.log(Password.value);
-
+ 
   var objSent = {
     userName: "",
     Password: "",
@@ -16,17 +14,15 @@ LoginButton.onclick = function () {
   objSent.Password = Password.value;
 
   var jsonFormat = JSON.stringify(objSent);
-  console.log("before sending request");
   try {
-    console.log("Making request");
     var xhttp = new XMLHttpRequest();
     xhttp.onload = function () {
       var response = JSON.parse(this.responseText);
       console.log(this.responseText);
       if (response.logInfo == "Fail") {
         console.log("Incorrect User Name or password");
+        //handle fail response here
       } else if (response.logInfo == "Success") {
-        console.log("Correct Username and password");
         sessionStorage.setItem("userName", objSent.userName);
         sessionStorage.setItem("authToken", response.authToken);
         userName.value = "";

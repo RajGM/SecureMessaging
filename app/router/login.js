@@ -3,6 +3,7 @@ const express = require('express');
 const router = new express.Router();
 var path = require('path');
 const helperFunction = require('./../serverSideJs/loginHelper');
+const allHelper = require('./../serverSideJs/allHelper');
 
 // @type    GET
 //@route    /login
@@ -24,9 +25,10 @@ router.post('/', async (req,res)=>{
         profileValues.password = req.body.Password;
     }
     
-    let loginState = await helperFunction.loginProfile(profileValues.username,profileValues.password);
-    console.log("LOGIN STATE:"+loginState);
-
+    let mongoClient = await allHelper.connectionToDB();
+    
+    let loginState = await helperFunction.loginProfile(profileValues.username,profileValues.password,mongoClient);
+   
     let responseObj = {
         logInfo:"",
         userName:"",
@@ -43,6 +45,7 @@ router.post('/', async (req,res)=>{
         responseObj.logInfo="Fail";
     }
     
+    mongoClient.close();
     res.status(200).json(responseObj);
 });
 

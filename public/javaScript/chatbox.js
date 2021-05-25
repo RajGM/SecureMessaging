@@ -307,17 +307,12 @@ searchButton.onclick = function () {
     console.log("Toggle Button Value:" + switchButton.checked);
 
     if (switchButton.checked == false) {
-        console.log("Toggle Button Check:" + switchButton.checked);
         //implment search from contacts logic here
     } else if (switchButton.checked == true) {
         //implement search from web logic here
         console.log("Toggle Button Check:" + switchButton.checked);
         // use this when on live server 'https://chatapp2capstone.herokuapp.com/chatbox/data'
     }
-
-    console.log("searchInput value:"+searchInput.value);
-    console.log("searchInput value length:"+searchInput.value.length);
-
     //more input sanitization
     //check so that it is not self nor already added friend CHECK before sending as well
     if( searchInput.value.length != 0 ){
@@ -343,7 +338,5 @@ searchButton.onclick = function () {
             });
     
     }
-
-    
 
 }

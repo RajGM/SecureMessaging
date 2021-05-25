@@ -13,9 +13,6 @@ dumpData.onclick = function () {
                 console.log(this.responseText);
                 let response = JSON.parse(this.responseText);
                 totaldata = response;
-                //console.log(typeof response);
-                //console.log(response.length)
-                console.log("Data coming");
                 for (let i = 0; i < response.length; i++) {
                     if (i == 0) {
                         //do nothing
