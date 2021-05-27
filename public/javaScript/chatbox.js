@@ -1,4 +1,4 @@
-var socket = io.connect('https://chatapp2capstone.herokuapp.com/');
+var socket = io.connect('http://localhost:8000');
 var from = document.getElementById("fromUser");
 var to = document.getElementById("toUser");
 var sendButton = document.getElementById("sendButton");
@@ -329,6 +329,8 @@ searchButton.onclick = function () {
                     //check so that it is not self nor already added friend
                     //add to the contact list
                     console.log("Found");
+                    console.log(response.data);
+                    displaySearchedProfile(response.data);
                 }else{
                     console.log("notFound");
                 }
@@ -339,4 +341,36 @@ searchButton.onclick = function () {
     
     }
 
+}
+
+function displaySearchedProfile(data){
+    console.log("displaySearchedProfile DATA:",data);
+    console.log("Object.keys:",data.chatWindowName+"ContactDiv" in chatWindowandDisplayBoxTracker);
+    if( data.chatWindowName+"ContactDiv" in chatWindowandDisplayBoxTracker ){
+        console.log("NOT NULL");
+        console.log(chatWindowandDisplayBoxTracker[data.chatWindowName+"ContactDiv"]);
+        let currentElementDiv = document.getElementById(data.chatWindowName+"ContactDiv");
+        currentElementDiv.remove();
+        contactParentDiv.insertBefore(currentElementDiv,contactParentDiv.childNodes[4]);
+    }else{
+        //create new div with all the rules
+        let contactDiv = makeContactDiv(data.searchedProfileName);
+        contactDiv.setAttribute("id", data.chatWindowName+"ContactDiv");
+        contactDiv.addEventListener("click", showClickedChatDiv, false);
+        contactParentDiv.insertBefore(contactDiv,contactParentDiv.childNodes[4]);
+
+        // makeChatWindowDiv(chatData, chatDataWindowID) 
+        let chatDiv = makeChatWindowDiv({}, data.chatWindowName+"DisplayBox");
+        chatParentDiv.insertBefore(chatDiv, chatParentDiv.children[1]);
+        chatDiv.style.display = "none";
+
+        //some 
+        chatWindowandDisplayBoxTracker[data.chatWindowName+"ContactDiv"] = {
+            windowName: data.chatWindowName+"DisplayBox",
+            isDisplayed: false,
+            currentIndex: 0
+        }
+
+        console.log("NULL");
+    }
 }

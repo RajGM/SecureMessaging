@@ -41,12 +41,19 @@ router.get('/data', verifyToken, async function (req, res) {
 // @access  PRIVATE
 router.get('/searchProfile/:profileUserName', verifyToken, async function (req, res) {
     console.log("Profile Seach UserName:",req.params.profileUserName);
+    console.log("Self Profile UserName:",req.query.userName);
     let profileStatus = await chatboxHelper.findProfile(req.params.profileUserName);
     console.log("Profile Find Status:"+profileStatus);
     if(profileStatus=="notExists"){
         res.status(200).json("notFound");
     }else if(profileStatus=="exists"){
-        res.status(200).json(req.params.profileUserName);
+        let data = {
+            from:req.query.userName,
+            to:req.params.profileUserName
+        }
+        let returnChatWindow = chatWindowName(data);
+        let returnData = {"searchedProfileName":req.params.profileUserName,"chatWindowName":returnChatWindow};
+        res.status(200).json(returnData);
     }
 });
 
@@ -113,6 +120,21 @@ async function verifyToken(req, res, next) {
         res.status(404).json("unAuthorized");
     }
 
+}
+
+function chatWindowName(data){
+    var usr1;
+    var usr2;
+    var usr1and2;
+    if (data.to > data.from) {
+        usr1 = data.from;
+        usr2 = data.to;
+    } else {
+        usr1 = data.to;
+        usr2 = data.from;
+    }
+    usr1and2 = usr1 + usr2;
+    return usr1and2;
 }
 
 //export all of the routers 

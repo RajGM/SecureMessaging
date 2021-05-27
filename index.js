@@ -8,7 +8,7 @@ const bodyparser = require("body-parser");
 
 //importing custom build helper funtions
 const indexHelper = require('./app/serverSideJs/indexHelper');
-
+const allHelper = require('./app/serverSideJs/allHelper');
 // Define our application
 const app = express();
 
@@ -71,8 +71,9 @@ io.on('connection', function (socket) {
   socket.on('chat', async function (data) {
     let finalToken = data.authToken.split(" ")[1];
     let toSocketID = await indexHelper.findSocketID(data.from, finalToken,data.to);
-    let dataInsertState = await indexHelper.insertChatData(data);
-    
+    let mongoClient = await allHelper.connectionToDB();
+    let dataInsertState = await indexHelper.insertChatData(data,mongoClient);
+    mongoClient.close();
     console.log("toSocketID"+toSocketID);
     //fix response for each funtion
     if( toSocketID == "incorrect Auth Token" ){

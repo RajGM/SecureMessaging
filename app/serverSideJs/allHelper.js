@@ -7,4 +7,20 @@ async function connectionToDB() {
     return client;
 }
 
+async function chatWindowName(data){
+    var usr1;
+    var usr2;
+    var usr1and2;
+    if (data.to > data.from) {
+        usr1 = data.from;
+        usr2 = data.to;
+    } else {
+        usr1 = data.to;
+        usr2 = data.from;
+    }
+    usr1and2 = usr1 + usr2;
+    return usr1and2;
+}
+
 exports.connectionToDB = connectionToDB;
+exports.chatWindowName = chatWindowName;

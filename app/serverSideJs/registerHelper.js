@@ -33,6 +33,29 @@ async function findProfile(userName, email, mongoClient) {
 
 }
 
+//calls to check if userName exists
+async function findUserName(userName, mongoClient) {
+    let dataArr;
+    
+        try {
+        const db = mongoClient.db(process.env.mongoDBName).collection("userprofiles");
+
+        dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
+            .toArray();
+
+    }
+    catch (err) {
+        console.log(err);
+    } 
+
+    if (Object.keys(dataArr).length === 0 ) {
+        return "notExists"
+    }
+    return "exists";
+
+}
+
+
 //calls relevant functions to insert new user data into database 
 async function createProfile(userName, password, email,mongoClient) {
 
@@ -135,3 +158,4 @@ async function sendConfirmationEmail(email, emailConfirmationToken) {
 //exports respective modules
 exports.findProfile = findProfile;
 exports.createProfile = createProfile;
+exports.findUserName = findUserName;

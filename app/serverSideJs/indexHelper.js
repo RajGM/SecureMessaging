@@ -16,13 +16,13 @@ async function updateSocketID(userName, authToken, socketID) {
 }
 
 //calls relevant helper funtions to check for authentication and for inserting data into DB 
-async function insertChatData(data) {
+async function insertChatData(data,mongoClient) {
     var timeStamp = new Date();
 
     if (data.from != "" && data.to != "" && data.message != "" && data.authToken != "" && data.socketID != "") {
     
     }else{
-        return "dataForm incorrect"
+        return "dataForm incorrect";
     }
     
     const newMessage = new msgSent({
@@ -32,8 +32,8 @@ async function insertChatData(data) {
         timeStamp: timeStamp
     });
 
-    let fromProfile = await registerHelper.findProfile(newMessage.from);
-    let toProfile = await registerHelper.findProfile(newMessage.to);
+    let fromProfile = await registerHelper.findUserName(newMessage.from,mongoClient);
+    let toProfile = await registerHelper.findUserName(newMessage.to,mongoClient);
     if (toProfile == "exists" && fromProfile == "exists") {
         var usr1;
         var usr2;
@@ -53,11 +53,18 @@ async function insertChatData(data) {
             chatboxHelper.insertData(usr1and2,newMessage);
             return ["doneOld",usr1and2];
         } else {
-            let chatW = new chatWindow({
+            // let chatW = new chatWindow({
+            //     user1:usr1,
+            //     user2:usr2,
+            //     usr12:usr1and2
+            // });
+
+            let chatW = {
                 user1:usr1,
                 user2:usr2,
                 usr12:usr1and2
-            });
+            };
+
             let profileUpdateStateFrom = await chatboxHelper.updateProfile(newMessage.from,usr1and2);
             let profileUpdateStateTo = await chatboxHelper.updateProfile(newMessage.to,usr1and2);
             let collectionCreationState = await chatboxHelper.createCollections(usr1and2);
