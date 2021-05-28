@@ -53,12 +53,7 @@ async function insertChatData(data,mongoClient) {
             chatboxHelper.insertData(usr1and2,newMessage);
             return ["doneOld",usr1and2];
         } else {
-            // let chatW = new chatWindow({
-            //     user1:usr1,
-            //     user2:usr2,
-            //     usr12:usr1and2
-            // });
-
+            
             let chatW = {
                 user1:usr1,
                 user2:usr2,
@@ -80,8 +75,8 @@ async function insertChatData(data,mongoClient) {
 }
 
 //calls relevant funtions to find socketID for realtime communications
-async function findSocketID(userName, authToken, toUser) {
-    let authVerified = await chatboxHelper.verifyAuthToken(userName, authToken);
+async function findSocketID(userName, authToken, toUser,mongoClient) {
+    let authVerified = await chatboxHelper.verifyAuthToken(userName, authToken, mongoClient);
     if (authVerified == "correct") {
         let socID = await chatboxHelper.findSocketID(toUser);
         return socID;

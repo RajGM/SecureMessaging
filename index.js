@@ -70,9 +70,10 @@ io.on('connection', function (socket) {
 
   socket.on('chat', async function (data) {
     let finalToken = data.authToken.split(" ")[1];
-    let toSocketID = await indexHelper.findSocketID(data.from, finalToken,data.to);
     let mongoClient = await allHelper.connectionToDB();
-    let dataInsertState = await indexHelper.insertChatData(data,mongoClient);
+    let toSocketID = await indexHelper.findSocketID(data.from, finalToken,data.to,mongoClient);
+    let dataInsertState =  indexHelper.insertChatData(data,mongoClient);
+    let chatWindowName = allHelper.chatWindowName({"from":data.from,"to":data.to});
     mongoClient.close();
     console.log("toSocketID"+toSocketID);
     //fix response for each funtion
@@ -102,3 +103,4 @@ io.on('connection', function (socket) {
   // });
 
 });
+

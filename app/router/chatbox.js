@@ -69,11 +69,13 @@ router.post('/logout', async (req, res) => {
     });
     console.log("LOGOUT DATA:",aT);
     let returnDoc;
-    await authToken.findOneAndUpdate({ userName: req.body.from }, { authToken: ""}, { upsert: true, useFindAndModify: false })
+    await authToken.findOneAndUpdate({ userName: req.body.from }, { $set:{authToken: ""}}, { upsert: true, useFindAndModify: false })
         .then(updatedDocument => {
             if (updatedDocument) {
+                console.log("SocketID cleared");
                 //document updated
             } else {
+                console.log("SocketID NOT CLEARED");
                 //document not updated
             }
             returnDoc = updatedDocument;
