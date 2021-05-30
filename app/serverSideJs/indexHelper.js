@@ -4,8 +4,8 @@ const chatboxHelper = require('./chatboxHelper');
 const registerHelper = require('./registerHelper');
 
 //calls relevant helper functions to update socketID after authentication is being verified
-async function updateSocketID(userName, authToken, socketID) {
-    let authVerified = await chatboxHelper.verifyAuthToken(userName, authToken);
+async function updateSocketID(userName, authToken, socketID,mongoClient) {
+    let authVerified = await chatboxHelper.verifyAuthToken(userName, authToken,mongoClient);
     if (authVerified == "correct") {
         await chatboxHelper.socketIDUpdate(userName, socketID);
         return "done";
@@ -34,6 +34,7 @@ async function insertChatData(data,mongoClient) {
 
     let fromProfile = await registerHelper.findUserName(newMessage.from,mongoClient);
     let toProfile = await registerHelper.findUserName(newMessage.to,mongoClient);
+
     if (toProfile == "exists" && fromProfile == "exists") {
         var usr1;
         var usr2;
@@ -60,29 +61,24 @@ async function insertChatData(data,mongoClient) {
                 usr12:usr1and2
             };
 
-            let profileUpdateStateFrom = await chatboxHelper.updateProfile(newMessage.from,usr1and2);
-            let profileUpdateStateTo = await chatboxHelper.updateProfile(newMessage.to,usr1and2);
-            let collectionCreationState = await chatboxHelper.createCollections(usr1and2);
-            let chatWindowCollUpdateState = await chatboxHelper.chatWindowCollectionUpdate(chatW);
-            let dataInsertState = await chatboxHelper.insertData(usr1and2,newMessage);
-            ["doneNew",usr1and2]
+            chatboxHelper.updateProfile(newMessage.from,usr1and2);
+            chatboxHelper.updateProfile(newMessage.to,usr1and2);
+            chatboxHelper.createCollections(usr1and2);
+            chatboxHelper.chatWindowCollectionUpdate(chatW);
+            chatboxHelper.insertData(usr1and2,newMessage);
+            return ["doneNew",usr1and2];
         }
 
     } else {
         return "errChat";
     }
-        return "errDataUpload";
+       
 }
 
 //calls relevant funtions to find socketID for realtime communications
-async function findSocketID(userName, authToken, toUser,mongoClient) {
-    let authVerified = await chatboxHelper.verifyAuthToken(userName, authToken, mongoClient);
-    if (authVerified == "correct") {
-        let socID = await chatboxHelper.findSocketID(toUser);
-        return socID;
-    } else {
-        return "incorrect Auth Token"
-    }
+async function findSocketID(toUser,mongoClient) {
+        let socketID = await chatboxHelper.findSocketID(toUser,mongoClient);
+        return socketID;
 }
 
 //export all of the functions

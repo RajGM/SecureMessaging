@@ -7,7 +7,7 @@ async function connectionToDB() {
     return client;
 }
 
-async function chatWindowName(data){
+function chatWindowName(data){
     var usr1;
     var usr2;
     var usr1and2;

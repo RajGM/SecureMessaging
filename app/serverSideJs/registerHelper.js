@@ -49,7 +49,7 @@ async function findUserName(userName, mongoClient) {
     } 
 
     if (Object.keys(dataArr).length === 0 ) {
-        return "notExists"
+        return "notExists";
     }
     return "exists";
 

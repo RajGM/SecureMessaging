@@ -189,32 +189,28 @@ async function chatWinowFinder(windowName) {
 }
 
 //find socketID of user
-async function findSocketID(userName) {
-    let MongoClient = require('mongodb').MongoClient;
+async function findSocketID(userName,mongoClient) {
     
-    const url = process.env.mongoURL + process.env.mongoUserName + ":" + process.env.mongoPassword + process.env.mongoRestUrl;
-    let dataArr;
-    let client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-        .catch(err => console.log(err));
-
     try {
-        const db = client.db('testdb').collection("sockettoken");
+        const db = mongoClient.db('testdb').collection("sockettoken");
         dataArr = await db.find({ userName }, { projection: { "_id": 0 } })
             .toArray();
     }
     catch (err) {
         console.log(err);
-    } finally {
-        client.close();
     }
-
 
     if (Object.keys(dataArr).length === 0) {
         console.log("Test@123 socket not exists");
-        return "notExists"
+        return "notExists";
     } else {
         console.log("Test@123 socketID:"+dataArr[0].socketID);
-        return dataArr[0].socketID;
+        if(dataArr[0].socketID.length == 0){
+            return false;
+        }else{
+            return dataArr[0].socketID;
+        }
+        
     }
 
 }
@@ -236,9 +232,9 @@ async function verifyAuthToken(userName, authToken, mongoClient) {
         return "notExists"
     } else {
         if (authToken == dataArr[0].authToken) {
-            return "correct";
+            return true;
         } else {
-            return "incorrect";
+            return false;
         }
     }
 

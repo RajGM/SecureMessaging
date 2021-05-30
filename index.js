@@ -9,6 +9,8 @@ const bodyparser = require("body-parser");
 //importing custom build helper funtions
 const indexHelper = require('./app/serverSideJs/indexHelper');
 const allHelper = require('./app/serverSideJs/allHelper');
+const chatBoxHelper = require('./app/serverSideJs/chatboxHelper');
+const registerHelper = require('./app/serverSideJs/registerHelper');
 // Define our application
 const app = express();
 
@@ -63,37 +65,53 @@ io.on('connection', function (socket) {
   console.log('Socket made connection with client id:' + socket.id);
 
   socket.on('socketIDUpdate', async function (data) {
+    let mongoClient = await allHelper.connectionToDB();
     let finalToken = data.authToken.split(" ")[1];
     //check authtoken update socketID 
-    let upSid = await indexHelper.updateSocketID(data.from, finalToken, data.socketID);
+
+    let upSid = await indexHelper.updateSocketID(data.from, finalToken, data.socketID, mongoClient);
+    mongoClient.close();
   });
 
   socket.on('chat', async function (data) {
+
     let finalToken = data.authToken.split(" ")[1];
     let mongoClient = await allHelper.connectionToDB();
-    let toSocketID = await indexHelper.findSocketID(data.from, finalToken,data.to,mongoClient);
-    let dataInsertState =  indexHelper.insertChatData(data,mongoClient);
-    let chatWindowName = allHelper.chatWindowName({"from":data.from,"to":data.to});
-    mongoClient.close();
-    console.log("toSocketID"+toSocketID);
-    //fix response for each funtion
-    if( toSocketID == "incorrect Auth Token" ){
-      console.log("Data saved to DB user is offline");
-    }else if (toSocketID != "notexists") {
-      //if sockeID to is found
-      let datatoSend = {
-        from: data.from,
-        to: data.to,
-        message: data.message,
-        chatWindow:dataInsertState[1]
-      }
-      // console.log("DATA THE USER WILL BE RECIEVING"+datatoSend);
-      io.sockets.to(toSocketID).emit("chat", datatoSend);
-      //make it double tick here
+    let authTokenVerified = await chatBoxHelper.verifyAuthToken(data.from, finalToken, mongoClient);
+    console.log("authTokenVerified:" + authTokenVerified);
+    if(authTokenVerified){
+        let toProfileState = await registerHelper.findUserName(data.to,mongoClient);
+        if(toProfileState!="notExists"){
+
+          let toSocketID = await indexHelper.findSocketID(data.to, mongoClient);
+          if(toSocketID){
+            let chatWindowName = allHelper.chatWindowName({ "from": data.from, "to": data.to });
+            
+            let datatoSend = {
+              from: data.from,
+              to: data.to,
+              message: data.message,
+              chatWindow: chatWindowName
+            }
+
+            io.sockets.to(toSocketID).emit("chat", datatoSend);
+            
+          }else{
+            console.log("Data saved to DB user is offline");
+          }
+
+          indexHelper.insertChatData(data, mongoClient);
+    
+
+        }else{
+          //touser does not exists somebody is trying to messup the system 
+        }
+    }else{
+      //from user token expired it is either by accident or somebody is trying to mess with the server
     }
-    else{
-      //make it single tick here
-    }
+    //mongoClient.close();
+    //solve mongoClient close issue as well
+    
 
   });
 
@@ -103,4 +121,3 @@ io.on('connection', function (socket) {
   // });
 
 });
-
