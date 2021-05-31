@@ -7,7 +7,6 @@ const nodemailer = require("nodemailer");
 const dotenv = require('dotenv');
 dotenv.config();
 
-
 //calls relevant funtions to check if userName or email already exists 
 async function findProfile(userName, email, mongoClient) {
     let dataArr;
@@ -153,6 +152,64 @@ async function sendConfirmationEmail(email, emailConfirmationToken) {
         console.log(e);
     }
 
+}
+
+
+function inputSanitization(userName, password, email) {
+    let inputLengthTest = checkLengthOfInput(userName, password, email);
+    let inputTypeTest = checkTypeofInput(userName, password, email);
+    let lengthState = (inputLengthTest.userNameLength == true && inputLengthTest.passwordLength == true && inputLengthTest.emailLength == true);
+    let typeState = (inputTypeTest.userNameType == true && inputTypeTest.passwordType == true && inputTypeTest.emailType == true);
+
+    //do embedded script test also 
+
+    if (lengthState && typeState) {
+        return { "lengthState": lengthState, "typeState": typeState };
+    } else if (!typeState) {
+        //do intrusion alert from here
+        return { "lengthState": lengthState, "typeState": typeState };
+    } else if (!lengthState && typeState) {
+        return { "lengthState": lengthState, lengthStateError: inputLengthTest, "typeState": typeState };
+    } else if (!lengthState && !typeState) {
+        //do intrusion alert from here as well
+        return { "lengthState": lengthState, "typeState": typeState };
+    }
+
+}
+
+function checkLengthOfInput(userName, password, email) {
+
+    let userNameState;
+    let passwordState;
+    let emailState;
+
+    if (userName.length != 0 && userName.length <= 12) {
+        userNameState = true;
+    } else {
+        userNameState = false;
+    }
+
+    if (password.length >= 8 && password.length <= 50) {
+        passwordState = true;
+    } else {
+        passwordState = false;
+    }
+
+    if (email.length != 0 && email.length <= 30) {
+        emailState = true;
+    } else {
+        emailState = false;
+    }
+
+    return { userNameLength: userNameState, passwordLength: passwordState, emailLength: emailState };
+}
+
+function checkTypeofInput(userName, password, email) {
+    let userNameState = typeof (userName) == "string";
+    let passwordState = typeof (password) == "string";
+    let emailState = typeof (email) == "string";
+
+    return { userNameType: userNameState, passwordType: passwordState, emailType: emailState };
 }
 
 //exports respective modules

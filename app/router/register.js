@@ -27,7 +27,12 @@ router.post('/', async (req, res) => {
         profileValues.password = req.body.Password;
         profileValues.email = req.body.email;
     }
-    
+
+   let inputValidation = registerHelper.inputSanitization( req.body.username, req.body.password, req.body.email );
+   if( !inputValidation.lengthState || !inputValidation.typeState ){
+        res.status(200).json("Input Error");
+   }
+
     let mongoClient = await allHelper.connectionToDB();
     
     let fpv = await registerHelper.findProfile(profileValues.username,profileValues.email,mongoClient);
